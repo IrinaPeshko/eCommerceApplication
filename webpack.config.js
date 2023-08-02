@@ -8,7 +8,7 @@ module.exports = {
   entry: path.join(__dirname, "src", "index"),
   output: {
     path: path.join(__dirname, "dist"),
-    filename: "index.[contenthash].js",
+    filename: "index.js",
     assetModuleFilename: (pathData) => {
       const filepath = path
         .dirname(pathData.filename)
@@ -24,17 +24,25 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "src", "index.html"),
-      filename: "index.[contenthash].html",
+      filename: "index.html",
     }),
     new FileManagerPlugin({
       events: {
         onStart: {
           delete: ["dist"],
         },
+        onEnd: {
+          copy: [
+            {
+              source: path.join('src', 'assets'),
+              destination: path.join('dist', 'assets'),
+            },
+          ],
+        },
       },
     }),
     new MiniCssExtractPlugin({
-      filename: "[name].[contenthash].css",
+      filename: "[name].css",
     }),
     new ESLintPlugin({ extensions: 'ts' })
   ],
@@ -59,7 +67,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|jpg|jpeg|gif|svg)$/i,
+        test: /\.(jpe?g|png|gif|svg|webp|avif|ico)$/i,
         type: "asset/resource",
       },
       {

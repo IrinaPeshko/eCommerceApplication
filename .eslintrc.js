@@ -3,7 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['airbnb-base', 'airbnb-typescript/base', 'plugin:@typescript-eslint/recommended', 'prettier'],
+  extends: ['airbnb-base', 'airbnb-typescript/base',  "eslint:recommended", 'plugin:@typescript-eslint/recommended', 'prettier'],
   overrides: [],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -15,7 +15,7 @@ module.exports = {
   root: true,
   rules: 
   {
-    'no-console': 'off',
+    'no-console': 'warn',
     'import/extensions': 'off',
     'import/prefer-default-export': 'off',
     '@typescript-eslint/no-explicit-any': 'error',
@@ -43,4 +43,5 @@ module.exports = {
     '@typescript-eslint/no-unnecessary-type-assertion': 'error',
     '@typescript-eslint/no-non-null-assertion': 'error',
   },
+  ignorePatterns: ['*config.js']
 };
