@@ -15,7 +15,7 @@ module.exports = {
   root: true,
   rules: 
   {
-    'no-console': 'warn',
+    'no-console': 'error',
     'import/extensions': 'off',
     'import/prefer-default-export': 'off',
     '@typescript-eslint/no-explicit-any': 'error',

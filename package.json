@@ -9,8 +9,8 @@
     "prod": "webpack --mode production",
     "start": "webpack serve --open --mode development",
     "deleteDist": "rm -rf ./dist",
-    "lint": "eslint src --ext .ts",
-    "lint:fix": "npm run lint -- --fix",
+    "lint": "eslint ./src --ext .ts",
+    "lint:fix": "eslint --debug ./src --fix --color",
     "prettier": "prettier --write src"
   },
   "repository": {
@@ -38,6 +38,8 @@
     "filemanager-webpack-plugin": "^8.0.0",
     "html-loader": "^4.2.0",
     "html-webpack-plugin": "^5.5.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
     "mini-css-extract-plugin": "^2.7.6",
     "postcss-loader": "^7.3.3",
     "postcss-preset-env": "^9.1.0",
@@ -50,5 +52,18 @@
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ]
   }
 }
+
