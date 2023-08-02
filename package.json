@@ -5,6 +5,13 @@
   "main": "index",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --mode development",
+    "prod": "webpack --mode production",
+    "start": "webpack serve --open --mode development",
+    "deleteDist": "rm -rf ./dist",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "npm run lint -- --fix",
+    "prettier": "prettier --write src"
   },
   "repository": {
     "type": "git",
