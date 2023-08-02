@@ -5,6 +5,3 @@ const div = document.createElement("div");
 div.innerHTML = `img src="${img}" alt="gguj">`;
 
 document.body.append(div);
-
-console.log("test");
-
