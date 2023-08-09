@@ -1,4 +1,4 @@
-import { foo } from "./foo";
+import { foo } from "../components/utils/foo";
 
 describe("Jest Tests", () => {
   test("Verify tests work", () => {
