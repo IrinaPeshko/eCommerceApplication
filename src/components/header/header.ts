@@ -1,22 +1,10 @@
+import "./header.scss"
 import Param from "../../types/elementCreator/param";
-import link from "../../types/link/Ilink";
 import ElementCreator from "../utils/elementCreator";
 import View from "../utils/view";
 import LinkView from "./link";
-
-const cssClasses = {
-  header: "header",
-  nav: "nav",
-};
-
-const namePage = {
-  MAIN: "Main",
-  LOGIN: "Login",
-  CATALOG: "Catalog",
-  USER: "User",
-  BASKET: "Basket",
-  ABOUT: "About Us",
-};
+import { paramLogo, paramsNav, paramsProfileBlock, cssClasses} from "./data/params";
+import { profileLinks, pages} from "./data/linkArrays";
 
 const startPageIndex = 0;
 export default class HeaderView extends View {
@@ -34,40 +22,14 @@ export default class HeaderView extends View {
 
   // eslint-disable-next-line max-lines-per-function
   private configureView(): void {
-    const paramsNav: Param = {
-      tag: "nav",
-      classNames: [`${cssClasses.nav}`],
-    };
-
+    
+    const creatorLogo = new ElementCreator(paramLogo);
+    this.elementCreator.addInnerELement(creatorLogo);
     const creatorNav = new ElementCreator(paramsNav);
     this.elementCreator.addInnerELement(creatorNav);
+    const creatorProfileBlock = new ElementCreator(paramsProfileBlock)
+    this.elementCreator.addInnerELement(creatorProfileBlock);
 
-    const pages: link[] = [
-      {
-        name: namePage.MAIN,
-        callback: (): void => {},
-      },
-      {
-        name: namePage.LOGIN,
-        callback: (): void => {},
-      },
-      {
-        name: namePage.ABOUT,
-        callback: (): void => {},
-      },
-      {
-        name: namePage.CATALOG,
-        callback: (): void => {},
-      },
-      {
-        name: namePage.BASKET,
-        callback: (): void => {},
-      },
-      {
-        name: namePage.USER,
-        callback: (): void => {},
-      },
-    ];
     pages.forEach((item, index) => {
       const linkElement = new LinkView(item.name, this.linkElements);
       const newLink = linkElement.getHTMLElement();
@@ -79,5 +41,18 @@ export default class HeaderView extends View {
         }
       }
     });
+
+    profileLinks.forEach((item, index) => {
+      const linkElement = new LinkView(item.name, this.linkElements);
+      const newLink = linkElement.getHTMLElement();
+      if (newLink) {
+        creatorProfileBlock.addInnerELement(newLink);
+        this.linkElements.push(linkElement);
+        if (index === startPageIndex) {
+          linkElement.setSelectedStatus();
+        }
+      }
+    });
+    creatorLogo.setInnerHTML(`<img src="./assets/icons/logo.png" alt="logo">`);
   }
 }
