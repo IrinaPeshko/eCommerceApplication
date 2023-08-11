@@ -13,9 +13,7 @@ export default class App {
     const mainElement = mainView.getHTMLElement();
 
     if (footerElement && headerElement && mainElement) {
-      document.body.append(headerElement);
-      document.body.append(mainElement);
-      document.body.append(footerElement);
+      document.body.append(headerElement, mainElement, footerElement);
     } else {
       throw new Error("Element is null.");
     }

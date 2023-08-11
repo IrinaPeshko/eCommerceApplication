@@ -8,10 +8,18 @@ export default class ElementCreator {
     this.createElement(param);
   }
 
-  public createElement(param: Param): void {
+  private createElement(param: Param): void {
     this.element = document.createElement(param.tag);
     this.setCssClasses(param.classNames);
-    this.setTextContent(param.textContent);
+
+    if (param.textContent) {
+      this.setTextContent(param.textContent);
+    }
+
+    if (param.innerHTML) {
+      this.setInnerHTML(param.innerHTML);
+    }
+
     if (param.callback) {
       this.setCallback(param.callback);
     }
@@ -21,15 +29,21 @@ export default class ElementCreator {
     return this.element;
   }
 
-  public setCssClasses(cssClasses: string[]): void {
+  private setCssClasses(cssClasses: string[]): void {
     cssClasses.forEach((className) => {
       this.element?.classList.add(className);
     });
   }
 
-  public setTextContent(text: string): void {
+  private setTextContent(text: string): void {
     if (this.element) {
       this.element.textContent = text;
+    }
+  }
+
+  public setInnerHTML(text: string): void {
+    if (this.element) {
+      this.element.innerHTML = text;
     }
   }
 
@@ -37,5 +51,16 @@ export default class ElementCreator {
     this.element?.addEventListener("click", (event: MouseEvent) => {
       callback(event);
     });
+  }
+
+  public addInnerELement(element: HTMLElement | ElementCreator): void {
+    if (element instanceof ElementCreator) {
+      const newElement = element.getElement();
+      if (newElement) {
+        this.element?.append(newElement);
+      }
+    } else {
+      this.element?.append(element);
+    }
   }
 }
