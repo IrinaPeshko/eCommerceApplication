@@ -1,0 +1,17 @@
+.container {
+  max-width: 1920px;
+  padding: 0px 21px;
+  margin: 0px auto;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+body {
+  font-size: 14px;
+  font-family: "Oswald";
+  display: flex;
+  min-width: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}

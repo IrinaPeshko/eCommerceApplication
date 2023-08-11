@@ -1,7 +1,6 @@
-@import url(styles/normalaize.scss);
-@import url(styles/variables.scss);
-@import url(styles/general.scss);
-
-body {
-  background-color: aqua;
-}
+@import "styles/fonts.scss";
+@import "styles/normalaize.scss";
+@import "styles/variables.scss";
+@import "styles/general.scss";
+@import "styles/header.scss";
+@import "styles/main_page.scss";

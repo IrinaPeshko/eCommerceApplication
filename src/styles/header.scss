@@ -1,0 +1,53 @@
+header {
+  background-color: $color1;
+  min-height: 115px;
+  color: white;
+  min-width: 100%;
+  margin: 0 auto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  justify-content: space-between;
+  min-height: 115px;
+}
+
+.logo {
+  width: 86px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav {
+  display: flex;
+  gap: 405px;
+}
+
+.pages,
+.account {
+  display: flex;
+  gap: 29px;
+}
+
+.pages__item,
+.account__item {
+  text-transform: uppercase;
+  list-style: none;
+  white-space: nowrap;
+}
+
+.shoping_cart {
+  display: flex;
+  gap: 10px;
+}
+
+.shoping_cart__aditional {
+  display: flex;
+  flex-direction: column;
+}
