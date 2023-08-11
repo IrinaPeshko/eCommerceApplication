@@ -1,5 +1,12 @@
 .main_welcome {
-  background: url("assets/img/main_bg.png") top left/ 100% 100% no-repeat;
+  background:
+    linear-gradient(
+      174deg,
+      rgba(255, 255, 255, 0.6) 35.42%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    url("assets/img/main_bg.png") no-repeat top left / 100% 100%,
+    lightgray 50% / cover no-repeat;
   height: 800px;
   width: 100%;
 }
