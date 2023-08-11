@@ -2,11 +2,13 @@ import Param from "../../types/elementCreator/param";
 
 export default class ElementCreator {
   private element: HTMLElement | null;
+
   constructor(param: Param) {
     this.element = null;
     this.createElement(param);
   }
-  createElement(param: Param) {
+
+  public createElement(param: Param): void {
     this.element = document.createElement(param.tag);
     this.setCssClasses(param.classNames);
     this.setTextContent(param.textContent);
@@ -14,20 +16,24 @@ export default class ElementCreator {
       this.setCallback(param.callback);
     }
   }
-  getElement() {
+
+  public getElement(): HTMLElement | null {
     return this.element;
   }
-  setCssClasses(cssClasses: string[]) {
+
+  public setCssClasses(cssClasses: string[]): void {
     cssClasses.forEach((className) => {
       this.element?.classList.add(className);
     });
   }
-  setTextContent(text: string) {
+
+  public setTextContent(text: string): void {
     if (this.element) {
       this.element.textContent = text;
     }
   }
-  setCallback(callback: (params: MouseEvent) => void) {
+
+  public setCallback(callback: (params: MouseEvent) => void): void {
     this.element?.addEventListener("click", (event: MouseEvent) => {
       callback(event);
     });

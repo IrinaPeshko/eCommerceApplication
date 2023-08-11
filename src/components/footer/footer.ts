@@ -8,14 +8,17 @@ const cssClasses = {
 const TEXT = "SPA FOOTER";
 
 export default class Footer {
-  elementCreator: ElementCreator;
+  public elementCreator: ElementCreator;
+
   constructor() {
-    this.elementCreator = this.createView();
+    this.elementCreator = Footer.createView();
   }
-  getHTMLElement() {
+
+  public getHTMLElement(): HTMLElement | null {
     return this.elementCreator.getElement();
   }
-  createView() {
+
+  public static createView(): ElementCreator {
     const params: Param = {
       tag: "footer",
       classNames: [`${cssClasses.footer}`],
