@@ -1,27 +1,27 @@
 import Param from "../../types/elementCreator/param";
 import ElementCreator from "../utils/elementCreator";
 
-const cssClasses  = {
-  footer: 'footer'
-}
+const cssClasses = {
+  footer: "footer",
+};
 
-const TEXT = 'SPA FOOTER'
+const TEXT = "SPA FOOTER";
 
 export default class Footer {
   elementCreator: ElementCreator;
-  constructor(){
+  constructor() {
     this.elementCreator = this.createView();
   }
-  getHTMLElement () {
-    return this.elementCreator.getElement()
+  getHTMLElement() {
+    return this.elementCreator.getElement();
   }
-  createView(){
+  createView() {
     const params: Param = {
-      tag: 'footer',
+      tag: "footer",
       classNames: [`${cssClasses.footer}`],
-      textContent: TEXT
-    }
-    const elementCreator = new ElementCreator(params)
+      textContent: TEXT,
+    };
+    const elementCreator = new ElementCreator(params);
     return elementCreator;
   }
 }

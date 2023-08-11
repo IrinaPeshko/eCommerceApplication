@@ -10,8 +10,7 @@ export default class ElementCreator {
     this.element = document.createElement(param.tag);
     this.setCssClasses(param.classNames);
     this.setTextContent(param.textContent);
-    if (param.callback)
-    {
+    if (param.callback) {
       this.setCallback(param.callback);
     }
   }
@@ -24,7 +23,7 @@ export default class ElementCreator {
     });
   }
   setTextContent(text: string) {
-    if (this.element){
+    if (this.element) {
       this.element.textContent = text;
     }
   }
