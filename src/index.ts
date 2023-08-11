@@ -12,7 +12,7 @@ import App from "./components/app/app";
 // // p.innerText = foo() ? "yup" : "nope";
 
 function initializeApp(): void {
-   App.createView();
+  App.createView();
 }
 
 window.addEventListener("DOMContentLoaded", initializeApp);

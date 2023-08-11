@@ -22,4 +22,4 @@ export default class View {
     const elementCreator = new ElementCreator(params);
     return elementCreator;
   }
-} 
+}
