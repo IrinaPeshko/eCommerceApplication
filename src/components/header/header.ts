@@ -2,16 +2,16 @@ import Param from "../../types/elementCreator/param";
 import View from "../utils/view";
 
 const cssClasses = {
-  footer: "footer",
+  header: "header",
 };
 
-const TEXT = "SPA FOOTER";
+const TEXT = "SPA HEADER";
 
-export default class FooterView extends View {
+export default class HeaderView extends View {
   constructor() {
     const params: Param = {
-      tag: "footer",
-      classNames: [`${cssClasses.footer}`],
+      tag: "header",
+      classNames: [`${cssClasses.header}`],
       textContent: TEXT,
     };
     super(params);
