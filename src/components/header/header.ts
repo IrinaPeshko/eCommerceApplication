@@ -1,10 +1,16 @@
-import "./header.scss"
+import "./header.scss";
 import Param from "../../types/elementCreator/param";
 import ElementCreator from "../utils/elementCreator";
 import View from "../utils/view";
 import LinkView from "./link";
-import { paramLogo, paramsNav, paramsProfileBlock, cssClasses} from "./data/params";
-import { profileLinks, pages} from "./data/linkArrays";
+import {
+  paramLogo,
+  paramsNav,
+  paramsProfileBlock,
+  cssClasses,
+} from "./data/params";
+import { profileLinks, pages } from "./data/linkArrays";
+import img from "../../assets/icons/logo.png";
 
 const startPageIndex = 0;
 export default class HeaderView extends View {
@@ -22,12 +28,11 @@ export default class HeaderView extends View {
 
   // eslint-disable-next-line max-lines-per-function
   private configureView(): void {
-    
     const creatorLogo = new ElementCreator(paramLogo);
     this.elementCreator.addInnerELement(creatorLogo);
     const creatorNav = new ElementCreator(paramsNav);
     this.elementCreator.addInnerELement(creatorNav);
-    const creatorProfileBlock = new ElementCreator(paramsProfileBlock)
+    const creatorProfileBlock = new ElementCreator(paramsProfileBlock);
     this.elementCreator.addInnerELement(creatorProfileBlock);
 
     pages.forEach((item, index) => {
@@ -53,6 +58,7 @@ export default class HeaderView extends View {
         }
       }
     });
-    creatorLogo.setInnerHTML(`<img src="./assets/icons/logo.png" alt="logo">`);
+
+    creatorLogo.setInnerHTML(`<img src="${img}" alt="logo">`);
   }
 }
