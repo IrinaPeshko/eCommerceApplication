@@ -13,12 +13,6 @@ export default class View {
   }
 
   public static createView(params: Param): ElementCreator {
-    // const elementParams = {
-    //   tag: params.tag,
-    //   textContent: params.textContent,
-    //   className: params.classNames,
-    //   callback: params.callback,
-    // };
     const elementCreator = new ElementCreator(params);
     return elementCreator;
   }

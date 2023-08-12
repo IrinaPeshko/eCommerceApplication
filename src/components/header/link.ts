@@ -2,18 +2,24 @@ import Param from "../../types/elementCreator/param";
 import View from "../utils/view";
 
 const cssClasses = {
-  link: "link",
+  link: "pages__item",
   itemSelected: "show",
 };
 
 export default class LinkView extends View {
   private linkElements;
 
-  constructor(text: string, linkElements: LinkView[]) {
+  constructor(
+    linkElements: LinkView[],
+    text?: string,
+    classList: string[] = ["pages__item"],
+    innerHTML?: string,
+  ) {
     const params: Param = {
       tag: "a",
-      classNames: [`${cssClasses.link}`],
+      classNames: classList,
       textContent: text,
+      innerHTML,
     };
     super(params);
     this.linkElements = linkElements;

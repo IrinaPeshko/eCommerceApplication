@@ -8,6 +8,8 @@ import {
   paramsNav,
   paramsProfileBlock,
   cssClasses,
+  headerBlockParams,
+  paramsNavUl,
 } from "./data/params";
 import { profileLinks, pages } from "./data/linkArrays";
 import img from "../../assets/icons/logo.png";
@@ -28,18 +30,28 @@ export default class HeaderView extends View {
 
   // eslint-disable-next-line max-lines-per-function
   private configureView(): void {
+    const creatorHeaderContainer = new ElementCreator(headerBlockParams);
+    this.elementCreator.addInnerELement(creatorHeaderContainer);
     const creatorLogo = new ElementCreator(paramLogo);
-    this.elementCreator.addInnerELement(creatorLogo);
+    creatorHeaderContainer.addInnerELement(creatorLogo);
     const creatorNav = new ElementCreator(paramsNav);
-    this.elementCreator.addInnerELement(creatorNav);
+    creatorHeaderContainer.addInnerELement(creatorNav);
+    const creatorNavUl = new ElementCreator(paramsNavUl);
+    creatorNav.addInnerELement(creatorNavUl);
     const creatorProfileBlock = new ElementCreator(paramsProfileBlock);
-    this.elementCreator.addInnerELement(creatorProfileBlock);
+    creatorHeaderContainer.addInnerELement(creatorProfileBlock);
+    // const creatorSigh = new ElementCreator(paramsSigh);
+    // creatorProfileBlock.addInnerELement(creatorSigh);
+    // const creatorCreateAccount = new ElementCreator(paramsCreateAccount);
+    // creatorProfileBlock.addInnerELement(creatorCreateAccount);
+    // const creatorBasket = new ElementCreator(paramsBasket);
+    // creatorProfileBlock.addInnerELement(creatorBasket);
 
     pages.forEach((item, index) => {
-      const linkElement = new LinkView(item.name, this.linkElements);
+      const linkElement = new LinkView(this.linkElements, item.name);
       const newLink = linkElement.getHTMLElement();
       if (newLink) {
-        creatorNav.addInnerELement(newLink);
+        creatorNavUl.addInnerELement(newLink);
         this.linkElements.push(linkElement);
         if (index === startPageIndex) {
           linkElement.setSelectedStatus();
@@ -48,7 +60,12 @@ export default class HeaderView extends View {
     });
 
     profileLinks.forEach((item, index) => {
-      const linkElement = new LinkView(item.name, this.linkElements);
+      const linkElement = new LinkView(
+        this.linkElements,
+        undefined,
+        item.classList,
+        item.innerHTML,
+      );
       const newLink = linkElement.getHTMLElement();
       if (newLink) {
         creatorProfileBlock.addInnerELement(newLink);
