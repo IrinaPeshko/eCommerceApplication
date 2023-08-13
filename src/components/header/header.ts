@@ -83,7 +83,6 @@ export default class HeaderView extends View {
         }
       }
     });
-
     creatorLogo.setInnerHTML(`<img src="${img}" alt="logo">`);
   }
 }

@@ -1,5 +1,6 @@
 import link from "../../../types/link/Ilink";
 import imgBascket from "../../../assets/icons/bascket.png";
+import imgProfile from "../../../assets/icons/8324223_ui_essential_app_avatar_profile_icon.svg";
 
 const namePage = {
   MAIN: "MAIN",
@@ -67,7 +68,7 @@ export const profileLinks: link[] = [
     name: namePage.CREATEACCOUNT,
     classList: ["account__item", "account__create", "unactive"],
     innerHTML: `<img
-              src="./assets/icons/8324223_ui_essential_app_avatar_profile_icon.svg"
+              src="${imgProfile}"
               alt="create an account"
               title="create an account"
             />`,
