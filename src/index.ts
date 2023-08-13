@@ -1,18 +1,17 @@
 import "./style.scss";
 import App from "./components/app/app";
-// // import img from "./assets/rs_school_js.svg";
-// // import { foo } from "./components/foo/foo";
-// const div = document.createElement("div");
-// // div.innerHTML = `<img src="${img}" alt="gguj">`;
-// document.body.append(div);
-
-// const p = document.createElement("p");
-// document.body.append(p);
-
-// // p.innerText = foo() ? "yup" : "nope";
+import { route } from "./components/utils/router";
 
 function initializeApp(): void {
   App.createView();
 }
 
 window.addEventListener("DOMContentLoaded", initializeApp);
+
+declare global {
+  interface Window {
+    route: (e: MouseEvent) => void;
+  }
+}
+
+window.route = route;

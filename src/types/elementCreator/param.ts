@@ -4,4 +4,5 @@ export default interface Param {
   textContent?: string;
   callback?: (params: MouseEvent) => void;
   innerHTML?: string;
+  href?: string;
 }

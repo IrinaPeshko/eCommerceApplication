@@ -1,4 +1,3 @@
-// import "./header.scss";
 import Param from "../../types/elementCreator/param";
 import ElementCreator from "../utils/elementCreator";
 import View from "../utils/view";
@@ -48,15 +47,15 @@ export default class HeaderView extends View {
     creatorNav.addInnerELement(creatorNavUl);
     const creatorProfileBlock = new ElementCreator(paramsProfileBlock);
     creatorHeaderContainer.addInnerELement(creatorProfileBlock);
-    // const creatorSigh = new ElementCreator(paramsSigh);
-    // creatorProfileBlock.addInnerELement(creatorSigh);
-    // const creatorCreateAccount = new ElementCreator(paramsCreateAccount);
-    // creatorProfileBlock.addInnerELement(creatorCreateAccount);
-    // const creatorBasket = new ElementCreator(paramsBasket);
-    // creatorProfileBlock.addInnerELement(creatorBasket);
 
     pages.forEach((item, index) => {
-      const linkElement = new LinkView(this.linkElements, item.name);
+      const linkElement = new LinkView(
+        this.linkElements,
+        item.name,
+        undefined,
+        undefined,
+        item.href,
+      );
       const newLink = linkElement.getHTMLElement();
       if (newLink) {
         creatorNavUl.addInnerELement(newLink);
@@ -73,6 +72,7 @@ export default class HeaderView extends View {
         undefined,
         item.classList,
         item.innerHTML,
+        item.href,
       );
       const newLink = linkElement.getHTMLElement();
       if (newLink) {

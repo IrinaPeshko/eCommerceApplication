@@ -60,6 +60,7 @@ export const profileLinks: link[] = [
                 </clipPath>
               </defs>
             </svg>`,
+    href: "/login",
     callback: (): void => {},
   },
   {
@@ -70,6 +71,7 @@ export const profileLinks: link[] = [
               alt="create an account"
               title="create an account"
             />`,
+    href: "createaccount",
     callback: (): void => {},
   },
   {
@@ -78,6 +80,7 @@ export const profileLinks: link[] = [
     innerHTML: `<div class="shoping_cart__ico">
               <img src="${imgBascket}" alt="cart" />
             </div>`,
+    href: "basket",
     callback: (): void => {},
   },
 ];
@@ -85,14 +88,17 @@ export const profileLinks: link[] = [
 export const pages: link[] = [
   {
     name: namePage.MAIN,
+    href: "/",
     callback: (): void => {},
   },
   {
     name: namePage.ABOUT,
+    href: "/about",
     callback: (): void => {},
   },
   {
     name: namePage.CATALOG,
+    href: "/catalog",
     callback: (): void => {},
   },
 ];

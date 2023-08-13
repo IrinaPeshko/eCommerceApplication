@@ -23,6 +23,10 @@ export default class ElementCreator {
     if (param.callback) {
       this.setCallback(param.callback);
     }
+
+    if (param.href) {
+      this.setHref(param.href);
+    }
   }
 
   public getElement(): HTMLElement | null {
@@ -44,6 +48,12 @@ export default class ElementCreator {
   public setInnerHTML(text: string): void {
     if (this.element) {
       this.element.innerHTML = text;
+    }
+  }
+
+  public setHref(text: string): void {
+    if (this.element) {
+      this.element.setAttribute("href", text);
     }
   }
 

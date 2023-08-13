@@ -1,5 +1,6 @@
 import Param from "../../types/elementCreator/param";
 import View from "../utils/view";
+import { route } from "../utils/router";
 
 const cssClasses = {
   link: "pages__item",
@@ -14,12 +15,14 @@ export default class LinkView extends View {
     text?: string,
     classList: string[] = ["pages__item"],
     innerHTML?: string,
+    href?: string,
   ) {
     const params: Param = {
       tag: "a",
       classNames: classList,
       textContent: text,
       innerHTML,
+      href,
     };
     super(params);
     this.linkElements = linkElements;
@@ -41,6 +44,10 @@ export default class LinkView extends View {
 
   private configureView(): void {
     const element = this.elementCreator.getElement();
-    element?.addEventListener("click", this.setSelectedStatus.bind(this));
+    element?.addEventListener("click", (event) => {
+      this.setSelectedStatus.bind(this);
+      route(event);
+      event.preventDefault();
+    });
   }
 }
