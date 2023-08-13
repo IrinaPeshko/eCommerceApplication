@@ -1,7 +1,4 @@
 @import url(styles/normalaize.scss);
 @import url(styles/variables.scss);
 @import url(styles/general.scss);
-
-body {
-  background-color: aqua;
-}
+@import url(./styles/header.scss);

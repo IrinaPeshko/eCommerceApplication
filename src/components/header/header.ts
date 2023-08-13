@@ -1,4 +1,4 @@
-import "./header.scss";
+// import "./header.scss";
 import Param from "../../types/elementCreator/param";
 import ElementCreator from "../utils/elementCreator";
 import View from "../utils/view";
@@ -10,6 +10,8 @@ import {
   cssClasses,
   headerBlockParams,
   paramsNavUl,
+  paramBurgerSpan,
+  paramBurgerContainer,
 } from "./data/params";
 import { profileLinks, pages } from "./data/linkArrays";
 import img from "../../assets/icons/logo.png";
@@ -34,6 +36,12 @@ export default class HeaderView extends View {
     this.elementCreator.addInnerELement(creatorHeaderContainer);
     const creatorLogo = new ElementCreator(paramLogo);
     creatorHeaderContainer.addInnerELement(creatorLogo);
+    const creatorBurger = new ElementCreator(paramBurgerContainer);
+    creatorHeaderContainer.addInnerELement(creatorBurger);
+    for (let i = 0; i < 4; i += 1) {
+      const creatorBurgerSpan = new ElementCreator(paramBurgerSpan);
+      creatorBurger.addInnerELement(creatorBurgerSpan);
+    }
     const creatorNav = new ElementCreator(paramsNav);
     creatorHeaderContainer.addInnerELement(creatorNav);
     const creatorNavUl = new ElementCreator(paramsNavUl);

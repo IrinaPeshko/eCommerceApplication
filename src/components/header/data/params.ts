@@ -7,9 +7,8 @@ export const cssClasses = {
   navUl: "pages",
   logo: "logo",
   profileBlock: "account",
-  sigh: ["account__item", "sigh"],
-  accaountCreate: ["account__item", "account__create", "unactive"],
-  basket: "shoping_cart",
+  burgerContainer: "burger",
+  burgerSpan: "span",
 };
 export const headerBlockParams: Param = {
   tag: "div",
@@ -34,4 +33,14 @@ export const paramsNavUl: Param = {
 export const paramsProfileBlock: Param = {
   tag: "div",
   classNames: [`${cssClasses.profileBlock}`],
+};
+
+export const paramBurgerContainer: Param = {
+  tag: "div",
+  classNames: [`${cssClasses.burgerContainer}`],
+};
+
+export const paramBurgerSpan: Param = {
+  tag: "span",
+  classNames: [`${cssClasses.burgerSpan}`],
 };
