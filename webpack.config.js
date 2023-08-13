@@ -19,7 +19,7 @@ module.exports = {
     },
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: [".ts", ".js"],
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -34,8 +34,8 @@ module.exports = {
         onEnd: {
           copy: [
             {
-              source: path.join('src', 'assets'),
-              destination: path.join('dist', 'assets'),
+              source: path.join("src", "assets"),
+              destination: path.join("dist", "assets"),
             },
           ],
         },
@@ -44,7 +44,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name].css",
     }),
-    new ESLintPlugin({ extensions: 'ts' })
+    new ESLintPlugin({ extensions: "ts" }),
   ],
   devtool: "inline-source-map",
   devServer: {
@@ -53,9 +53,9 @@ module.exports = {
   },
   module: {
     rules: [
-      { 
-        test: /\.ts$/i, 
-        use: 'ts-loader' 
+      {
+        test: /\.ts$/i,
+        use: "ts-loader",
       },
       {
         test: /\.(scss|css)$/,
@@ -78,7 +78,6 @@ module.exports = {
         test: /\.html$/i,
         loader: "html-loader",
       },
-      
     ],
   },
 };
