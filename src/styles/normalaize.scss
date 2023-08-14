@@ -47,8 +47,6 @@ body {
 
 main {
   display: block;
-main {
-  display: block;
 }
 
 /**
@@ -60,10 +58,6 @@ main {
  * `article` contexts in Chrome, Firefox, and Safari.
  */
 
-h1 {
-  font-size: 2em;
-  margin: 0.67em 0;
-}
 h1 {
   font-size: 2em;
   margin: 0.67em 0;
@@ -127,8 +121,6 @@ pre {
  * Remove the gray background on active links in IE 10.
  */
 
-a {
-  background-color: transparent;
 a {
   background-color: transparent;
 }
@@ -214,8 +206,6 @@ sub {
   bottom: -0.25em;
 }
 
-sup {
-  top: -0.5em;
 sup {
   top: -0.5em;
 }
@@ -332,8 +322,6 @@ button:-moz-focusring,
 
 fieldset {
   padding: 0.35em 0.75em 0.625em;
-fieldset {
-  padding: 0.35em 0.75em 0.625em;
 }
 
 /**
@@ -364,6 +352,7 @@ legend {
 
 progress {
   vertical-align: baseline;
+}
 legend {
   box-sizing: border-box; /* 1 */
   color: inherit; /* 2 */
@@ -493,6 +482,7 @@ template {
 
 [hidden] {
   display: none;
+}
 /*
  * Add the correct display in all browsers.
  */
