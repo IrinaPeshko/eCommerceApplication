@@ -9,7 +9,7 @@ export const routers: Irouters = {
   "/basket": "pages/basket.html",
 };
 
-async function handleLocation(): Promise<void> {
+export async function handleLocation(): Promise<void> {
   const path = window.location.pathname;
   const html = await fetch(routers[path]).then((data) => data.text());
   const main = document.querySelector(".main");
@@ -17,6 +17,8 @@ async function handleLocation(): Promise<void> {
     main.innerHTML = html;
   }
 }
+
+window.onpopstate = handleLocation;
 
 export const route = (e: MouseEvent): void => {
   const { currentTarget } = e;
