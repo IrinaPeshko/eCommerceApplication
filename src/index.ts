@@ -4,7 +4,7 @@ import { handleLocation, route } from "./components/utils/router";
 
 function initializeApp(): void {
   App.createView();
-  handleLocation()
+  handleLocation();
 }
 
 window.addEventListener("DOMContentLoaded", initializeApp);
