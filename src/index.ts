@@ -1,4 +1,3 @@
-import { getCustomers, getProjectDetails } from "./sdk/sdk";
 import "./style.scss";
 import App from "./components/app/app";
 import { handleLocation, route } from "./components/utils/router";
@@ -17,6 +16,3 @@ declare global {
 }
 
 window.route = route;
-getCustomers().then((response) => console.log(response));
-
-getProjectDetails().then((response) => console.log(response));
