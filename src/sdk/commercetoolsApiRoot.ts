@@ -7,26 +7,22 @@ import {
   createApiBuilderFromCtpClient,
   ApiRoot,
 } from "@commercetools/platform-sdk";
-import fetch from "node-fetch";
-import dotenv from "dotenv";
 
-dotenv.config();
+export const projectKey = "ecommerceapplication";
 
-const projectKey = process.env.CTP_PROJECT_KEY || "";
 const authMiddlewareOptions = {
-  host: process.env.CTP_AUTH_URL || "",
+  host: "https://auth.europe-west1.gcp.commercetools.com",
   projectKey,
   credentials: {
-    clientId: process.env.CTP_CLIENT_ID || "",
-    clientSecret: process.env.CTP_CLIENT_SECRET || "",
+    clientId: "xWGHs96wClja2WK4pTe4sHuL",
+    clientSecret: "ygIfusxYt5nEp1dB-K4Y-rcCMEReoCFG",
   },
-  oauthUri: process.env.adminAuthUrl || "",
   scopes: [`manage_project:${projectKey}`],
   fetch,
 };
 
 const httpMiddlewareOptions = {
-  host: process.env.CTP_API_URL || "",
+  host: "https://api.europe-west1.gcp.commercetools.com",
   fetch,
 };
 
@@ -37,6 +33,4 @@ const client = new ClientBuilder()
   .withUserAgentMiddleware()
   .build();
 
-const apiRoot: ApiRoot = createApiBuilderFromCtpClient(client);
-
-export { apiRoot, projectKey, ApiRoot };
+export const apiRoot: ApiRoot = createApiBuilderFromCtpClient(client);
