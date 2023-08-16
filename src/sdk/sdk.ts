@@ -36,3 +36,20 @@ export function registerUser(
     })
     .execute();
 }
+
+export function getUser(email: string, password: string) {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .me()
+    .login()
+    .post({
+      body: {
+        email,
+        password,
+        updateProductData: true,
+        // anonymousId: options?.anonymousId,
+        // anonymousCartSignInMode: "MergeWithExistingCustomerCart",
+      },
+    })
+    .execute();
+}
