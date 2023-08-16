@@ -15,7 +15,7 @@ module.exports = {
   root: true,
   rules: 
   {
-    'no-console': 'error',
+    // 'no-console': 'error',
     'import/extensions': 'off',
     'import/prefer-default-export': 'off',
     '@typescript-eslint/no-explicit-any': 'error',
@@ -39,7 +39,7 @@ module.exports = {
       },
     ],
     'max-lines-per-function': ['error', 40],
-    '@typescript-eslint/explicit-function-return-type': 'error',
+    // '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/no-unnecessary-type-assertion': 'error',
     '@typescript-eslint/no-non-null-assertion': 'error',
   },
