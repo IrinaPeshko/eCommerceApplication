@@ -7,11 +7,31 @@ export const routers: Irouters = {
   "/login": "pages/login.html",
   "/createaccount": "pages/createaccount.html",
   "/basket": "pages/basket.html",
+  "/404": "pages/404.html",
 };
 
-export async function handleLocation(): Promise<void> {
+export async function getNotFoundPage() {
+  return fetch(routers["/404"])
+    .then((page) => page.text())
+    .catch(() => "404");
+}
+
+async function getHTML() {
   const path = window.location.pathname;
-  const html = await fetch(routers[path]).then((data) => data.text());
+  const validPathes = Object.keys(routers);
+  if (!validPathes.includes(path)) {
+    return getNotFoundPage();
+  }
+  const data = await fetch(routers[path]);
+  if (data.status === 200) {
+    return data.text();
+  }
+  return getNotFoundPage();
+}
+
+export async function handleLocation(): Promise<void> {
+  const html = await getHTML();
+
   const main = document.querySelector(".main");
   if (main) {
     main.innerHTML = html;
