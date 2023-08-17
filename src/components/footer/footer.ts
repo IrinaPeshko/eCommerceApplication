@@ -1,5 +1,6 @@
 import Param from "../../types/elementCreator/param";
 import View from "../utils/view";
+import footerContent from "./template";
 
 const cssClasses = {
   footer: "footer",
@@ -13,6 +14,7 @@ export default class FooterView extends View {
       tag: "footer",
       classNames: [`${cssClasses.footer}`],
       textContent: TEXT,
+      innerHTML: footerContent,
     };
     super(params);
   }
