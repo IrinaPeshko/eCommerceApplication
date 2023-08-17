@@ -18,6 +18,8 @@ export async function handleLocation(): Promise<void> {
   }
 }
 
+window.onpopstate = handleLocation;
+
 export const route = (e: MouseEvent): void => {
   const { currentTarget } = e;
 
