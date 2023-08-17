@@ -7,6 +7,132 @@
     ),
     url("assets/img/main_bg.png") no-repeat top left / 100% 100%,
     lightgray 50% / cover no-repeat;
-  height: 800px;
-  width: 100%;
+}
+
+.main_welcome__box {
+  display: flex;
+  margin: 45px auto;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 20px;
+  @media (max-width: 650px) {
+    flex-wrap: wrap;
+  }
+}
+
+.welcome_col_1 {
+  flex: 0 0 40%;
+  align-items: center;
+  justify-self: center;
+  @media (max-width: 650px) {
+    order: 2;
+  }
+  & .button-main {
+    padding-left: 21px;
+    margin: 0 auto;
+  }
+}
+
+.welcome_col_2 {
+  display: flex;
+  flex: 1 0 60%;
+  display: flex;
+  align-items: center;
+  margin: 20px;
+}
+
+.welcome_dress {
+  flex: 1 1 50%;
+  padding: 1px;
+  img {
+    max-width: 100%;
+    width: 100%;
+  }
+  // width: 100%;
+  // max-width: 470px;
+
+  // // width: 470px;
+  // // @media (max-width:1630px) {
+  // //   width: 370px;
+  // // }
+  // // max-width: 100%;
+  // box-shadow: 10px 10px 24px 0px rgba(0, 0, 0, 0.25);
+  // display: inline;
+  // margin-top: 10%;
+  // margin-bottom: 10%;
+
+  &:first-child {
+    transform: scale(0.9);
+  }
+  &:last-child {
+    transform: scale(1);
+    margin-left: -10%;
+  }
+}
+
+.main__title {
+  font-size: 86px;
+  font-weight: 600;
+  line-height: 111%;
+  text-transform: uppercase;
+  max-width: 504px;
+  position: relative;
+  border-top: $color1 solid 2px;
+  border-right: $color1 solid 2px;
+  padding: 21px;
+  position: relative;
+  margin: 0 auto;
+  text-align: center;
+  @media (max-width: 1350px) {
+    font-size: 65px;
+  }
+  @media (max-width: 1070px) {
+    font-size: 55px;
+  }
+  @media (max-width: 900px) {
+    font-size: 45px;
+  }
+  @media (max-width: 700px) {
+    font-size: 35px;
+  }
+  margin: 15px;
+}
+
+.main_brands {
+  position: relative;
+  h2 {
+    font-size: 24px;
+    position: absolute;
+    top: -30px;
+    left: 5%;
+    background-color: white;
+    padding: 0px 30px;
+    width: 110px;
+    &::after {
+      content: "";
+      width: 50%;
+    }
+  }
+}
+
+.main_brands__list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  border: solid 2px #c4c4c4;
+  // &::after {
+  //   content: "Our brands";
+  //   position: absolute;
+  //   top: -10px;
+  //   font-size: 24px;
+  //   padding: 20px;
+  //   background-color: white;
+  // }
+
+  li svg {
+    max-width: 100%;
+    width: 139px;
+  }
 }
