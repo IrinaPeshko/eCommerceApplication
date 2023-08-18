@@ -88,7 +88,7 @@ export const profileLinks: link[] = [
           } else if (target.id === "default_billing_checkbox") {
             setBillingDefault();
           } else if (target.id === "default_shipping_checkbox") {
-            setShippingDefault()
+            setShippingDefault();
           }
         }
       });
