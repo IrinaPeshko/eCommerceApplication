@@ -1,31 +1,96 @@
 <section class="container create_account">
   <div class="map"><span>Home</span><span>Create New Customer Account</span></div>
   <h1>Create New Customer Account</h1>
-  <form class="create_account__box" action="#">
-      <h2>Personal Information</h2>
-      <div class="create_account__items">
-        <div class="create_account__item">
-          <label for="first_name">First name</label>
-          <input id="first_name" type="text" placeholder="first name"></div>
-        <div class="create_account__item">
-          <label for="last_name">Last name</label>
-          <input id="last_name" type="text" placeholder="last name">
-        </div>
-        <div class="create_account__item">
-          <label class="sing_up">
-            <input type="checkbox">Sign Up for Newsletter
-          </label>
-        </div>
+  <form class="create_account__box" action="#" id="registrationForm">
+    
+    <h2>Personal Information</h2>
+    <div class="create_account__items">
+      <div class="create_account__item">
+        <label for="first_name">First name</label>
+        <input id="first_name" type="text" placeholder="First name" required>
       </div>
-      <h2>Sign Up for Newsletter</h2>
-      <div class="create_account__items">
-        <div class="create_account__item"><label for="email">Email</label><input id="email" type="email" placeholder="email"></div>
-        <div class="create_account__item"><label>Password</label><input type="password" placeholder="password"></div>
-        <div class="create_account__item"><label>Confirm Password</label><input type="password" placeholder="confirm password"></div>
+      <div class="create_account__item">
+        <label for="last_name">Last name</label>
+        <input id="last_name" type="text" placeholder="Last name" required>
       </div>
-      <button type="button" class=" button-black" id = "sendCreatingAccount">create an account</button>
-  </form>
+      <div class="create_account__item">
+        <label for="birthdate">Date of Birth</label>
+        <input id="birthdate" type="date" required>
+      </div>
+    </div>
+
+    <!-- Additional Informationr -->
+    <h2>Additional Informationr</h2>
+    <div class="create_account__items">
+      <div class="create_account__item">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="Email" required>
+      </div>
+      <div class="create_account__item">
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$" title="Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number" required>
+      </div>
+      <div class="create_account__item">
+        <label for="confirm_password">Confirm Password</label>
+        <input id="confirm_password" type="password" placeholder="Confirm password" required>
+      </div>
+    </div>
+
+<!-- Billing Address -->
+<h2>Billing Address</h2>
+<div class="create_account__items">
+  <div class="create_account__item">
+    <label for="billing_street">Street</label>
+    <input id="billing_street" type="text" placeholder="Street" required>
+  </div>
+  <div class="create_account__item">
+    <label for="billing_city">City</label>
+    <input id="billing_city" type="text" placeholder="City" required>
+  </div>
+  <div class="create_account__item">
+    <label for="billing_postal_code">Postal Code</label>
+    <input id="billing_postal_code" type="text" placeholder="Postal Code" required>
+  </div>
+  <div class="create_account__item">
+    <label for="billing_country">Country</label>
+    <input id="billing_country" type="text" placeholder="Country" required>
+  </div>
+</div>
+
+<!-- Shipping Address -->
+<h2>Shipping Address</h2>
+<div class="create_account__items">
+  <div class="create_account__item">
+    <label for="shipping_street">Street</label>
+    <input id="shipping_street" type="text" placeholder="Street" required>
+  </div>
+  <div class="create_account__item">
+    <label for="shipping_city">City</label>
+    <input id="shipping_city" type="text" placeholder="City" required>
+  </div>
+  <div class="create_account__item">
+    <label for="shipping_postal_code">Postal Code</label>
+    <input id="shipping_postal_code" type="text" placeholder="Postal Code" required>
+  </div>
+  <div class="create_account__item">
+    <label for="shipping_country">Country</label>
+    <input id="shipping_country" type="text" placeholder="Country" required>
+  </div>
+</div>
+
+<!-- Checkbox for Default Address -->
+<div class="create_account__item">
+  <label class="sing_up">
+    <input type="checkbox" id="default_address_checkbox">Set shipping address as default
+  </label>
+</div>
+
+<!-- Button to Create an Account -->
+<button type="button" class="button-black" id="sendCreatingAccount">Create an account</button>
+</form>
 </section>
 
-
-
+    <!-- Button to Create an Account -->
+    <button type="button" class="button-black" id="sendCreatingAccount">Create an account</button>
+  </form>
+</section>

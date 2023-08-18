@@ -1,6 +1,7 @@
 import link from "../../../types/link/Ilink";
 import imgBascket from "../../../assets/icons/bascket.png";
 import imgProfile from "../../../assets/icons/8324223_ui_essential_app_avatar_profile_icon.svg";
+import { registerUser } from "../../../sdk/sdk";
 
 const namePage = {
   MAIN: "MAIN",
@@ -82,6 +83,8 @@ export const profileLinks: link[] = [
         if (target instanceof HTMLElement) {
           if (target.id === "sendCreatingAccount") {
             console.log("clickBtn");
+            
+            // registerUser
           }
         }
       });
