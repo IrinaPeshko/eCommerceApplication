@@ -55,6 +55,7 @@ export default class HeaderView extends View {
         undefined,
         undefined,
         item.href,
+        item.callback,
       );
       const newLink = linkElement.getHTMLElement();
       if (newLink) {
@@ -73,6 +74,7 @@ export default class HeaderView extends View {
         item.classList,
         item.innerHTML,
         item.href,
+        item.callback,
       );
       const newLink = linkElement.getHTMLElement();
       if (newLink) {
@@ -83,6 +85,7 @@ export default class HeaderView extends View {
         }
       }
     });
+
     creatorLogo.setInnerHTML(`<img src="${img}" alt="logo">`);
   }
 }

@@ -1,10 +1,20 @@
 import "./style.scss";
 import App from "./components/app/app";
 import { handleLocation, route } from "./components/utils/router";
+import { profileLinks, pages } from "./components/header/data/linkArrays";
 
 function initializeApp(): void {
   App.createView();
-  handleLocation();
+  const currentPath = window.location.pathname;
+  const currentLink = [...profileLinks, ...pages].find(
+    (link) => link.href === currentPath,
+  );
+  console.log(currentLink);
+  if (currentLink) {
+    handleLocation(currentLink.callback);
+  } else {
+    handleLocation();
+  }
 }
 
 window.addEventListener("DOMContentLoaded", initializeApp);

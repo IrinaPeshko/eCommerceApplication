@@ -62,7 +62,9 @@ export const profileLinks: link[] = [
               </defs>
             </svg>`,
     href: "/login",
-    callback: (): void => {},
+    callback: (): void => {
+      console.log("click");
+    },
   },
   {
     name: namePage.CREATEACCOUNT,
@@ -72,8 +74,18 @@ export const profileLinks: link[] = [
               alt="create an account"
               title="create an account"
             />`,
-    href: "createaccount",
-    callback: (): void => {},
+    href: "/createaccount",
+    callback: (): void => {
+      document.addEventListener("click", (event) => {
+        event.stopImmediatePropagation();
+        const { target } = event;
+        if (target instanceof HTMLElement) {
+          if (target.id === "sendCreatingAccount") {
+            console.log("clickBtn");
+          }
+        }
+      });
+    },
   },
   {
     name: namePage.BASKET,
@@ -82,7 +94,9 @@ export const profileLinks: link[] = [
               <img src="${imgBascket}" alt="cart" />
             </div>`,
     href: "basket",
-    callback: (): void => {},
+    callback: (): void => {
+      console.log("click");
+    },
   },
 ];
 
@@ -90,16 +104,22 @@ export const pages: link[] = [
   {
     name: namePage.MAIN,
     href: "/",
-    callback: (): void => {},
+    callback: (): void => {
+      console.log("click");
+    },
   },
   {
     name: namePage.ABOUT,
     href: "/about",
-    callback: (): void => {},
+    callback: (): void => {
+      console.log("click");
+    },
   },
   {
     name: namePage.CATALOG,
     href: "/catalog",
-    callback: (): void => {},
+    callback: (): void => {
+      console.log("click");
+    },
   },
 ];

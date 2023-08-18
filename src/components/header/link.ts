@@ -16,6 +16,7 @@ export default class LinkView extends View {
     classList: string[] = ["pages__item"],
     innerHTML?: string,
     href?: string,
+    callback?: () => void,
   ) {
     const params: Param = {
       tag: "a",
@@ -23,6 +24,7 @@ export default class LinkView extends View {
       textContent: text,
       innerHTML,
       href,
+      callback,
     };
     super(params);
     this.linkElements = linkElements;
