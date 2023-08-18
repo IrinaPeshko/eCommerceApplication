@@ -100,8 +100,17 @@ header {
   gap: 29px;
 }
 
+.account a {
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
 .account__item {
   text-transform: uppercase;
+  &:hover {
+    color: $color5;
+  }
 }
 
 .account__create {
@@ -131,6 +140,9 @@ header {
   text-transform: uppercase;
   list-style: none;
   white-space: nowrap;
+  &:hover {
+    border-bottom: $color5 solid 2px;
+  }
 }
 
 .shoping_cart {

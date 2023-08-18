@@ -6,10 +6,6 @@
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
-}
-
-.footer {
-  margin: 0px auto;
   box-sizing: border-box;
   width: 100%;
 }
@@ -64,9 +60,15 @@
   }
 }
 
+.footer_nav__item {
+  &:hover {
+    border-bottom: $color5 solid 2px;
+  }
+}
+
 .footer_general__title {
   color: #fff;
-  font-family: Oswald;
+  font-family: "Oswald";
   font-size: 18px;
   font-style: normal;
   font-weight: 600;
@@ -86,8 +88,14 @@
   line-height: 207%;
 }
 
-.follow_us__item span:first-child {
-  margin-right: 18px;
+.follow_us__item {
+  span:first-child {
+    margin-right: 18px;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .contact__item {
