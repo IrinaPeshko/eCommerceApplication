@@ -83,7 +83,7 @@ export const profileLinks: link[] = [
         if (target instanceof HTMLElement) {
           if (target.id === "sendCreatingAccount") {
             console.log("clickBtn");
-            
+
             // registerUser
           }
         }
