@@ -84,13 +84,6 @@ header {
   }
 }
 
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20%;
-}
-
 .pages {
   flex-wrap: wrap;
 }
@@ -212,18 +205,33 @@ header {
     position: relative;
     left: -10px;
   }
+
+  .header.open {
+    .nav {
+      position: absolute;
+      display: flex;
+      background-color: inherit;
+      z-index: 100;
+      min-height: 100vh;
+      min-width: 100%;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      margin-top: 100px;
+      background-color: #000;
+      transition: all 0.9s linear;
+    }
+    .pages {
+      flex-direction: column;
+      margin: 20px;
+      font-size: 24px;
+      transition: all 0.9s linear;
+    }
+  }
 }
 
 @media (max-width: 670px) {
   .header {
     gap: 10px;
-  }
-}
-
-.header.open {
-  .nav {
-    min-height: 100vh;
-    min-width: 100vw;
-    position: absolute;
   }
 }

@@ -21,6 +21,8 @@ export default class HeaderView extends View {
 
   public header: HTMLElement | null;
 
+  public burger: HTMLElement | null;
+
   constructor() {
     const params: Param = {
       tag: "header",
@@ -28,6 +30,7 @@ export default class HeaderView extends View {
     };
     super(params);
     this.header = null;
+    this.burger = null;
     this.linkElements = [];
     this.configureView();
     this.clickBurger();
@@ -69,6 +72,7 @@ export default class HeaderView extends View {
         }
       }
       this.header = creatorHeaderContainer.getElement();
+      this.burger = creatorBurger.getElement();
     });
 
     profileLinks.forEach((item, index) => {
@@ -94,7 +98,9 @@ export default class HeaderView extends View {
   public clickBurger() {
     if (this.header) {
       this.header.addEventListener("click", () => {
+        document.body.classList.toggle("lock");
         this.header?.classList.toggle("open");
+        this.burger?.classList.toggle("open");
       });
     }
   }
