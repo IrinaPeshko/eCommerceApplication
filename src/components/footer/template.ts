@@ -25,8 +25,8 @@ const footerContent = `
     <h2 class="footer_general__title">CONTACT US</h2>
     <ul class="footer_general__list contact__list">
       <li class="contact__item"><span>Address:</span><span>123 STREET NAME, CITY, ENGLAND</span></li>
-      <li class="contact__item"><span>Phone:</span><a href="/" type="phone">(123) 456-7890</a></li>
-      <li class="contact__item"><span>email:</span><a href="/">MAIL@EXAMPLE.COM</a></li>
+      <li class="contact__item"><span>Phone:</span><a href="tel:+1234567890" type="phone">(123) 456-7890</a></li>
+      <li class="contact__item"><span>email:</span><a href="mail:mail@exaple.com">MAIL@EXAMPLE.COM</a></li>
       <li class="contact__item"><span>working days/hours:</span><span>MON - SUN / 9:00AM - 8:00PM</span></li>
       </ul>
   </div>
@@ -34,18 +34,18 @@ const footerContent = `
     <h2 class="footer_general__title">FOLLOW US</h2>
     <ul class="footer_general__list follow_us__list">
       <li class="follow_us__item">
-        <a class="follow_us__link" href="#">
+        <a class="follow_us__link" target="_blank" href="https://www.facebook.com/">
           <span><img src="assets/icons/facebook.svg" alt="facebook"></span>
           <span>FACEBOOK</span>
         </a>
       </li>
       <li class="follow_us__item">
-        <a class="follow_us__link" href="#">
+        <a class="follow_us__link" target="_blank" href="https://twitter.com/?lang=en">
           <span><img src="./assets/icons/twitter.svg" alt="twitter"></span>
           <span>TWITTER</span></li>
         </a>
       <li class="follow_us__item">
-        <a class="follow_us__link" href="#">
+        <a class="follow_us__link" target="_blank" href="https://www.instagram.com/">
           <span><img src="./assets/icons/instagram-photo-camera-symbol.svg" alt="instagram"></span>
           <span>INSTAGRAM</span>
         </a>
