@@ -21,6 +21,7 @@ header {
   box-sizing: border-box;
   width: 100%;
   color: #ffffff;
+  position: relative;
 }
 
 .logo {
@@ -216,5 +217,13 @@ header {
 @media (max-width: 670px) {
   .header {
     gap: 10px;
+  }
+}
+
+.header.open {
+  .nav {
+    min-height: 100vh;
+    min-width: 100vw;
+    position: absolute;
   }
 }

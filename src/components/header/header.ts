@@ -19,14 +19,18 @@ const startPageIndex = 0;
 export default class HeaderView extends View {
   public linkElements: LinkView[];
 
+  public header: HTMLElement | null;
+
   constructor() {
     const params: Param = {
       tag: "header",
       classNames: [`${cssClasses.header}`],
     };
     super(params);
+    this.header = null;
     this.linkElements = [];
     this.configureView();
+    this.clickBurger();
   }
 
   // eslint-disable-next-line max-lines-per-function
@@ -64,6 +68,7 @@ export default class HeaderView extends View {
           linkElement.setSelectedStatus();
         }
       }
+      this.header = creatorHeaderContainer.getElement();
     });
 
     profileLinks.forEach((item, index) => {
@@ -84,5 +89,13 @@ export default class HeaderView extends View {
       }
     });
     creatorLogo.setInnerHTML(`<img src="${img}" alt="logo">`);
+  }
+
+  public clickBurger() {
+    if (this.header) {
+      this.header.addEventListener("click", () => {
+        this.header?.classList.toggle("open");
+      });
+    }
   }
 }
