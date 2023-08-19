@@ -66,7 +66,7 @@ export const profileLinks: link[] = [
             </svg>`,
     href: "/login",
     callback: (): void => {
-      console.log("click");
+      document.addEventListener("click", (event) => {})
     },
   },
   {
