@@ -45,6 +45,7 @@
     "husky": "^8.0.3",
     "jest": "^29.6.2",
     "mini-css-extract-plugin": "^2.7.6",
+    "postcode-validator": "^3.8.14",
     "postcss-loader": "^7.3.3",
     "postcss-preset-env": "^9.1.0",
     "prettier": "^3.0.0",
@@ -63,7 +64,6 @@
     "@commercetools/sdk-client-v2": "^2.2.0",
     "dotenv": "^16.3.1",
     "node-fetch": "^3.3.2",
-    "postcode-validator": "^3.8.14",
     "ts-node": "^10.9.1"
   }
 }

@@ -1,4 +1,4 @@
-import { postcodeValidator } from 'postcode-validator';
+import { postcodeValidator } from "postcode-validator";
 
 export default class Validate {
   private errorField: ChildNode | null;
@@ -11,15 +11,16 @@ export default class Validate {
   public validateText(): void {
     const reg = /^[А-яЁёa-zA-Z]{1,}$/;
     if (this.errorField) {
-      if (!this.target.value || this.target.value === '') {
+      if (!this.target.value || this.target.value === "") {
         this.errorField.textContent = "This is a required field.";
         this.target.classList.remove("valid");
         this.target.classList.add("invalid");
       }
       if (this.target.dataset.type === "code") {
-        let country: HTMLElement | null; let countryVal: string;
-        if (this.target.id === 'billing_postal_code') {
-          country = document.getElementById('billing_country');
+        let country: HTMLElement | null;
+        let countryVal: string;
+        if (this.target.id === "billing_postal_code") {
+          country = document.getElementById("billing_country");
           if (country) {
             countryVal = (country as HTMLSelectElement).value;
             if (!postcodeValidator(this.target.value, countryVal)) {
@@ -32,8 +33,8 @@ export default class Validate {
               this.target.classList.add("valid");
             }
           }
-        } else if (this.target.id === 'shipping_postal_code') {
-          country = document.getElementById('shipping_country');
+        } else if (this.target.id === "shipping_postal_code") {
+          country = document.getElementById("shipping_country");
           if (country) {
             countryVal = (country as HTMLSelectElement).value;
             if (!postcodeValidator(this.target.value, countryVal)) {
@@ -85,7 +86,7 @@ export default class Validate {
   public validateEmail(): void {
     const emailReg = /^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/;
     if (this.errorField) {
-      if (!this.target.value || this.target.value === '') {
+      if (!this.target.value || this.target.value === "") {
         this.errorField.textContent = "This is a required field.";
         (this.errorField as HTMLSpanElement).classList.remove(
           "form__message--short",
@@ -100,16 +101,16 @@ export default class Validate {
         this.target.classList.add("invalid");
       }
       if (!emailReg.test(this.target.value)) {
-          this.errorField.textContent = "Wrong format. Use @ and . symbols";
-          (this.errorField as HTMLSpanElement).classList.remove(
-            "form__message--empty",
-          );
-          (this.errorField as HTMLSpanElement).classList.remove(
-            "form__message--strong",
-          );
-          (this.errorField as HTMLSpanElement).classList.add(
-            "form__message--short",
-          );
+        this.errorField.textContent = "Wrong format. Use @ and . symbols";
+        (this.errorField as HTMLSpanElement).classList.remove(
+          "form__message--empty",
+        );
+        (this.errorField as HTMLSpanElement).classList.remove(
+          "form__message--strong",
+        );
+        (this.errorField as HTMLSpanElement).classList.add(
+          "form__message--short",
+        );
         this.target.classList.remove("valid");
         this.target.classList.add("invalid");
       } else {
@@ -180,7 +181,7 @@ export default class Validate {
         }
       } else {
         const passwordField: HTMLInputElement | null =
-        document.querySelector("#password");
+          document.querySelector("#password");
         const passwordValue: string | undefined = passwordField?.value;
         if (passwordValue && passwordValue !== "") {
           if (this.target.value === passwordValue) {
@@ -236,7 +237,8 @@ export default class Validate {
       } else {
         const userAge: number = new Date(difference).getFullYear() - 1970;
         if (userAge < 13) {
-          this.errorField.textContent = "Users under the age of 13 are not allowed to register.";
+          this.errorField.textContent =
+            "Users under the age of 13 are not allowed to register.";
           (this.errorField as HTMLSpanElement).classList.remove(
             "form__message--empty",
           );
@@ -268,7 +270,7 @@ export default class Validate {
 
   public validateSelect(): void {
     if (this.errorField) {
-      if (this.target.value && this.target.value !== '') {
+      if (this.target.value && this.target.value !== "") {
         this.errorField.textContent = "";
         this.target.classList.remove("invalid");
         this.target.classList.add("valid");

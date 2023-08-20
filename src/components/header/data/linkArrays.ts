@@ -115,8 +115,8 @@ export const profileLinks: link[] = [
         e.preventDefault();
         const { target } = e;
         if (target) {
-          if ((target as HTMLElement).tagName === 'SELECT') {
-            console.log('SELECVT');
+          if ((target as HTMLElement).tagName === "SELECT") {
+            console.log("SELECVT");
             registration.validationSelect(target as HTMLSelectElement);
           }
         }

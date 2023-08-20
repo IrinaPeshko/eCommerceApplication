@@ -29,15 +29,15 @@ export default class Registration {
     );
     const userData: Obj = {};
     if (form) {
-      const fields = form.querySelectorAll('.form__field[required]');
+      const fields = form.querySelectorAll(".form__field[required]");
       if (fields) {
         const fieldsArr: Element[] = Array.from(fields);
-        fieldsArr.forEach(elem => {
-          if (elem.hasAttribute('disabled')) {
-            elem.classList.add('valid');
+        fieldsArr.forEach((elem) => {
+          if (elem.hasAttribute("disabled")) {
+            elem.classList.add("valid");
           }
         });
-        if (fieldsArr.every(elem => elem.classList.contains('valid'))) {
+        if (fieldsArr.every((elem) => elem.classList.contains("valid"))) {
           const data = new FormData(form);
           for (const val of data.entries()) {
             const key: string = val[0];
@@ -65,9 +65,11 @@ export default class Registration {
             console.log(err);
           }
         } else {
-          fieldsArr.filter(elem => !elem.classList.contains('valid')).forEach(elem => {
-            elem.classList.add('invalid');
-          })
+          fieldsArr
+            .filter((elem) => !elem.classList.contains("valid"))
+            .forEach((elem) => {
+              elem.classList.add("invalid");
+            });
         }
       }
     }
