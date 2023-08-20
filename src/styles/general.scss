@@ -173,6 +173,9 @@ body.lock {
     &:not(:last-child) {
       margin-bottom: 15px;
     }
+    &.form__wrapper--btns-wrapper {
+      align-items: baseline;
+    }
   }
   & .form__asterisk {
     color: #eb5757;
@@ -289,6 +292,19 @@ body.lock {
     }
     & .form__checkbox:checked ~ .form__checkbox-indicator {
       background-image: url("./assets/icons/checkbox-checked.svg");
+    }
+  }
+  & .form__btn-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    row-gap: 12px;
+  }
+  & .form__sign-in-link {
+    text-decoration: underline;
+    color: #828282;
+    &:hover {
+      cursor: pointer;
+      color: #000000;
     }
   }
 }

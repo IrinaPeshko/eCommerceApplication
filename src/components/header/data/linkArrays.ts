@@ -70,24 +70,24 @@ export const profileLinks: link[] = [
     callback: (): void => {
       const login = new Login();
       const func: (event: Event) => void = (event: Event): void => {
-        const {target} = event;
+        const { target } = event;
         if (target) {
-          if ((target as HTMLInputElement).tagName === "BUTTON") {
+          if ((target as HTMLElement).tagName === "BUTTON") {
             if ((target as HTMLInputElement).classList.contains("login__btn")) {
               event.preventDefault();
               login.signIn();
             }
-          } else if ((target as HTMLInputElement).tagName === "A") {
+          } else if ((target as HTMLElement).tagName === "A") {
             event.preventDefault();
-            window.location.href = '/createaccount';
+            window.location.href = "/createaccount";
           }
         }
-      }
+      };
       document.addEventListener("input", (e: Event): void => {
         e.preventDefault();
-        const {target} = e;
+        const { target } = e;
         if (target) {
-            login.validationForm(target as HTMLInputElement);
+          login.validationForm(target as HTMLInputElement);
         }
       });
       document.addEventListener("click", (e: Event): void => func(e));
@@ -106,9 +106,19 @@ export const profileLinks: link[] = [
       const registration = new Registration();
       document.addEventListener("input", (e: Event): void => {
         e.preventDefault();
-        const {target} = e;
+        const { target } = e;
         if (target) {
           registration.validationForm(target as HTMLInputElement);
+        }
+      });
+      document.addEventListener("change", (e: Event): void => {
+        e.preventDefault();
+        const { target } = e;
+        if (target) {
+          if ((target as HTMLElement).tagName === 'SELECT') {
+            console.log('SELECVT');
+            registration.validationSelect(target as HTMLSelectElement);
+          }
         }
       });
       document.addEventListener("click", (event) => {
@@ -122,8 +132,10 @@ export const profileLinks: link[] = [
             setBillingDefault();
           } else if (target.id === "default_shipping_checkbox") {
             setShippingDefault();
-          } else if (target.classList.contains('form__back-link')) {
+          } else if (target.classList.contains("form__back-link")) {
             window.history.back();
+          } else if (target.classList.contains("form__sign-in-link")) {
+            window.location.href = "/login";
           }
         }
       });

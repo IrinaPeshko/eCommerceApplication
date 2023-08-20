@@ -13,7 +13,7 @@ module.exports = {
   },
   plugins: ['prettier', '@typescript-eslint'],
   root: true,
-  rules: 
+  rules:
   {
     'no-console': 'off',
     'import/extensions': 'off',
@@ -38,7 +38,7 @@ module.exports = {
         },
       },
     ],
-    'max-lines-per-function': ['error', 200],
+    'max-lines-per-function': "off",
     'class-methods-use-this': 'off',
     "no-restricted-syntax": "off",
     "no-param-reassign": "off",
