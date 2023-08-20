@@ -2,8 +2,10 @@ import link from "../../../types/link/Ilink";
 import imgBascket from "../../../assets/icons/bascket.png";
 import imgProfile from "../../../assets/icons/8324223_ui_essential_app_avatar_profile_icon.svg";
 // import { registerUser } from "../../../sdk/sdk";
+import Registration from "../../pages/registration/registration";
 import setBillingDefault from "../../pages/registration/select default address checkbox/setDefaultBilling";
 import setShippingDefault from "../../pages/registration/select default address checkbox/setDefaultShipping";
+import Login from "../../pages/login/login";
 
 const namePage = {
   MAIN: "MAIN",
@@ -66,9 +68,29 @@ export const profileLinks: link[] = [
             </svg>`,
     href: "/login",
     callback: (): void => {
-      document.addEventListener("click", (event) => {
-        console.log(event.target);
+      const login = new Login();
+      const func: (event: Event) => void = (event: Event): void => {
+        const {target} = event;
+        if (target) {
+          if ((target as HTMLInputElement).tagName === "BUTTON") {
+            if ((target as HTMLInputElement).classList.contains("login__btn")) {
+              event.preventDefault();
+              login.signIn();
+            }
+          } else if ((target as HTMLInputElement).tagName === "A") {
+            event.preventDefault();
+            window.location.href = '/createaccount';
+          }
+        }
+      }
+      document.addEventListener("input", (e: Event): void => {
+        e.preventDefault();
+        const {target} = e;
+        if (target) {
+            login.validationForm(target as HTMLInputElement);
+        }
       });
+      document.addEventListener("click", (e: Event): void => func(e));
     },
   },
   {
@@ -81,16 +103,27 @@ export const profileLinks: link[] = [
             />`,
     href: "/createaccount",
     callback: (): void => {
+      const registration = new Registration();
+      document.addEventListener("input", (e: Event): void => {
+        e.preventDefault();
+        const {target} = e;
+        if (target) {
+          registration.validationForm(target as HTMLInputElement);
+        }
+      });
       document.addEventListener("click", (event) => {
         event.stopImmediatePropagation();
         const { target } = event;
         if (target instanceof HTMLElement) {
           if (target.id === "sendCreatingAccount") {
-            console.log("clickBtn");
+            event.preventDefault();
+            registration.submitForm();
           } else if (target.id === "default_billing_checkbox") {
             setBillingDefault();
           } else if (target.id === "default_shipping_checkbox") {
             setShippingDefault();
+          } else if (target.classList.contains('form__back-link')) {
+            window.history.back();
           }
         }
       });

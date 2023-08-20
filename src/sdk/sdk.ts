@@ -14,7 +14,7 @@ export function registerUser(
   firstName: string,
   lastName: string,
   countryCode: string,
-  key: string,
+  key?: string,
 ) {
   return apiRoot
     .withProjectKey({ projectKey })

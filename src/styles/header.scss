@@ -114,6 +114,7 @@ header {
     content: "+";
     position: absolute;
     bottom: 0;
+    color: #ffffff;
   }
 }
 
@@ -134,6 +135,7 @@ header {
   text-transform: uppercase;
   list-style: none;
   white-space: nowrap;
+  color: #ffffff;
   &:hover {
     border-bottom: $color5 solid 2px;
   }

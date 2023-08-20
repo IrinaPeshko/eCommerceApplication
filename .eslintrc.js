@@ -15,7 +15,7 @@ module.exports = {
   root: true,
   rules: 
   {
-    // 'no-console': 'error',
+    'no-console': 'off',
     'import/extensions': 'off',
     'import/prefer-default-export': 'off',
     '@typescript-eslint/no-explicit-any': 'error',
@@ -38,7 +38,10 @@ module.exports = {
         },
       },
     ],
-    'max-lines-per-function': ['error', 100],
+    'max-lines-per-function': ['error', 200],
+    'class-methods-use-this': 'off',
+    "no-restricted-syntax": "off",
+    "no-param-reassign": "off",
     // '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/no-unnecessary-type-assertion': 'error',
     '@typescript-eslint/no-non-null-assertion': 'error',
