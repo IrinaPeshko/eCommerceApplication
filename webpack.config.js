@@ -37,6 +37,10 @@ module.exports = {
               source: path.join("src", "assets"),
               destination: path.join("dist", "assets"),
             },
+            {
+              source: path.join("public", "pages"),
+              destination: path.join("dist", "pages"),
+            },
           ],
         },
       },
