@@ -13,11 +13,12 @@ module.exports = {
   },
   plugins: ['prettier', '@typescript-eslint'],
   root: true,
-  rules: 
+  rules:
   {
-    'no-console': 'error',
+    'no-console': 'off',
     'import/extensions': 'off',
     'import/prefer-default-export': 'off',
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/array-type': [
       'error',
@@ -38,8 +39,11 @@ module.exports = {
         },
       },
     ],
-    'max-lines-per-function': ['error', 40],
-    '@typescript-eslint/explicit-function-return-type': 'error',
+    'max-lines-per-function': "off",
+    'class-methods-use-this': 'off',
+    "no-restricted-syntax": "off",
+    "no-param-reassign": "off",
+    // '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/no-unnecessary-type-assertion': 'error',
     '@typescript-eslint/no-non-null-assertion': 'error',
   },

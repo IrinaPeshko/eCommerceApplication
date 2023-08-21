@@ -1,12 +1,27 @@
 import "./style.scss";
-import img from "./assets/rs_school_js.svg";
-import { foo } from "./components/foo/foo";
+import App from "./components/app/app";
+import { handleLocation, route } from "./components/utils/router";
+import { profileLinks, pages } from "./components/header/data/linkArrays";
 
-const div = document.createElement("div");
-div.innerHTML = `<img src="${img}" alt="gguj">`;
-document.body.append(div);
+function initializeApp(): void {
+  App.createView();
+  const currentPath = window.location.pathname;
+  const currentLink = [...profileLinks, ...pages].find(
+    (link) => link.href === currentPath,
+  );
+  if (currentLink) {
+    handleLocation(currentLink.callback);
+  } else {
+    handleLocation();
+  }
+}
 
-const p = document.createElement("p");
-document.body.append(p);
+window.addEventListener("DOMContentLoaded", initializeApp);
 
-p.innerText = foo() ? "yup" : "nope";
+declare global {
+  interface Window {
+    route: (e: MouseEvent) => void;
+  }
+}
+
+window.route = route;
