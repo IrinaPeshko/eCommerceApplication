@@ -26,7 +26,8 @@ export default class Popap extends View {
   }
 
   public static close() {
-    const papupBtnClose = document.querySelector("popap__x");
+    debugger;
+    const papupBtnClose = document.querySelector(".popap__x");
     const popapBox = document.querySelector(".popap");
     if (papupBtnClose && popapBox) {
       papupBtnClose.addEventListener("click", () => {
