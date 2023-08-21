@@ -54,15 +54,14 @@ export default class Registration {
               country,
             );
             if (resp.statusCode !== 400) {
-              console.log(resp);
               setTimeout((): void => {
                 window.location.href = "/";
-              }, 3 * 1000);
+              }, 2 * 1000);
             } else {
               throw new Error("Something wrong");
             }
           } catch (err) {
-            console.log(err);
+            console.error(err);
           }
         } else {
           fieldsArr

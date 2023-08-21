@@ -50,12 +50,9 @@ export default class Login {
         const apiRoot: ApiRoot = createApiBuilderFromCtpClient(client);
         try {
           const resp = await getUser(email, password, apiRoot);
-          console.log(resp);
           if (resp.statusCode !== 400) {
-            console.log(resp);
             const { token } = tokenCache.get();
             localStorage.setItem("token", token);
-            console.log(localStorage.token);
             setTimeout((): void => {
               window.location.pathname = "/";
               handleLocation();

@@ -132,7 +132,6 @@ export default class Validate {
   }
 
   public validatePassword(): void {
-    console.log(this.target.value);
     const passwordReg =
       /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]/;
     if (this.errorField) {
@@ -216,7 +215,6 @@ export default class Validate {
   }
 
   public validateAge(): void {
-    console.log(typeof this.target.value);
     const currDate: number = Date.now();
     const userBirth: number = new Date(this.target.value).getTime();
     const difference: number = currDate - userBirth;

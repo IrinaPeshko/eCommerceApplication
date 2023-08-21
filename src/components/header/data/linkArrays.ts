@@ -117,7 +117,6 @@ export const profileLinks: link[] = [
         const { target } = e;
         if (target) {
           if ((target as HTMLElement).tagName === "SELECT") {
-            console.log("SELECVT");
             registration.validationSelect(target as HTMLSelectElement);
           }
         }
@@ -150,7 +149,6 @@ export const profileLinks: link[] = [
             </div>`,
     href: "basket",
     callback: (): void => {
-      console.log("click");
     },
   },
 ];
@@ -234,7 +232,6 @@ export const profileLinksOut: link[] = [
         const { target } = e;
         if (target) {
           if ((target as HTMLElement).tagName === "SELECT") {
-            console.log("SELECVT");
             registration.validationSelect(target as HTMLSelectElement);
           }
         }
@@ -266,9 +263,7 @@ export const profileLinksOut: link[] = [
               <img src="${imgBascket}" alt="cart" />
             </div>`,
     href: "basket",
-    callback: (): void => {
-      console.log("click");
-    },
+    callback: (): void => {},
   },
 ];
 
@@ -276,22 +271,16 @@ export const pages: link[] = [
   {
     name: namePage.MAIN,
     href: "/",
-    callback: (): void => {
-      console.log("click");
-    },
+    callback: (): void => {},
   },
   {
     name: namePage.ABOUT,
     href: "/about",
-    callback: (): void => {
-      console.log("click");
-    },
+    callback: (): void => {},
   },
   {
     name: namePage.CATALOG,
     href: "/catalog",
-    callback: (): void => {
-      console.log("click");
-    },
+    callback: (): void => {},
   },
 ];

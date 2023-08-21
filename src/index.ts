@@ -9,7 +9,6 @@ function initializeApp(): void {
   const currentLink = [...profileLinks, ...pages].find(
     (link) => link.href === currentPath,
   );
-  console.log(currentLink);
   if (currentLink) {
     handleLocation(currentLink.callback);
   } else {
