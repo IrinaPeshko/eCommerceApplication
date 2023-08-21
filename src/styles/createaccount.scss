@@ -97,6 +97,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    max-width: 100%;
     & .registration__breadcrumbs-item {
       color: #828282;
       & + .registration__breadcrumbs-item::before {
@@ -114,8 +115,12 @@
   }
   & .registration__form {
     width: 606px;
+    @media (max-width: 490px) {
+      max-width: 100%;
+    }
   }
   & .registration__form-section {
+    max-width: 100%;
     &:first-of-type {
       margin-bottom: 53px;
     }
@@ -125,5 +130,6 @@
   }
   & .registration__btn {
     width: 270px;
+    max-width: 100%;
   }
 }

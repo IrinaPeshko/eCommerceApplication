@@ -13,6 +13,8 @@
   }
   & .login__border-wrapper {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -22,12 +24,17 @@
   }
   & .login__form {
     max-width: 443px;
+    @media (max-width: 445px) {
+      max-width: 100%;
+    }
   }
   & .login__btn {
     width: 100%;
     margin-bottom: 15px;
+    max-width: 70vw;
   }
   & .login__create-acc-btn {
     display: block;
+    max-width: 70vw;
   }
 }
