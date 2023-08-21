@@ -5,3 +5,14 @@ export enum FieldTypes {
   Date = "date",
 }
 export type Obj = Record<string, string>;
+
+export interface BadRequest {
+  body: object;
+  headers: object;
+  originalRequest: object;
+  code: number;
+  statusCode: number;
+  status: number;
+  message: string;
+  name: string;
+}

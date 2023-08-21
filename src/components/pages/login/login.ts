@@ -1,6 +1,7 @@
-import { Obj, FieldTypes } from "../../../types/types";
+import { Obj, FieldTypes, BadRequest } from "../../../types/types";
 import Validate from "../../utils/validation";
 import { getUser } from "../../../sdk/sdk";
+import Popap from "../../popap/popap";
 
 export default class Login {
   public validationForm(target: HTMLInputElement): void {
@@ -35,9 +36,7 @@ export default class Login {
         const { email, password } = userData;
         try {
           const resp = await getUser(email, password);
-          console.log(resp);
           if (resp.statusCode !== 400) {
-            console.log(resp);
             setTimeout((): void => {
               window.location.href = "/";
             }, 3 * 1000);
@@ -45,7 +44,7 @@ export default class Login {
             throw new Error("User not found!");
           }
         } catch (err) {
-          console.log(err);
+          Popap.open(`<div>${(err as BadRequest).message}</div>`);
         }
       }
     }

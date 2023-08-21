@@ -1,4 +1,5 @@
 import Irouters from "../../types/routers/routers";
+import Popap from "../popap/popap";
 
 export const routers: Irouters = {
   "/": "pages/main.html",
@@ -35,6 +36,9 @@ export async function handleLocation(callback?: () => void): Promise<void> {
   const main = document.querySelector(".main");
   if (main) {
     main.innerHTML = html;
+    const popap = new Popap();
+    const popapElement = popap.getHTMLElement();
+    if (popapElement) main.append(popapElement);
   }
   if (callback) {
     callback();

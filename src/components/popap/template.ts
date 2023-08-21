@@ -1,4 +1,4 @@
-const popapTemplate = `<section class="popap active">
+const popapTemplate = `
 <div class="popap__block">
   <button class="popap__x btn" type="button" title="close">
     <span>
@@ -11,6 +11,6 @@ const popapTemplate = `<section class="popap active">
     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Omnis impedit mollitia, incidunt modi quidem assumenda totam reprehenderit culpa pariatur, quis possimus maxime aliquid veniam dolorem aperiam itaque? Doloremque, quis numquam.
   </div>
 </div>
-</section>`
+`;
 
-export default popapTemplate
+export default popapTemplate;
