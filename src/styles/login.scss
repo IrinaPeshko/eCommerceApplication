@@ -29,5 +29,12 @@
   }
   & .login__create-acc-btn {
     display: block;
+    
+    text-decoration: underline;
+    color: #828282;
+    &:hover {
+      cursor: pointer;
+      color: #000000;
+    }
   }
 }
