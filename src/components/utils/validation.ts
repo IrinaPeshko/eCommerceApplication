@@ -84,7 +84,7 @@ export default class Validate {
   }
 
   public validateEmail(): void {
-    const emailReg = /^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/;
+    const emailReg = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
     if (this.errorField) {
       if (!this.target.value || this.target.value === "") {
         this.errorField.textContent = "This is a required field.";
