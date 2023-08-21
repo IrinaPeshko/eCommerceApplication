@@ -1,6 +1,15 @@
+import {
+  ApiRoot,
+  createApiBuilderFromCtpClient,
+} from "@commercetools/platform-sdk";
 import { FieldTypes, Obj } from "../../../types/types";
 import Validate from "../../utils/validation";
-import { registerUser } from "../../../sdk/sdk";
+import { getUser, registerUser } from "../../../sdk/sdk";
+import { MyTokenCache } from "../../../sdk/token/TokenCache";
+import {
+  createClient,
+  createPasswordClient,
+} from "../../../sdk/createPasswordClient";
 
 export default class Registration {
   public validationForm(target: HTMLInputElement): void {
@@ -54,6 +63,21 @@ export default class Registration {
               country,
             );
             if (resp.statusCode !== 400) {
+              const tokenCache = new MyTokenCache();
+              const clientAPI = createPasswordClient(
+                email,
+                password,
+                tokenCache,
+              );
+              const client = createClient(clientAPI);
+              const apiRoot: ApiRoot = createApiBuilderFromCtpClient(client);
+              const respGetUser = await getUser(email, password, apiRoot);
+              if (respGetUser.statusCode !== 400) {
+                const { token } = tokenCache.get();
+                localStorage.setItem("token", token);
+              } else {
+                throw new Error("User not found!");
+              }
               setTimeout((): void => {
                 window.location.href = "/";
               }, 2 * 1000);
