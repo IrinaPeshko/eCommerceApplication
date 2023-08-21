@@ -148,8 +148,7 @@ export const profileLinks: link[] = [
               <img src="${imgBascket}" alt="cart" />
             </div>`,
     href: "basket",
-    callback: (): void => {
-    },
+    callback: (): void => {},
   },
 ];
 
