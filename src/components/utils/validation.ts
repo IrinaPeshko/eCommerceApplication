@@ -84,7 +84,8 @@ export default class Validate {
   }
 
   public validateEmail(): void {
-    const emailReg = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+    const emailReg =
+      /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
     if (this.errorField) {
       if (!this.target.value || this.target.value === "") {
         this.errorField.textContent = "This is a required field.";
@@ -133,7 +134,7 @@ export default class Validate {
 
   public validatePassword(): void {
     const passwordReg =
-      /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]/;
+      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
     if (this.errorField) {
       if (this.target.id !== "confirm-password") {
         if (!passwordReg.test(this.target.value)) {

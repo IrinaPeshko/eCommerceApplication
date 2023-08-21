@@ -198,6 +198,10 @@ body.lock {
       padding: 11px 16px;
       border: 2px solid #c4c4c4;
     }
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.4;
+    }
     &.invalid {
       background-color: #ffffff;
       border: 2px solid #eb5757;

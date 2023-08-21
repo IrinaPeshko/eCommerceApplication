@@ -13,11 +13,18 @@ import {
 
 export default class Registration {
   public validationForm(target: HTMLInputElement): void {
+    const form: HTMLFormElement | null = document.querySelector(
+      ".registration__form",
+    );
+    if (form) form.noValidate = true;
     const validate = new Validate(target);
     if (target.tagName === "INPUT") {
       if (target.type === FieldTypes.Text) {
         validate.validateText();
-      } else if (target.type === FieldTypes.Password) {
+      } else if (
+        target.type === FieldTypes.Password ||
+        target.name === "password"
+      ) {
         validate.validatePassword();
       } else if (target.type === FieldTypes.Email) {
         validate.validateEmail();
@@ -95,6 +102,7 @@ export default class Registration {
             });
         }
       }
+      form.reset();
     }
   }
 }

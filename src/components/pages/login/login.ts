@@ -19,7 +19,10 @@ export default class Login {
     if (target.tagName === "INPUT") {
       if (target.type === FieldTypes.Email) {
         validate.validateEmail();
-      } else if (target.type === FieldTypes.Password) {
+      } else if (
+        target.type === FieldTypes.Password ||
+        target.name === "password"
+      ) {
         validate.validatePassword();
       }
     }
