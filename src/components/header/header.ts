@@ -12,7 +12,7 @@ import {
   paramBurgerSpan,
   paramBurgerContainer,
 } from "./data/params";
-import { profileLinks, pages } from "./data/linkArrays";
+import { profileLinks, pages, profileLinksOut } from "./data/linkArrays";
 import img from "../../assets/icons/logo.png";
 
 const startPageIndex = 0;
@@ -76,24 +76,45 @@ export default class HeaderView extends View {
       this.burger = creatorBurger.getElement();
     });
 
-    profileLinks.forEach((item, index) => {
-      const linkElement = new LinkView(
-        this.linkElements,
-        undefined,
-        item.classList,
-        item.innerHTML,
-        item.href,
-        item.callback,
-      );
-      const newLink = linkElement.getHTMLElement();
-      if (newLink) {
-        creatorProfileBlock.addInnerELement(newLink);
-        this.linkElements.push(linkElement);
-        if (index === startPageIndex) {
-          linkElement.setSelectedStatus();
+    if (localStorage.token) {
+      profileLinksOut.forEach((item, index) => {
+        const linkElement = new LinkView(
+          this.linkElements,
+          undefined,
+          item.classList,
+          item.innerHTML,
+          item.href,
+          item.callback,
+        );
+        const newLink = linkElement.getHTMLElement();
+        if (newLink) {
+          creatorProfileBlock.addInnerELement(newLink);
+          this.linkElements.push(linkElement);
+          if (index === startPageIndex) {
+            linkElement.setSelectedStatus();
+          }
         }
-      }
-    });
+      });
+    } else {
+      profileLinks.forEach((item, index) => {
+        const linkElement = new LinkView(
+          this.linkElements,
+          undefined,
+          item.classList,
+          item.innerHTML,
+          item.href,
+          item.callback,
+        );
+        const newLink = linkElement.getHTMLElement();
+        if (newLink) {
+          creatorProfileBlock.addInnerELement(newLink);
+          this.linkElements.push(linkElement);
+          if (index === startPageIndex) {
+            linkElement.setSelectedStatus();
+          }
+        }
+      });
+    }
 
     creatorLogo.setInnerHTML(`<img src="${img}" alt="logo">`);
   }

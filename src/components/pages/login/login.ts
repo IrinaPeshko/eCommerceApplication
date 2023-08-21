@@ -50,10 +50,11 @@ export default class Login {
         try {
           const resp = await getUser(email, password, apiRoot);
           console.log(resp);
-          console.log(tokenCache);
           if (resp.statusCode !== 400) {
             console.log(resp);
-
+            const { token } = tokenCache.get();
+            localStorage.setItem("token", token);
+            console.log(localStorage.token);
             setTimeout((): void => {
               window.location.pathname = "/";
               handleLocation();
