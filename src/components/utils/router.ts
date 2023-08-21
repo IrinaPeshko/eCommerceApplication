@@ -1,5 +1,6 @@
 import Irouters from "../../types/routers/routers";
 import Popap from "../popap/popap";
+import showPassword from "./showPassword";
 
 export const routers: Irouters = {
   "/": "pages/main.html",
@@ -39,6 +40,7 @@ export async function handleLocation(callback?: () => void): Promise<void> {
     const popap = new Popap();
     const popapElement = popap.getHTMLElement();
     if (popapElement) main.append(popapElement);
+    showPassword();
   }
   if (callback) {
     callback();
