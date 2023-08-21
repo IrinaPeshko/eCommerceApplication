@@ -3,7 +3,7 @@ import View from "../utils/view";
 import popapTemplate from "./template";
 
 export default class Popap extends View {
-  public popup: HTMLElement | null;
+  public popap: HTMLElement | null;
 
   constructor() {
     const params: Param = {
@@ -13,7 +13,7 @@ export default class Popap extends View {
       innerHTML: popapTemplate,
     };
     super(params);
-    this.popup = this.getHTMLElement();
+    this.popap = this.getHTMLElement();
   }
 
   public static open(inner: string) {
@@ -26,7 +26,6 @@ export default class Popap extends View {
   }
 
   public static close() {
-    debugger;
     const papupBtnClose = document.querySelector(".popap__x");
     const popapBox = document.querySelector(".popap");
     if (papupBtnClose && popapBox) {
