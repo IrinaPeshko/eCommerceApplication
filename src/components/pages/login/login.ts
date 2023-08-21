@@ -1,7 +1,17 @@
+import {
+  createApiBuilderFromCtpClient,
+  ApiRoot,
+} from "@commercetools/platform-sdk";
 import { Obj, FieldTypes, BadRequest } from "../../../types/types";
 import Validate from "../../utils/validation";
 import { getUser } from "../../../sdk/sdk";
 import Popap from "../../popap/popap";
+import { handleLocation } from "../../utils/router";
+import {
+  createPasswordClient,
+  createClient,
+} from "../../../sdk/createPasswordClient";
+import { MyTokenCache } from "../../../sdk/token/TokenCache";
 
 export default class Login {
   public validationForm(target: HTMLInputElement): void {
@@ -34,12 +44,22 @@ export default class Login {
           }
         }
         const { email, password } = userData;
+        const tokenCache = new MyTokenCache();
+        const clientAPI = createPasswordClient(email, password, tokenCache);
+        const client = createClient(clientAPI);
+        const apiRoot: ApiRoot = createApiBuilderFromCtpClient(client);
         try {
-          const resp = await getUser(email, password);
+          const resp = await getUser(email, password, apiRoot);
+          console.log(resp);
           if (resp.statusCode !== 400) {
+            console.log(resp);
+            const { token } = tokenCache.get();
+            localStorage.setItem("token", token);
+            console.log(localStorage.token);
             setTimeout((): void => {
-              window.location.href = "/";
-            }, 3 * 1000);
+              window.location.pathname = "/";
+              handleLocation();
+            }, 2 * 1000);
           } else {
             throw new Error("User not found!");
           }

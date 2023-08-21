@@ -1,3 +1,4 @@
+import { ApiRoot } from "@commercetools/platform-sdk";
 import { apiRoot, projectKey } from "./commercetoolsApiRoot";
 
 export function getProjectDetails() {
@@ -37,8 +38,12 @@ export function registerUser(
     .execute();
 }
 
-export function getUser(email: string, password: string) {
-  return apiRoot
+export function getUser(
+  email: string,
+  password: string,
+  passwordApiRoot: ApiRoot,
+) {
+  return passwordApiRoot
     .withProjectKey({ projectKey })
     .me()
     .login()

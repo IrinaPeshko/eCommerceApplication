@@ -3,12 +3,13 @@ import Popap from "../popap/popap";
 
 export const routers: Irouters = {
   "/": "pages/main.html",
-  "/catalog": "pages/catalog.html",
-  "/about": "pages/about.html",
+  "/catalogg": "pages/catalog.html",
+  "/aboutt": "pages/about.html",
   "/login": "pages/login.html",
   "/createaccount": "pages/createaccount.html",
-  "/basket": "pages/basket.html",
+  "/baskett": "pages/basket.html",
   "/404": "pages/404.html",
+  "/profilee": "pages/profile.html",
 };
 
 export async function getNotFoundPage() {
