@@ -86,6 +86,7 @@ header {
 
 .pages {
   flex-wrap: wrap;
+  box-sizing: border-box;
 }
 
 .pages,
@@ -136,6 +137,7 @@ header {
   list-style: none;
   white-space: nowrap;
   color: #ffffff;
+  border-bottom: transparent solid 2px;
   &:hover {
     border-bottom: $color5 solid 2px;
   }

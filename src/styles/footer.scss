@@ -66,6 +66,7 @@
 }
 
 .footer_nav__item {
+  color: $color2;
   &:hover {
     border-bottom: $color5 solid 2px;
   }
@@ -103,6 +104,10 @@
   }
 }
 
+.follow_us__link {
+  color: $color2;
+}
+
 .contact__item {
   margin-bottom: 1em;
   line-height: 107%;
@@ -113,5 +118,9 @@
     font-family: Oswald;
     font-size: 12px;
     font-weight: 500;
+  }
+
+  a {
+    color: inherit;
   }
 }
