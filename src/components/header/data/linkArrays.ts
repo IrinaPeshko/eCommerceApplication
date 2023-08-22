@@ -216,7 +216,7 @@ m1653 -377 c75 -32 122 -103 122 -185 0 -138 -132 -233 -261 -188 -55 19 -88
     name: namePage.CREATEACCOUNT,
     classList: ["account__item", "account__create", "active"],
     innerHTML: `<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="30.000000pt" height=30.000000pt" viewBox="0 0 64.000000 64.000000"
+ width="30.000000pt" height="30.000000pt" viewBox="0 0 64.000000 64.000000"
  preserveAspectRatio="xMidYMid meet">
 
 <g transform="translate(0.000000,64.000000) scale(0.100000,-0.100000)"
