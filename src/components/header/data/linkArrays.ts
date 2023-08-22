@@ -1,16 +1,18 @@
 import link from "../../../types/link/Ilink";
 import imgBascket from "../../../assets/icons/bascket.png";
 import imgProfile from "../../../assets/icons/8324223_ui_essential_app_avatar_profile_icon.svg";
-// import { registerUser } from "../../../sdk/sdk";
 import Registration from "../../pages/registration/registration";
 import setBillingDefault from "../../pages/registration/select default address checkbox/setDefaultBilling";
 import setShippingDefault from "../../pages/registration/select default address checkbox/setDefaultShipping";
+/* eslint-disable import/no-cycle */
 import Login from "../../pages/login/login";
-import { handleLocation, routeforOtherLink } from "../../utils/router";
+import { routeforOtherLink } from "../../utils/router";
+import HeaderView from "../header";
 
 const namePage = {
   MAIN: "MAIN",
   LOGIN: "LOG IN",
+  LOGOUT: "LOG OUT",
   CREATEACCOUNT: "CREATE ACCOUNT",
   CATALOG: "CATALOG",
   USER: "USER",
@@ -84,7 +86,7 @@ export const profileLinks: link[] = [
             event.preventDefault();
             if (event instanceof MouseEvent) {
               routeforOtherLink(event);
-            };
+            }
           }
         }
       };
@@ -212,18 +214,22 @@ m1653 -377 c75 -32 122 -103 122 -185 0 -138 -132 -233 -261 -188 -55 19 -88
 </g>
 </svg>
 `,
-    href: "/loginout",
+    href: "/",
     callback: (): void => {
       localStorage.removeItem("token");
-      window.location.pathname = "/";
-      handleLocation();
+      const newHeader = new HeaderView();
+      const headerElement = newHeader.getHTMLElement();
+      const header = document.querySelector("header");
+      if (header && header.parentNode && headerElement) {
+        header.parentNode.replaceChild(headerElement, header);
+      }
     },
   },
   {
     name: namePage.CREATEACCOUNT,
     classList: ["account__item", "account__create", "active"],
     innerHTML: `<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="30px" height="30px" viewBox="0 0 64.000000 64.000000"
+ width="40px" height="40px" viewBox="0 0 64.000000 64.000000"
  preserveAspectRatio="xMidYMid meet">
 
 <g transform="translate(0.000000,64.000000) scale(0.100000,-0.100000)"
