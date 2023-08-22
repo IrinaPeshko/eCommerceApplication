@@ -6,7 +6,7 @@ import Registration from "../../pages/registration/registration";
 import setBillingDefault from "../../pages/registration/select default address checkbox/setDefaultBilling";
 import setShippingDefault from "../../pages/registration/select default address checkbox/setDefaultShipping";
 import Login from "../../pages/login/login";
-import { handleLocation } from "../../utils/router";
+import { handleLocation, routeforOtherLink } from "../../utils/router";
 
 const namePage = {
   MAIN: "MAIN",
@@ -80,7 +80,9 @@ export const profileLinks: link[] = [
             }
           } else if ((target as HTMLElement).tagName === "A") {
             event.preventDefault();
-            window.location.href = "/createaccount";
+            if (event instanceof MouseEvent) {
+              routeforOtherLink(event);
+            };
           }
         }
       };
@@ -205,7 +207,7 @@ m1653 -377 c75 -32 122 -103 122 -185 0 -138 -132 -233 -261 -188 -55 19 -88
 </g>
 </svg>
 `,
-    href: "/login",
+    href: "/loginout",
     callback: (): void => {
       localStorage.removeItem("token");
       window.location.pathname = "/";
@@ -216,7 +218,7 @@ m1653 -377 c75 -32 122 -103 122 -185 0 -138 -132 -233 -261 -188 -55 19 -88
     name: namePage.CREATEACCOUNT,
     classList: ["account__item", "account__create", "active"],
     innerHTML: `<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="30.000000pt" height=30.000000pt" viewBox="0 0 64.000000 64.000000"
+ width="30px" height="30px" viewBox="0 0 64.000000 64.000000"
  preserveAspectRatio="xMidYMid meet">
 
 <g transform="translate(0.000000,64.000000) scale(0.100000,-0.100000)"
