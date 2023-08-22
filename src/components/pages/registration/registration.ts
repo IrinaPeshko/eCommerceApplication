@@ -11,6 +11,8 @@ import {
   createPasswordClient,
 } from "../../../sdk/createPasswordClient";
 import { routeToNotAnchor } from "../../utils/router";
+/* eslint-disable import/no-cycle */
+import HeaderView from "../../header/header";
 
 export default class Registration {
   public validationForm(target: HTMLInputElement): void {
@@ -88,6 +90,12 @@ export default class Registration {
               }
               setTimeout((): void => {
                 routeToNotAnchor(event, "/");
+                const newHeader = new HeaderView();
+                const headerElement = newHeader.getHTMLElement();
+                const header = document.querySelector("header");
+                if (header && header.parentNode && headerElement) {
+                  header.parentNode.replaceChild(headerElement, header);
+                }
               }, 2 * 1000);
             } else {
               throw new Error("Something wrong");
