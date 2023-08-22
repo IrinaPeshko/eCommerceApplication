@@ -82,12 +82,15 @@ export const profileLinks: link[] = [
                 login.signIn(event);
               }
             }
-          } else if ((target as HTMLElement).tagName === "A") {
-            event.preventDefault();
-            if (event instanceof MouseEvent) {
-              routeforOtherLink(event);
+          } else if (target instanceof HTMLAnchorElement){
+            console.log("click");
+            if (target.classList.contains("login__create-acc-btn")) {
+              event.preventDefault();
+              if (event instanceof MouseEvent) {
+                routeforOtherLink(event);
+              }
             }
-          }
+        }
         }
       };
       document.addEventListener("input", (e: Event): void => {
@@ -140,6 +143,11 @@ export const profileLinks: link[] = [
             setShippingDefault();
           } else if (target.classList.contains("form__back-link")) {
             window.history.back();
+          } else if (target.classList.contains("registration__breadcrumbs-link")) {
+            event.preventDefault();
+            if (event instanceof MouseEvent) {
+              routeforOtherLink(event);
+            }
           } else if (target.classList.contains("form__sign-in-link")) {
             event.preventDefault();
             if (event instanceof MouseEvent) {
