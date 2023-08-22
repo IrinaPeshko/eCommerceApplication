@@ -81,6 +81,7 @@ h6 {
   border: none;
   background-color: #000000;
   color: #ffffff;
+  max-width: 100%;
   font: {
     family: "Oswald-Regular", Arial, sans-serif;
     size: 14px;
@@ -182,10 +183,18 @@ body.lock {
     display: flex;
     flex-direction: column;
     width: 443px;
+    max-width: 100%;
     position: relative;
+
+    @media (max-width: 600px) {
+      & {
+        width: 100%;
+      }
+    }
   }
   & .form__field {
     // width: 100%;
+    max-width: 100%;
     padding: 12px 16px;
     background-color: #ffffff;
     border: 1px solid #c4c4c4;
@@ -220,6 +229,7 @@ body.lock {
     }
     & + .form__message {
       // width: 100%;
+      max-width: 100%;
       padding: 8px 13px;
       &.form__message--empty {
         background-color: #f0f2f2;
@@ -366,4 +376,45 @@ body.lock {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@media (max-width: 700px) {
+  .form__wrapper {
+    flex-direction: column;
+    gap: 5px;
+  }
+  .form__label {
+    align-self: flex-start;
+  }
+  .form__field {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .form .form__wrapper {
+    flex-direction: column;
+    gap: 5px;
+    max-width: 100%;
+
+    & .form__label {
+      align-self: flex-start;
+      max-width: 100%;
+    }
+
+    .form__input-wrapper {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+  .form__field {
+    max-width: 100%;
+  }
+  .form__wrapper {
+    max-width: 100%;
+    width: 80vw;
+    & * {
+      max-width: 100%;
+    }
+  }
 }
