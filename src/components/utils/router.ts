@@ -71,9 +71,9 @@ export const routeforOtherLink = (e: MouseEvent): void => {
 };
 
 export const routeToNotAnchor = (e: MouseEvent, href: string): void => {
-  const { currentTarget } = e;
+  const { target } = e;
 
-  if (currentTarget) {
+  if (target) {
     window.history.pushState({}, "", href);
   }
   handleLocation();

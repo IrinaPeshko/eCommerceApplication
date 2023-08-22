@@ -76,7 +76,9 @@ export const profileLinks: link[] = [
           if ((target as HTMLElement).tagName === "BUTTON") {
             if ((target as HTMLInputElement).classList.contains("login__btn")) {
               event.preventDefault();
-              login.signIn();
+              if (event instanceof MouseEvent) {
+                login.signIn(event);
+              }
             }
           } else if ((target as HTMLElement).tagName === "A") {
             event.preventDefault();
@@ -129,7 +131,7 @@ export const profileLinks: link[] = [
         if (target instanceof HTMLElement) {
           if (target.id === "sendCreatingAccount") {
             event.preventDefault();
-            registration.submitForm();
+            registration.submitForm(event);
           } else if (target.id === "default_billing_checkbox") {
             setBillingDefault();
           } else if (target.id === "default_shipping_checkbox") {
@@ -137,7 +139,10 @@ export const profileLinks: link[] = [
           } else if (target.classList.contains("form__back-link")) {
             window.history.back();
           } else if (target.classList.contains("form__sign-in-link")) {
-            window.location.href = "/login";
+            event.preventDefault();
+            if (event instanceof MouseEvent) {
+              routeforOtherLink(event);
+            }
           }
         }
       });
@@ -264,43 +269,7 @@ fill="#ffffff" stroke="none">
 </g>
 </svg>`,
     href: "/profile",
-    callback: (): void => {
-      const registration = new Registration();
-      document.addEventListener("input", (e: Event): void => {
-        e.preventDefault();
-        const { target } = e;
-        if (target) {
-          registration.validationForm(target as HTMLInputElement);
-        }
-      });
-      document.addEventListener("change", (e: Event): void => {
-        e.preventDefault();
-        const { target } = e;
-        if (target) {
-          if ((target as HTMLElement).tagName === "SELECT") {
-            registration.validationSelect(target as HTMLSelectElement);
-          }
-        }
-      });
-      document.addEventListener("click", (event) => {
-        event.stopImmediatePropagation();
-        const { target } = event;
-        if (target instanceof HTMLElement) {
-          if (target.id === "sendCreatingAccount") {
-            event.preventDefault();
-            registration.submitForm();
-          } else if (target.id === "default_billing_checkbox") {
-            setBillingDefault();
-          } else if (target.id === "default_shipping_checkbox") {
-            setShippingDefault();
-          } else if (target.classList.contains("form__back-link")) {
-            window.history.back();
-          } else if (target.classList.contains("form__sign-in-link")) {
-            window.location.href = "/login";
-          }
-        }
-      });
-    },
+    callback: (): void => {},
   },
   {
     name: namePage.BASKET,

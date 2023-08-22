@@ -10,6 +10,7 @@ import {
   createClient,
   createPasswordClient,
 } from "../../../sdk/createPasswordClient";
+import { routeToNotAnchor } from "../../utils/router";
 
 export default class Registration {
   public validationForm(target: HTMLInputElement): void {
@@ -39,7 +40,7 @@ export default class Registration {
     validate.validateSelect();
   }
 
-  public async submitForm() {
+  public async submitForm(event: MouseEvent) {
     const form: HTMLFormElement | null = document.querySelector(
       ".registration__form",
     );
@@ -86,7 +87,7 @@ export default class Registration {
                 throw new Error("User not found!");
               }
               setTimeout((): void => {
-                window.location.href = "/";
+                routeToNotAnchor(event, "/");
               }, 2 * 1000);
             } else {
               throw new Error("Something wrong");
