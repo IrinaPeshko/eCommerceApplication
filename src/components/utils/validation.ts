@@ -102,7 +102,8 @@ export default class Validate {
         this.target.classList.add("invalid");
       }
       if (!emailReg.test(this.target.value)) {
-        this.errorField.textContent = "Wrong format. Use @ and . symbols";
+        this.errorField.textContent =
+          "Please enter a valid email address, e.g., user@example.com, and ensure it contains no leading or trailing whitespace, includes a domain name, and has an '@' symbol separating the local part and domain name.";
         (this.errorField as HTMLSpanElement).classList.remove(
           "form__message--empty",
         );
@@ -139,7 +140,7 @@ export default class Validate {
       if (this.target.id !== "confirm-password") {
         if (!passwordReg.test(this.target.value)) {
           this.errorField.textContent =
-            "Use lowercase and uppercase letters, numbers and special characters.";
+            "Your password must contain at least 8 characters, at least one uppercase and lowercase letter, digit, and special character (such as !, @, #, $) and must not start or end with a whitespace character.";
           (this.errorField as HTMLSpanElement).classList.remove(
             "form__message--empty",
           );
