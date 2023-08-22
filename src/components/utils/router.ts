@@ -60,3 +60,21 @@ export const route = (e: MouseEvent): void => {
   }
   handleLocation();
 };
+
+export const routeforOtherLink = (e: MouseEvent): void => {
+  const { target } = e;
+
+  if (target instanceof HTMLAnchorElement) {
+    window.history.pushState({}, "", target.href);
+  }
+  handleLocation();
+};
+
+export const routeToNotAnchor = (e: MouseEvent, href: string): void => {
+  const { target } = e;
+
+  if (target) {
+    window.history.pushState({}, "", href);
+  }
+  handleLocation();
+};

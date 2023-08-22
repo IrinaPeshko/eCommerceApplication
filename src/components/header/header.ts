@@ -12,6 +12,7 @@ import {
   paramBurgerSpan,
   paramBurgerContainer,
 } from "./data/params";
+/* eslint-disable import/no-cycle */
 import { profileLinks, pages, profileLinksOut } from "./data/linkArrays";
 import img from "../../assets/icons/logo.png";
 

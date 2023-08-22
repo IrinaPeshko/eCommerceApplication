@@ -6,12 +6,14 @@ import { Obj, FieldTypes, BadRequest } from "../../../types/types";
 import Validate from "../../utils/validation";
 import { getUser } from "../../../sdk/sdk";
 import Popap from "../../popap/popap";
-import { handleLocation } from "../../utils/router";
+import { routeToNotAnchor } from "../../utils/router";
 import {
   createPasswordClient,
   createClient,
 } from "../../../sdk/createPasswordClient";
 import { MyTokenCache } from "../../../sdk/token/TokenCache";
+/* eslint-disable import/no-cycle */
+import HeaderView from "../../header/header";
 
 export default class Login {
   public validationForm(target: HTMLInputElement): void {
@@ -28,7 +30,7 @@ export default class Login {
     }
   }
 
-  public async signIn(): Promise<void> {
+  public async signIn(event: MouseEvent): Promise<void> {
     const form: HTMLFormElement | null = document.querySelector(".login__form");
     const passwordField: HTMLElement | null =
       document.getElementById("login-password");
@@ -57,8 +59,13 @@ export default class Login {
             const { token } = tokenCache.get();
             localStorage.setItem("token", token);
             setTimeout((): void => {
-              window.location.pathname = "/";
-              handleLocation();
+              routeToNotAnchor(event, "/");
+              const newHeader = new HeaderView();
+              const headerElement = newHeader.getHTMLElement();
+              const header = document.querySelector("header");
+              if (header && header.parentNode && headerElement) {
+                header.parentNode.replaceChild(headerElement, header);
+              }
             }, 2 * 1000);
           } else {
             throw new Error("User not found!");

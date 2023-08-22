@@ -1,16 +1,19 @@
 import link from "../../../types/link/Ilink";
 import imgBascket from "../../../assets/icons/bascket.png";
 import imgProfile from "../../../assets/icons/8324223_ui_essential_app_avatar_profile_icon.svg";
-// import { registerUser } from "../../../sdk/sdk";
+/* eslint-disable import/no-cycle */
 import Registration from "../../pages/registration/registration";
 import setBillingDefault from "../../pages/registration/select default address checkbox/setDefaultBilling";
 import setShippingDefault from "../../pages/registration/select default address checkbox/setDefaultShipping";
+/* eslint-disable import/no-cycle */
 import Login from "../../pages/login/login";
-import { handleLocation } from "../../utils/router";
+import { routeforOtherLink } from "../../utils/router";
+import HeaderView from "../header";
 
 const namePage = {
   MAIN: "MAIN",
   LOGIN: "LOG IN",
+  LOGOUT: "LOG OUT",
   CREATEACCOUNT: "CREATE ACCOUNT",
   CATALOG: "CATALOG",
   USER: "USER",
@@ -76,11 +79,18 @@ export const profileLinks: link[] = [
           if ((target as HTMLElement).tagName === "BUTTON") {
             if ((target as HTMLInputElement).classList.contains("login__btn")) {
               event.preventDefault();
-              login.signIn();
+              if (event instanceof MouseEvent) {
+                login.signIn(event);
+              }
             }
-          } else if ((target as HTMLElement).tagName === "A") {
-            event.preventDefault();
-            window.location.href = "/createaccount";
+          } else if (target instanceof HTMLAnchorElement) {
+            console.log("click");
+            if (target.classList.contains("login__create-acc-btn")) {
+              event.preventDefault();
+              if (event instanceof MouseEvent) {
+                routeforOtherLink(event);
+              }
+            }
           }
         }
       };
@@ -127,15 +137,25 @@ export const profileLinks: link[] = [
         if (target instanceof HTMLElement) {
           if (target.id === "sendCreatingAccount") {
             event.preventDefault();
-            registration.submitForm();
+            registration.submitForm(event);
           } else if (target.id === "default_billing_checkbox") {
             setBillingDefault();
           } else if (target.id === "default_shipping_checkbox") {
             setShippingDefault();
           } else if (target.classList.contains("form__back-link")) {
             window.history.back();
+          } else if (
+            target.classList.contains("registration__breadcrumbs-link")
+          ) {
+            event.preventDefault();
+            if (event instanceof MouseEvent) {
+              routeforOtherLink(event);
+            }
           } else if (target.classList.contains("form__sign-in-link")) {
-            window.location.href = "/login";
+            event.preventDefault();
+            if (event instanceof MouseEvent) {
+              routeforOtherLink(event);
+            }
           }
         }
       });
@@ -205,18 +225,22 @@ m1653 -377 c75 -32 122 -103 122 -185 0 -138 -132 -233 -261 -188 -55 19 -88
 </g>
 </svg>
 `,
-    href: "/login",
+    href: "/",
     callback: (): void => {
       localStorage.removeItem("token");
-      window.location.pathname = "/";
-      handleLocation();
+      const newHeader = new HeaderView();
+      const headerElement = newHeader.getHTMLElement();
+      const header = document.querySelector("header");
+      if (header && header.parentNode && headerElement) {
+        header.parentNode.replaceChild(headerElement, header);
+      }
     },
   },
   {
     name: namePage.CREATEACCOUNT,
     classList: ["account__item", "account__create", "active"],
     innerHTML: `<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="30.000000pt" height="30.000000pt" viewBox="0 0 64.000000 64.000000"
+ width="40px" height="40px" viewBox="0 0 64.000000 64.000000"
  preserveAspectRatio="xMidYMid meet">
 
 <g transform="translate(0.000000,64.000000) scale(0.100000,-0.100000)"
@@ -262,43 +286,7 @@ fill="#ffffff" stroke="none">
 </g>
 </svg>`,
     href: "/profile",
-    callback: (): void => {
-      const registration = new Registration();
-      document.addEventListener("input", (e: Event): void => {
-        e.preventDefault();
-        const { target } = e;
-        if (target) {
-          registration.validationForm(target as HTMLInputElement);
-        }
-      });
-      document.addEventListener("change", (e: Event): void => {
-        e.preventDefault();
-        const { target } = e;
-        if (target) {
-          if ((target as HTMLElement).tagName === "SELECT") {
-            registration.validationSelect(target as HTMLSelectElement);
-          }
-        }
-      });
-      document.addEventListener("click", (event) => {
-        event.stopImmediatePropagation();
-        const { target } = event;
-        if (target instanceof HTMLElement) {
-          if (target.id === "sendCreatingAccount") {
-            event.preventDefault();
-            registration.submitForm();
-          } else if (target.id === "default_billing_checkbox") {
-            setBillingDefault();
-          } else if (target.id === "default_shipping_checkbox") {
-            setShippingDefault();
-          } else if (target.classList.contains("form__back-link")) {
-            window.history.back();
-          } else if (target.classList.contains("form__sign-in-link")) {
-            window.location.href = "/login";
-          }
-        }
-      });
-    },
+    callback: (): void => {},
   },
   {
     name: namePage.BASKET,

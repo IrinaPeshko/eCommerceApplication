@@ -10,6 +10,9 @@ import {
   createClient,
   createPasswordClient,
 } from "../../../sdk/createPasswordClient";
+import { routeToNotAnchor } from "../../utils/router";
+/* eslint-disable import/no-cycle */
+import HeaderView from "../../header/header";
 
 export default class Registration {
   public validationForm(target: HTMLInputElement): void {
@@ -39,7 +42,7 @@ export default class Registration {
     validate.validateSelect();
   }
 
-  public async submitForm() {
+  public async submitForm(event: MouseEvent) {
     const form: HTMLFormElement | null = document.querySelector(
       ".registration__form",
     );
@@ -86,7 +89,13 @@ export default class Registration {
                 throw new Error("User not found!");
               }
               setTimeout((): void => {
-                window.location.href = "/";
+                routeToNotAnchor(event, "/");
+                const newHeader = new HeaderView();
+                const headerElement = newHeader.getHTMLElement();
+                const header = document.querySelector("header");
+                if (header && header.parentNode && headerElement) {
+                  header.parentNode.replaceChild(headerElement, header);
+                }
               }, 2 * 1000);
             } else {
               throw new Error("Something wrong");
