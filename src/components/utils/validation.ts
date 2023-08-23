@@ -10,9 +10,9 @@ export default class Validate {
 
   public validateText(): void {
     const reg = /^[ёЁA-zА-я ]+$/;
-    if (!this.target.value || this.target.value === "") {
-      this.error("This is a required field.");
-    }
+    // if (!this.target.value || this.target.value === "") {
+    //   this.error("This is a required field.");
+    // }
     if (this.target.dataset.type === "code") {
       let country: HTMLElement | null;
       let countryVal: string;
@@ -20,20 +20,28 @@ export default class Validate {
         country = document.getElementById("billing_country");
         if (country) {
           countryVal = (country as HTMLSelectElement).value;
-          if (!postcodeValidator(this.target.value, countryVal)) {
-            this.error("Incorrect postcode.");
+          if (this.target.value !== "") {
+            if (!postcodeValidator(this.target.value, countryVal)) {
+              this.error("Incorrect postcode.");
+            } else {
+              this.valid("Correct postcode!");
+            }
           } else {
-            this.valid("Correct postcode!");
+            this.error("This is a required field.");
           }
         }
       } else if (this.target.id === "shipping_postal_code") {
         country = document.getElementById("shipping_country");
         if (country) {
           countryVal = (country as HTMLSelectElement).value;
-          if (!postcodeValidator(this.target.value, countryVal)) {
-            this.error("Incorrect postcode.");
+          if (this.target.value !== "") {
+            if (!postcodeValidator(this.target.value, countryVal)) {
+              this.error("Incorrect postcode.");
+            } else {
+              this.valid("Correct postcode!");
+            }
           } else {
-            this.valid("Correct postcode!");
+            this.error("This is a required field.");
           }
         }
       }
@@ -55,9 +63,7 @@ export default class Validate {
     } else if (this.target.dataset.type === "street") {
       const street = /^.+$/;
       if (!street.test(this.target.value)) {
-        this.error(
-          "Must be at least 1 character.",
-        );
+        this.error("Must be at least 1 character.");
       } else {
         this.valid("Correct street!");
       }

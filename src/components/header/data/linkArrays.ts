@@ -3,7 +3,6 @@ import imgBascket from "../../../assets/icons/bascket.png";
 import imgProfile from "../../../assets/icons/8324223_ui_essential_app_avatar_profile_icon.svg";
 /* eslint-disable import/no-cycle */
 import Registration from "../../pages/registration/registration";
-import setBillingDefault from "../../pages/registration/select default address checkbox/setDefaultBilling";
 import setShippingDefault from "../../pages/registration/select default address checkbox/setDefaultShipping";
 /* eslint-disable import/no-cycle */
 import Login from "../../pages/login/login";
@@ -127,7 +126,15 @@ export const profileLinks: link[] = [
         const { target } = e;
         if (target) {
           if ((target as HTMLElement).tagName === "SELECT") {
-            registration.validationSelect(target as HTMLSelectElement);
+            if ((target as HTMLElement).id === 'billing_country') {
+              const postcodeField: HTMLElement | null = document.getElementById('billing_postal_code');
+              registration.validationSelect(target as HTMLSelectElement);
+              if (postcodeField) registration.validationForm(postcodeField as HTMLInputElement);
+            } else if ((target as HTMLElement).id === 'shipping_country') {
+              const postcodeField: HTMLElement | null = document.getElementById('shipping_postal_code');
+              registration.validationSelect(target as HTMLSelectElement);
+              if (postcodeField) registration.validationForm(postcodeField as HTMLInputElement);
+            }
           }
         }
       });
@@ -138,20 +145,22 @@ export const profileLinks: link[] = [
           if (target.id === "sendCreatingAccount") {
             event.preventDefault();
             registration.submitForm(event);
-          } else if (target.id === "default_billing_checkbox") {
-            setBillingDefault();
-          } else if (target.id === "default_shipping_checkbox") {
+          }
+          if (target.id === "billing_address_checkbox") {
             setShippingDefault();
-          } else if (target.classList.contains("form__back-link")) {
+          }
+          if (target.classList.contains("form__back-link")) {
             window.history.back();
-          } else if (
+          }
+          if (
             target.classList.contains("registration__breadcrumbs-link")
           ) {
             event.preventDefault();
             if (event instanceof MouseEvent) {
               routeforOtherLink(event);
             }
-          } else if (target.classList.contains("form__sign-in-link")) {
+          }
+          if (target.classList.contains("form__sign-in-link")) {
             event.preventDefault();
             if (event instanceof MouseEvent) {
               routeforOtherLink(event);

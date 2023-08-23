@@ -1,4 +1,7 @@
 export default function setShippingDefault(): void {
+  const useLikeBillingAddressCheckbox = document.getElementById(
+    "billing_address_checkbox",
+  ) as HTMLInputElement;
   const defaultShippingCheckbox = document.getElementById(
     "default_shipping_checkbox",
   ) as HTMLInputElement;
@@ -45,6 +48,7 @@ export default function setShippingDefault(): void {
   if (
     defaultShippingCheckbox instanceof HTMLInputElement &&
     defaultBillingCheckbox instanceof HTMLInputElement &&
+    useLikeBillingAddressCheckbox instanceof HTMLInputElement &&
     shippingStreet instanceof HTMLInputElement &&
     shippingBuilding instanceof HTMLInputElement &&
     shippingApartment instanceof HTMLInputElement &&
@@ -58,7 +62,7 @@ export default function setShippingDefault(): void {
     billingPostalCode instanceof HTMLInputElement &&
     billingCountry instanceof HTMLSelectElement
   ) {
-    if (defaultShippingCheckbox.checked) {
+    if (useLikeBillingAddressCheckbox.checked) {
       billingStreet.value = shippingStreet.value;
       billingBuilding.value = shippingBuilding.value;
       billingApartment.value = shippingApartment.value;
@@ -72,7 +76,6 @@ export default function setShippingDefault(): void {
       billingCity.disabled = true;
       billingPostalCode.disabled = true;
       billingCountry.disabled = true;
-
       defaultBillingCheckbox.disabled = true;
     } else {
       billingStreet.disabled = false;
