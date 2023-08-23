@@ -115,7 +115,7 @@ export const profileLinks: link[] = [
     href: "/createaccount",
     callback: (): void => {
       const registration = new Registration();
-      document.addEventListener("change", (e: Event): void => {
+      document.addEventListener("input", (e: Event): void => {
         e.preventDefault();
         const { target } = e;
         if (target) {
