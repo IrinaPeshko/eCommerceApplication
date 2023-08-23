@@ -2,7 +2,7 @@ import {
   ApiRoot,
   createApiBuilderFromCtpClient,
 } from "@commercetools/platform-sdk";
-import { FieldTypes, Obj } from "../../../types/types";
+import { BadRequest, FieldTypes, Obj } from "../../../types/types";
 import Validate from "../../utils/validation";
 import { getUser, registerUser } from "../../../sdk/sdk";
 import { MyTokenCache } from "../../../sdk/token/TokenCache";
@@ -13,6 +13,7 @@ import {
 import { routeToNotAnchor } from "../../utils/router";
 /* eslint-disable import/no-cycle */
 import HeaderView from "../../header/header";
+import Popap from "../../popap/popap";
 
 export default class Registration {
   public validationForm(target: HTMLInputElement): void {
@@ -88,7 +89,15 @@ export default class Registration {
               } else {
                 throw new Error("User not found!");
               }
+              const popapContent = document.querySelector(".popap__content");
+              if (popapContent) {
+                const innerText =
+                  "Registration successful. You are now logged in.";
+                Popap.open(`<div>${innerText}</div>`);
+              }
               setTimeout((): void => {
+                Popap.close();
+                document.querySelector("body")?.classList.remove("lock");
                 routeToNotAnchor(event, "/");
                 const newHeader = new HeaderView();
                 const headerElement = newHeader.getHTMLElement();
@@ -96,12 +105,13 @@ export default class Registration {
                 if (header && header.parentNode && headerElement) {
                   header.parentNode.replaceChild(headerElement, header);
                 }
-              }, 2 * 1000);
+                document.querySelector("body")?.classList.remove("lock");
+              }, 3 * 1000);
             } else {
               throw new Error("Something wrong");
             }
           } catch (err) {
-            console.error(err);
+            Popap.open(`<div>${(err as BadRequest).message}</div>`);
           }
         } else {
           fieldsArr

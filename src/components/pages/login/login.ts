@@ -58,7 +58,13 @@ export default class Login {
           if (resp.statusCode !== 400) {
             const { token } = tokenCache.get();
             localStorage.setItem("token", token);
+            const popapContent = document.querySelector(".popap__content");
+            if (popapContent) {
+              const innerText = "Log in is successful";
+              Popap.open(`<div>${innerText}</div>`);
+            }
             setTimeout((): void => {
+              Popap.close();
               routeToNotAnchor(event, "/");
               const newHeader = new HeaderView();
               const headerElement = newHeader.getHTMLElement();
@@ -66,7 +72,8 @@ export default class Login {
               if (header && header.parentNode && headerElement) {
                 header.parentNode.replaceChild(headerElement, header);
               }
-            }, 2 * 1000);
+              document.querySelector("body")?.classList.remove("lock");
+            }, 3 * 1000);
           } else {
             throw new Error("User not found!");
           }
