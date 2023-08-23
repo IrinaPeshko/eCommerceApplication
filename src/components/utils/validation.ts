@@ -84,11 +84,8 @@ export default class Validate {
 
   public validatePassword(): void {
     const passwordReg =
-      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
+      /^(?! )(?!.* $)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-])\S{8,}$/;
       if (this.target.id !== "confirm-password") {
-        if (/^\s/.test(this.target.value)) this.target.value = "";
-        if (/\s+$/.test(this.target.value))
-          this.target.value = this.target.value.trimEnd();
         if (!passwordReg.test(this.target.value)) {
           this.error(
             "Your password must contain at least 8 characters, at least one uppercase and lowercase letter, digit, and special character (such as !, @, #, $) and must not start or end with a whitespace character.",
