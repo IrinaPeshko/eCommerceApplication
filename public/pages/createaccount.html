@@ -28,7 +28,7 @@
                 <p class="form__wrapper">
                   <label class="form__label" for="birthdate">Date of Birth <span class="form__asterisk">*</span></label>
                   <span class="form__input-wrapper">
-                    <input class="form__field" id="birthdate" type="date" required>
+                    <input class="form__field" id="birthdate" name="dateOfBirth" type="date" required>
                     <span class="form__message" aria-live="polite"></span>
                   </span>
                 </p>
@@ -40,7 +40,7 @@
                   <p class="form__wrapper">
                     <label class="form__label" for="shipping_country">Country <span class="form__asterisk">*</span></label>
                     <span class="form__input-wrapper">
-                    <select class="form__field" id="shipping_country" name="country" required>
+                    <select class="form__field" id="shipping_country" name="shippingCountryCode" required>
                       <option value="" selected disabled>Choose your country:</option>
                       <option value="BY">Belarus (BY)</option>
                       <option value="DE">Germany (DE)</option>
@@ -53,41 +53,41 @@
                   <p class="form__wrapper">
                     <label class="form__label" for="shipping_street">Street <span class="form__asterisk">*</span></label>
                     <span class="form__input-wrapper">
-                      <input class="form__field" id="shipping_street" type="text" placeholder="Street" data-type="street" required>
+                      <input class="form__field" id="shipping_street" type="text" name="shippingStreetName" placeholder="Street" data-type="street" required>
                       <span class="form__message" aria-live="polite"></span>
                     </span>
                   </p>
                   <p class="form__wrapper">
                     <label class="form__label" for="shipping_building">Building</label>
                     <span class="form__input-wrapper">
-                      <input class="form__field" id="shipping_building" type="text" placeholder="Building">
+                      <input class="form__field" id="shipping_building" type="text" name="shippingBuilding" placeholder="Building">
                       <span class="form__message" aria-live="polite"></span>
                     </span>
                   </p>
                   <p class="form__wrapper">
                       <label class="form__label" for="shipping_apartment">Apartment / Suite</span></label>
                       <span class="form__input-wrapper">
-                        <input class="form__field" id="shipping_apartment" type="text" placeholder="Apartment / Suite">
+                        <input class="form__field" id="shipping_apartment" type="text" name="shippingApartment" placeholder="Apartment / Suite">
                         <span class="form__message" aria-live="polite"></span>
                       </span>
                   </p>
                   <p class="form__wrapper">
                     <label class="form__label" for="shipping_city">City <span class="form__asterisk">*</span></label>
                     <span class="form__input-wrapper">
-                      <input class="form__field" id="shipping_city" type="text" placeholder="City" data-type="city" required>
+                      <input class="form__field" id="shipping_city" type="text" name="shippingCity" placeholder="City" data-type="city" required>
                       <span class="form__message" aria-live="polite"></span>
                     </span>
                   </p>
                   <p class="form__wrapper">
                       <label class="form__label" for="shipping_postal_code">Postal Code <span class="form__asterisk">*</span></label>
                       <span class="form__input-wrapper">
-                        <input class="form__field" id="shipping_postal_code" type="text" placeholder="Postal Code" data-type="code" required>
+                        <input class="form__field" id="shipping_postal_code" type="text" name="shippingPostalCode" placeholder="Postal Code" data-type="code" required>
                         <span class="form__message" aria-live="polite"></span>
                       </span>
                   </p>
                   <p class="form__checkbox-wrapper">
                     <label class="form__checkbox-label" for="default_shipping_checkbox" name="default_shipping">
-                      <input class="form__checkbox" id="default_shipping_checkbox" type="checkbox">
+                      <input class="form__checkbox" id="default_shipping_checkbox" name="shippingDefaultCheckbox" type="checkbox">
                       <span class="form__checkbox-indicator"></span>
                     Use as Default Shipping Address</label>
                   </p>
@@ -103,7 +103,7 @@
                   <p class="form__wrapper">
                     <label class="form__label" for="billing_country">Country <span class="form__asterisk">*</span></label>
                     <span class="form__input-wrapper">
-                    <select class="form__field" id="billing_country" name="country" required>
+                    <select class="form__field" id="billing_country" name="billingCountryCode" required>
                       <option value="" selected disabled>Choose your country:</option>
                       <option value="BY">Belarus (BY)</option>
                       <option value="DE">Germany (DE)</option>
@@ -116,41 +116,41 @@
                   <p class="form__wrapper">
                     <label class="form__label" for="billing_street">Street <span class="form__asterisk">*</span></label>
                     <span class="form__input-wrapper">
-                      <input class="form__field" id="billing_street" type="text" placeholder="Street" data-type="street" required>
+                      <input class="form__field" id="billing_street" type="text" name="billingStreetName" placeholder="Street" data-type="street" required>
                       <span class="form__message" aria-live="polite"></span>
                     </span>
                   </p>
                   <p class="form__wrapper">
                     <label class="form__label" for="billing_building">Building</label>
                     <span class="form__input-wrapper">
-                      <input class="form__field" id="billing_building" type="text" placeholder="Building">
+                      <input class="form__field" id="billing_building" name="billingBuilding" type="text" placeholder="Building">
                       <span class="form__message" aria-live="polite"></span>
                     </span>
                   </p>
                   <p class="form__wrapper">
                       <label class="form__label" for="billing_apartment">Apartment / Suite</span></label>
                       <span class="form__input-wrapper">
-                        <input class="form__field" id="billing_apartment" type="text" placeholder="Apartment / Suite">
+                        <input class="form__field" id="billing_apartment" type="text" name="billingApartment" placeholder="Apartment / Suite">
                         <span class="form__message" aria-live="polite"></span>
                       </span>
                   </p>
                   <p class="form__wrapper">
                     <label class="form__label" for="billing_city">City <span class="form__asterisk">*</span></label>
                     <span class="form__input-wrapper">
-                      <input class="form__field" id="billing_city" type="text" placeholder="City" data-type="city" required>
+                      <input class="form__field" id="billing_city" type="text" name="billingCity" placeholder="City" data-type="city" required>
                       <span class="form__message" aria-live="polite"></span>
                     </span>
                   </p>
                   <p class="form__wrapper">
                       <label class="form__label" for="billing_postal_code">Postal Code <span class="form__asterisk">*</span></label>
                       <span class="form__input-wrapper">
-                        <input class="form__field" id="billing_postal_code" type="text" placeholder="Postal Code" data-type="code" required>
+                        <input class="form__field" id="billing_postal_code" type="text" name="billingPostalCode" placeholder="Postal Code" data-type="code" required>
                         <span class="form__message" aria-live="polite"></span>
                       </span>
                   </p>
                   <p class="form__checkbox-wrapper">
                     <label class="form__checkbox-label" for="default_billing_checkbox" name="default_shipping">
-                      <input class="form__checkbox" id="default_billing_checkbox" type="checkbox">
+                      <input class="form__checkbox" id="default_billing_checkbox" name="billingDefaultCheckbox" type="checkbox">
                       <span class="form__checkbox-indicator"></span>
                       Use as Default Billing Address</label>
                   </p>
@@ -171,14 +171,6 @@
                         <input class="form__field password__input" id="password" name="password" type="password" required>
                         <span class="form__message form__message--empty" aria-live="polite">Password Strength: No Password</span>
                         <span class="password__btn"><img src="../assets/icons/211739_eye_icon.svg" alt="eye"></span>
-                    </span>
-                </p>
-                <p class="form__wrapper">
-                    <label class="form__label" for="confirm-password">Confirm Password <span class="form__asterisk">*</span></label>
-                    <span class="form__input-wrapper password">
-                      <input class="form__field password__input" id="confirm-password" type="password" required>
-                      <span class="form__message form__message--empty" aria-live="polite">Password Strength: No Password</span>
-                      <span class="password__btn"><img src="../assets/icons/211739_eye_icon.svg" alt="eye"></span>
                     </span>
                 </p>
             </fieldset>

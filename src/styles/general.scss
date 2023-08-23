@@ -207,10 +207,6 @@ body.lock {
       padding: 11px 16px;
       border: 2px solid #c4c4c4;
     }
-    &:disabled {
-      pointer-events: none;
-      opacity: 0.4;
-    }
     &.invalid {
       background-color: #ffffff;
       border: 2px solid #eb5757;
@@ -347,7 +343,10 @@ body.lock {
     color: #000000;
   }
 }
-
+input:read-only, .read-only {
+  pointer-events: none;
+  opacity: 0.4;
+}
 .password__btn {
   position: absolute;
   top: 0%;

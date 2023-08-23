@@ -89,7 +89,6 @@ export default class Validate {
   public validatePassword(): void {
     const passwordReg =
       /^(?! )(?!.* $)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-])\S{8,}$/;
-    if (this.target.id !== "confirm-password") {
       if (!passwordReg.test(this.target.value)) {
         this.error(
           "Your password must contain at least 8 characters, at least one uppercase and lowercase letter, digit, and special character (such as !, @, #, $) and must not start or end with a whitespace character.",
@@ -99,22 +98,6 @@ export default class Validate {
       } else {
         this.valid("Strong Password!");
       }
-    } else {
-      const passwordField: HTMLInputElement | null =
-        document.querySelector("#password");
-      if (passwordField && passwordField.classList.contains("valid")) {
-        const passwordValue: string | undefined = passwordField.value;
-        if (passwordValue && passwordValue !== "") {
-          if (this.target.value === passwordValue) {
-            this.valid("Password confirm!");
-          } else {
-            this.error("This password is different.");
-          }
-        }
-      } else {
-        this.error("This password is invalid.");
-      }
-    }
   }
 
   public validateAge(): void {

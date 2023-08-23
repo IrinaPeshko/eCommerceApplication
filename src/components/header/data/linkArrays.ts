@@ -126,14 +126,20 @@ export const profileLinks: link[] = [
         const { target } = e;
         if (target) {
           if ((target as HTMLElement).tagName === "SELECT") {
-            if ((target as HTMLElement).id === 'billing_country') {
-              const postcodeField: HTMLElement | null = document.getElementById('billing_postal_code');
+            if ((target as HTMLElement).id === "billing_country") {
+              const postcodeField: HTMLElement | null = document.getElementById(
+                "billing_postal_code",
+              );
               registration.validationSelect(target as HTMLSelectElement);
-              if (postcodeField) registration.validationForm(postcodeField as HTMLInputElement);
-            } else if ((target as HTMLElement).id === 'shipping_country') {
-              const postcodeField: HTMLElement | null = document.getElementById('shipping_postal_code');
+              if (postcodeField)
+                registration.validationForm(postcodeField as HTMLInputElement);
+            } else if ((target as HTMLElement).id === "shipping_country") {
+              const postcodeField: HTMLElement | null = document.getElementById(
+                "shipping_postal_code",
+              );
               registration.validationSelect(target as HTMLSelectElement);
-              if (postcodeField) registration.validationForm(postcodeField as HTMLInputElement);
+              if (postcodeField)
+                registration.validationForm(postcodeField as HTMLInputElement);
             }
           }
         }
@@ -152,9 +158,7 @@ export const profileLinks: link[] = [
           if (target.classList.contains("form__back-link")) {
             window.history.back();
           }
-          if (
-            target.classList.contains("registration__breadcrumbs-link")
-          ) {
+          if (target.classList.contains("registration__breadcrumbs-link")) {
             event.preventDefault();
             if (event instanceof MouseEvent) {
               routeforOtherLink(event);

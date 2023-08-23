@@ -69,23 +69,24 @@ export default function setShippingDefault(): void {
       billingCity.value = shippingCity.value;
       billingPostalCode.value = shippingPostalCode.value;
       billingCountry.value = shippingCountry.value;
+      defaultBillingCheckbox.checked = true;
 
-      billingStreet.disabled = true;
-      billingBuilding.disabled = true;
-      billingApartment.disabled = true;
-      billingCity.disabled = true;
-      billingPostalCode.disabled = true;
-      billingCountry.disabled = true;
-      defaultBillingCheckbox.disabled = true;
+      billingStreet.readOnly = true;
+      billingBuilding.readOnly = true;
+      billingApartment.readOnly = true;
+      billingCity.readOnly = true;
+      billingPostalCode.readOnly = true;
+      billingCountry.classList.add('read-only');
+      defaultBillingCheckbox.readOnly = true;
     } else {
-      billingStreet.disabled = false;
-      billingBuilding.disabled = false;
-      billingApartment.disabled = false;
-      billingCity.disabled = false;
-      billingPostalCode.disabled = false;
-      billingCountry.disabled = false;
+      billingStreet.readOnly = false;
+      billingBuilding.readOnly = false;
+      billingApartment.readOnly = false;
+      billingCity.readOnly = false;
+      billingPostalCode.readOnly = false;
+      billingCountry.classList.remove('read-only');
 
-      defaultBillingCheckbox.disabled = false;
+      defaultBillingCheckbox.readOnly = false;
     }
   }
 }
