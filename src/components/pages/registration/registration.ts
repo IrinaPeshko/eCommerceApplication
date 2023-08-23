@@ -111,7 +111,6 @@ export default class Registration {
             });
         }
       }
-      form.reset();
     }
   }
 }
