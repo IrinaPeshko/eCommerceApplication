@@ -68,7 +68,7 @@ export function registerUser2(
   address1: Address,
   address2: Address,
   shippingDefaultCheckbox: string,
-  billingDefaultCheckbox: string
+  billingDefaultCheckbox: string,
 ) {
   return apiRoot
     .withProjectKey({ projectKey })
@@ -79,17 +79,14 @@ export function registerUser2(
         password,
         firstName,
         lastName,
-       dateOfBirth,
-        addresses: [
-          address1,
-          address2
-        ],
+        dateOfBirth,
+        addresses: [address1, address2],
         shippingAddresses: [0],
         billingAddresses: [1],
-        defaultShippingAddress: shippingDefaultCheckbox === "on" ? 0 : undefined,
-        defaultBillingAddress: billingDefaultCheckbox  === "on" ? 1 : undefined,
+        defaultShippingAddress:
+          shippingDefaultCheckbox === "on" ? 0 : undefined,
+        defaultBillingAddress: billingDefaultCheckbox === "on" ? 1 : undefined,
       },
     })
     .execute();
-  }
-
+}

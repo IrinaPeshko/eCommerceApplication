@@ -17,11 +17,11 @@ export interface BadRequest {
   name: string;
 }
 export interface Address {
-  key: string,
-  country: string,
-  city: string,
-  postalCode: string,
-  streetName: string,
-  building?: string,
-  apartment?: string
+  key: string;
+  country: string;
+  city: string;
+  postalCode: string;
+  streetName: string;
+  building?: string;
+  apartment?: string;
 }

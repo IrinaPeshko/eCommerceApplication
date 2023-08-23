@@ -343,7 +343,8 @@ body.lock {
     color: #000000;
   }
 }
-input:read-only, .read-only {
+input:read-only,
+.read-only {
   pointer-events: none;
   opacity: 0.4;
 }

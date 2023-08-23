@@ -52,8 +52,11 @@ export default class Registration {
       if (fields) {
         const fieldsArr: Element[] = Array.from(fields);
         fieldsArr.forEach((elem) => {
-          if (elem.hasAttribute("readonly") || elem.classList.contains('read-only')) {
-            console.log('Есть');
+          if (
+            elem.hasAttribute("readonly") ||
+            elem.classList.contains("read-only")
+          ) {
+            console.log("Есть");
             elem.classList.add("valid");
           }
         });
@@ -64,27 +67,45 @@ export default class Registration {
             const newVal: string = val[1] as string;
             userData[`${key}`] = newVal;
           }
-          const { email, password, firstName, lastName, dateOfBirth,
-            shippingCountryCode, shippingCity, shippingPostalCode, shippingStreetName, shippingBuilding, shippingApartment, shippingDefaultCheckbox,
-            billingCountryCode, billingCity, billingPostalCode, billingStreetName, billingBuilding, billingApartment, billingDefaultCheckbox } = userData;
-            const shippingObj: Address = {
-              key: "keyShippingAddress",
-              country: shippingCountryCode,
-              city: shippingCity,
-              postalCode: shippingPostalCode,
-              streetName: shippingStreetName,
-              building: shippingBuilding,
-              apartment: shippingApartment
-            };
-            const billingObj: Address = {
-              key: "keyBillingAddress",
-              country: billingCountryCode,
-              city: billingCity,
-              postalCode: billingPostalCode,
-              streetName: billingStreetName,
-              building: billingBuilding,
-              apartment: billingApartment
-            };
+          const {
+            email,
+            password,
+            firstName,
+            lastName,
+            dateOfBirth,
+            shippingCountryCode,
+            shippingCity,
+            shippingPostalCode,
+            shippingStreetName,
+            shippingBuilding,
+            shippingApartment,
+            shippingDefaultCheckbox,
+            billingCountryCode,
+            billingCity,
+            billingPostalCode,
+            billingStreetName,
+            billingBuilding,
+            billingApartment,
+            billingDefaultCheckbox,
+          } = userData;
+          const shippingObj: Address = {
+            key: "keyShippingAddress",
+            country: shippingCountryCode,
+            city: shippingCity,
+            postalCode: shippingPostalCode,
+            streetName: shippingStreetName,
+            building: shippingBuilding,
+            apartment: shippingApartment,
+          };
+          const billingObj: Address = {
+            key: "keyBillingAddress",
+            country: billingCountryCode,
+            city: billingCity,
+            postalCode: billingPostalCode,
+            streetName: billingStreetName,
+            building: billingBuilding,
+            apartment: billingApartment,
+          };
           try {
             const resp = await registerUser2(
               email,
@@ -95,7 +116,7 @@ export default class Registration {
               shippingObj,
               billingObj,
               shippingDefaultCheckbox,
-              billingDefaultCheckbox
+              billingDefaultCheckbox,
             );
             if (resp.statusCode !== 400) {
               const tokenCache = new MyTokenCache();

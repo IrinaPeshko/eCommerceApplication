@@ -76,7 +76,7 @@ export default function setShippingDefault(): void {
       billingApartment.readOnly = true;
       billingCity.readOnly = true;
       billingPostalCode.readOnly = true;
-      billingCountry.classList.add('read-only');
+      billingCountry.classList.add("read-only");
       defaultBillingCheckbox.readOnly = true;
     } else {
       billingStreet.readOnly = false;
@@ -84,7 +84,7 @@ export default function setShippingDefault(): void {
       billingApartment.readOnly = false;
       billingCity.readOnly = false;
       billingPostalCode.readOnly = false;
-      billingCountry.classList.remove('read-only');
+      billingCountry.classList.remove("read-only");
 
       defaultBillingCheckbox.readOnly = false;
     }
