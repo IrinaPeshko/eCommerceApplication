@@ -16,3 +16,12 @@ export interface BadRequest {
   message: string;
   name: string;
 }
+export interface Address {
+  key: string;
+  country: string;
+  city: string;
+  postalCode: string;
+  streetName: string;
+  building?: string;
+  apartment?: string;
+}

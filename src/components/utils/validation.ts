@@ -9,10 +9,10 @@ export default class Validate {
   }
 
   public validateText(): void {
-    const reg = /^(?! )(?!.* $)(?!(?:.* ){2})[ёЁA-zА-я -]+$/;
-    if (!this.target.value || this.target.value === "") {
-      this.error("This is a required field.");
-    }
+    const reg = /^[ёЁA-zА-я ]+$/;
+    // if (!this.target.value || this.target.value === "") {
+    //   this.error("This is a required field.");
+    // }
     if (this.target.dataset.type === "code") {
       let country: HTMLElement | null;
       let countryVal: string;
@@ -20,20 +20,28 @@ export default class Validate {
         country = document.getElementById("billing_country");
         if (country) {
           countryVal = (country as HTMLSelectElement).value;
-          if (!postcodeValidator(this.target.value, countryVal)) {
-            this.error("Incorrect postcode.");
+          if (this.target.value !== "") {
+            if (!postcodeValidator(this.target.value, countryVal)) {
+              this.error("Incorrect postcode.");
+            } else {
+              this.valid("Correct postcode!");
+            }
           } else {
-            this.valid("Correct postcode!");
+            this.error("This is a required field.");
           }
         }
       } else if (this.target.id === "shipping_postal_code") {
         country = document.getElementById("shipping_country");
         if (country) {
           countryVal = (country as HTMLSelectElement).value;
-          if (!postcodeValidator(this.target.value, countryVal)) {
-            this.error("Incorrect postcode.");
+          if (this.target.value !== "") {
+            if (!postcodeValidator(this.target.value, countryVal)) {
+              this.error("Incorrect postcode.");
+            } else {
+              this.valid("Correct postcode!");
+            }
           } else {
-            this.valid("Correct postcode!");
+            this.error("This is a required field.");
           }
         }
       }
@@ -42,9 +50,8 @@ export default class Validate {
       this.target.dataset.type === "city"
     ) {
       if (!reg.test(this.target.value)) {
-        if (/^\s/.test(this.target.value)) this.target.value = "";
         this.error(
-          "Only letters, '-' and one space for double names allowed. Spaces at the beginning or end of a line are not allowed.",
+          "Must contain at least one character and no special characters or numbers.",
         );
       } else {
         this.target.value = this.target.value.replace(
@@ -54,12 +61,9 @@ export default class Validate {
         this.valid("Correct!");
       }
     } else if (this.target.dataset.type === "street") {
-      const street = /^(?! )(?!.* $)((?!\s{2}).)+$/;
+      const street = /^.+$/;
       if (!street.test(this.target.value)) {
-        if (/^\s/.test(this.target.value)) this.target.value = "";
-        this.error(
-          "Must be at least 1 character. Spaces at the beginning or end of a line or more than one space between characters are not allowed.",
-        );
+        this.error("Must be at least 1 character.");
       } else {
         this.valid("Correct street!");
       }
@@ -85,31 +89,14 @@ export default class Validate {
   public validatePassword(): void {
     const passwordReg =
       /^(?! )(?!.* $)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-])\S{8,}$/;
-    if (this.target.id !== "confirm-password") {
-      if (!passwordReg.test(this.target.value)) {
-        this.error(
-          "Your password must contain at least 8 characters, at least one uppercase and lowercase letter, digit, and special character (such as !, @, #, $) and must not start or end with a whitespace character.",
-        );
-      } else if (this.target.value.length < 8) {
-        this.error("Password must be at least 8 characters long");
-      } else {
-        this.valid("Strong Password!");
-      }
+    if (!passwordReg.test(this.target.value)) {
+      this.error(
+        "Your password must contain at least 8 characters, at least one uppercase and lowercase letter, digit, and special character (such as !, @, #, $), contain no spaces, and must not start or end with a whitespace character.",
+      );
+    } else if (this.target.value.length < 8) {
+      this.error("Password must be at least 8 characters long");
     } else {
-      const passwordField: HTMLInputElement | null =
-        document.querySelector("#password");
-      if (passwordField && passwordField.classList.contains("valid")) {
-        const passwordValue: string | undefined = passwordField.value;
-        if (passwordValue && passwordValue !== "") {
-          if (this.target.value === passwordValue) {
-            this.valid("Password confirm!");
-          } else {
-            this.error("This password is different.");
-          }
-        }
-      } else {
-        this.error("This password is invalid.");
-      }
+      this.valid("Strong Password!");
     }
   }
 

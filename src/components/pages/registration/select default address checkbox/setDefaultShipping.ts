@@ -1,4 +1,7 @@
 export default function setShippingDefault(): void {
+  const useLikeBillingAddressCheckbox = document.getElementById(
+    "billing_address_checkbox",
+  ) as HTMLInputElement;
   const defaultShippingCheckbox = document.getElementById(
     "default_shipping_checkbox",
   ) as HTMLInputElement;
@@ -45,6 +48,7 @@ export default function setShippingDefault(): void {
   if (
     defaultShippingCheckbox instanceof HTMLInputElement &&
     defaultBillingCheckbox instanceof HTMLInputElement &&
+    useLikeBillingAddressCheckbox instanceof HTMLInputElement &&
     shippingStreet instanceof HTMLInputElement &&
     shippingBuilding instanceof HTMLInputElement &&
     shippingApartment instanceof HTMLInputElement &&
@@ -58,31 +62,31 @@ export default function setShippingDefault(): void {
     billingPostalCode instanceof HTMLInputElement &&
     billingCountry instanceof HTMLSelectElement
   ) {
-    if (defaultShippingCheckbox.checked) {
+    if (useLikeBillingAddressCheckbox.checked) {
       billingStreet.value = shippingStreet.value;
       billingBuilding.value = shippingBuilding.value;
       billingApartment.value = shippingApartment.value;
       billingCity.value = shippingCity.value;
       billingPostalCode.value = shippingPostalCode.value;
       billingCountry.value = shippingCountry.value;
+      defaultBillingCheckbox.checked = true;
 
-      billingStreet.disabled = true;
-      billingBuilding.disabled = true;
-      billingApartment.disabled = true;
-      billingCity.disabled = true;
-      billingPostalCode.disabled = true;
-      billingCountry.disabled = true;
-
-      defaultBillingCheckbox.disabled = true;
+      billingStreet.readOnly = true;
+      billingBuilding.readOnly = true;
+      billingApartment.readOnly = true;
+      billingCity.readOnly = true;
+      billingPostalCode.readOnly = true;
+      billingCountry.classList.add("read-only");
+      defaultBillingCheckbox.closest("label")?.classList.add("read-only");
     } else {
-      billingStreet.disabled = false;
-      billingBuilding.disabled = false;
-      billingApartment.disabled = false;
-      billingCity.disabled = false;
-      billingPostalCode.disabled = false;
-      billingCountry.disabled = false;
+      billingStreet.readOnly = false;
+      billingBuilding.readOnly = false;
+      billingApartment.readOnly = false;
+      billingCity.readOnly = false;
+      billingPostalCode.readOnly = false;
+      billingCountry.closest("label")?.classList.remove("read-only");
 
-      defaultBillingCheckbox.disabled = false;
+      defaultBillingCheckbox.classList.remove("read-only");
     }
   }
 }
