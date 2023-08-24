@@ -77,16 +77,16 @@ export default function setShippingDefault(): void {
       billingCity.readOnly = true;
       billingPostalCode.readOnly = true;
       billingCountry.classList.add("read-only");
-      defaultBillingCheckbox.readOnly = true;
+      defaultBillingCheckbox.closest("label")?.classList.add("read-only");
     } else {
       billingStreet.readOnly = false;
       billingBuilding.readOnly = false;
       billingApartment.readOnly = false;
       billingCity.readOnly = false;
       billingPostalCode.readOnly = false;
-      billingCountry.classList.remove("read-only");
+      billingCountry.closest("label")?.classList.remove("read-only");
 
-      defaultBillingCheckbox.readOnly = false;
+      defaultBillingCheckbox.classList.remove("read-only");
     }
   }
 }
