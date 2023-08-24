@@ -127,7 +127,6 @@ export default class Validate {
   public validateSelect(): void {
     if (this.errorField) {
       if (this.target.value && this.target.value !== "") {
-        console.log(this.target.value);
         this.errorField.textContent = "Select one option.";
         this.target.classList.remove("valid");
         this.target.classList.add("invalid");
