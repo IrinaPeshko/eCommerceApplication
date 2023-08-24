@@ -125,8 +125,8 @@ export default class Validate {
   }
 
   public validateSelect(): void {
-        this.target.classList.remove("invalid");
-        this.target.classList.add("valid");
+    this.target.classList.remove("invalid");
+    this.target.classList.add("valid");
   }
 
   private error(message: string): void {
