@@ -48,8 +48,6 @@ export default function setShippingDefault(): void {
     const validate = new Validate(field);
     if (field.tagName === "INPUT") {
       validate.validateText();
-    } else if (field.tagName === "SELECT") {
-      validate.validateSelect();
     }
   }
 
@@ -102,8 +100,7 @@ export default function setShippingDefault(): void {
   shippingStreet.addEventListener("input", () => {
     updateBillingAddress();
     validateBillingFields(billingStreet);
-  }
-  );
+  });
   shippingCity.addEventListener("input", () => {
     updateBillingAddress();
     validateBillingFields(billingCity);
@@ -112,10 +109,7 @@ export default function setShippingDefault(): void {
     updateBillingAddress();
     validateBillingFields(billingPostalCode);
   });
-  shippingCountry.addEventListener("change", () => {
-    updateBillingAddress();
-    validateBillingFields(billingCountry);
-  });
+  shippingCountry.addEventListener("change", updateBillingAddress);
   shippingBuilding.addEventListener("input", updateBillingAddress);
   shippingApartment.addEventListener("input", updateBillingAddress);
   useLikeBillingAddressCheckbox.addEventListener(

@@ -125,17 +125,8 @@ export default class Validate {
   }
 
   public validateSelect(): void {
-    if (this.errorField) {
-      if (this.target.value && this.target.value !== "") {
-        this.errorField.textContent = "Select one option.";
-        this.target.classList.remove("valid");
-        this.target.classList.add("invalid");
-      } else {
-        this.errorField.textContent = "";
         this.target.classList.remove("invalid");
         this.target.classList.add("valid");
-      }
-    }
   }
 
   private error(message: string): void {
