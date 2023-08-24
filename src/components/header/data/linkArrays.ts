@@ -129,14 +129,14 @@ export const profileLinks: link[] = [
               const postcodeField: HTMLElement | null = document.getElementById(
                 "billing_postal_code",
               );
-              registration.validationSelect(target as HTMLSelectElement);
+              registration.validationForm(target as HTMLSelectElement);
               if (postcodeField)
                 registration.validationForm(postcodeField as HTMLInputElement);
             } else if ((target as HTMLElement).id === "shipping_country") {
               const postcodeField: HTMLElement | null = document.getElementById(
                 "shipping_postal_code",
               );
-              registration.validationSelect(target as HTMLSelectElement);
+              registration.validationForm(target as HTMLSelectElement);
               if (postcodeField)
                 registration.validationForm(postcodeField as HTMLInputElement);
             }

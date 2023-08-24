@@ -9,121 +9,132 @@ export default class Validate {
   }
 
   public validateText(): void {
-    const reg = /^[ёЁA-zА-я ]+$/;
-    // if (!this.target.value || this.target.value === "") {
-    //   this.error("This is a required field.");
-    // }
-    if (this.target.dataset.type === "code") {
-      let country: HTMLElement | null;
-      let countryVal: string;
-      if (this.target.id === "billing_postal_code") {
-        country = document.getElementById("billing_country");
-        if (country) {
-          countryVal = (country as HTMLSelectElement).value;
-          if (this.target.value !== "") {
-            if (!postcodeValidator(this.target.value, countryVal)) {
-              this.error("Incorrect postcode.");
+    if (!this.target.value || this.target.value === "") {
+      this.error("This is a required field.");
+    } else {
+      const reg = /^[ёЁA-zА-я ]+$/;
+        if (this.target.dataset.type === "code") {
+        let country: HTMLElement | null;
+        let countryVal: string;
+        if (this.target.id === "billing_postal_code") {
+          country = document.getElementById("billing_country");
+          if (country) {
+            countryVal = (country as HTMLSelectElement).value;
+            if (this.target.value !== "") {
+              if (!postcodeValidator(this.target.value, countryVal)) {
+                this.error("Incorrect postcode.");
+              } else {
+                this.valid("Correct postcode!");
+              }
             } else {
-              this.valid("Correct postcode!");
+              this.error("This is a required field.");
             }
-          } else {
-            this.error("This is a required field.");
+          }
+        } else if (this.target.id === "shipping_postal_code") {
+          country = document.getElementById("shipping_country");
+          if (country) {
+            countryVal = (country as HTMLSelectElement).value;
+            if (this.target.value !== "") {
+              if (!postcodeValidator(this.target.value, countryVal)) {
+                this.error("Incorrect postcode.");
+              } else {
+                this.valid("Correct postcode!");
+              }
+            } else {
+              this.error("This is a required field.");
+            }
           }
         }
-      } else if (this.target.id === "shipping_postal_code") {
-        country = document.getElementById("shipping_country");
-        if (country) {
-          countryVal = (country as HTMLSelectElement).value;
-          if (this.target.value !== "") {
-            if (!postcodeValidator(this.target.value, countryVal)) {
-              this.error("Incorrect postcode.");
-            } else {
-              this.valid("Correct postcode!");
-            }
-          } else {
-            this.error("This is a required field.");
-          }
+      } else if (
+        this.target.dataset.type === "names" ||
+        this.target.dataset.type === "city"
+      ) {
+        if (this.target.value.match(reg)) {
+          this.target.value = this.target.value.replace(
+            /(-| |^)[а-яёa-z]/g,
+            (firstLetter) => firstLetter.toUpperCase(),
+          );
+          this.valid("Correct!");
+        } else {
+          this.error(
+            "Must contain at least one character and no special characters or numbers.",
+          );
         }
-      }
-    } else if (
-      this.target.dataset.type === "names" ||
-      this.target.dataset.type === "city"
-    ) {
-      if (this.target.value.match(reg)) {
-        this.target.value = this.target.value.replace(
-          /(-| |^)[а-яёa-z]/g,
-          (firstLetter) => firstLetter.toUpperCase(),
-        );
-        this.valid("Correct!");
-      } else {
-        this.error(
-          "Must contain at least one character and no special characters or numbers.",
-        );
-      }
-    } else if (this.target.dataset.type === "street") {
-      const street = /^.+$/;
-      if (this.target.value.match(street)) {
-        this.valid("Correct street!");
-      } else {
-        this.error("Must be at least 1 character.");
+      } else if (this.target.dataset.type === "street") {
+        const street = /^.+$/;
+        if (this.target.value.match(street)) {
+          this.valid("Correct street!");
+        } else {
+          this.error("Must be at least 1 character.");
+        }
       }
     }
   }
 
   public validateEmail(): void {
-    const emailReg =
-      /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
     if (!this.target.value || this.target.value === "") {
       this.error("This is a required field.");
-    }
-    if (this.target.value.match(emailReg)) {
-      this.target.value = this.target.value.trim();
-      this.valid("Correct email!");
     } else {
-      this.error(
-        "Please enter a valid email address, e.g., user@example.com, and ensure it contains no leading or trailing whitespace, includes a domain name, and has an '@' symbol separating the local part and domain name.",
-      );
+      const emailReg =
+      /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+      if (this.target.value.match(emailReg)) {
+        this.target.value = this.target.value.trim();
+        this.valid("Correct email!");
+      } else {
+        this.error(
+          "Please enter a valid email address, e.g., user@example.com, and ensure it contains no leading or trailing whitespace, includes a domain name, and has an '@' symbol separating the local part and domain name.",
+        );
+      }
     }
   }
 
   public validatePassword(): void {
-    const passwordReg =
-      /^(?! )(?!.* $)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-])\S{8,}$/;
-    if (this.target.value.match(passwordReg)) {
-      this.valid("Strong Password!");
+    if (!this.target.value || this.target.value === "") {
+      this.error("This is a required field.")
     } else {
-      this.error(
-        "Your password must contain at least 8 characters, at least one uppercase and lowercase letter, digit, and special character (such as !, @, #, $), contain no spaces, and must not start or end with a whitespace character.",
-      );
+      const passwordReg =
+      /^(?! )(?!.* $)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-])\S{8,}$/;
+      if (this.target.value.match(passwordReg)) {
+        this.valid("Strong Password!");
+      } else {
+        this.error(
+          "Your password must contain at least 8 characters, at least one uppercase and lowercase letter, digit, and special character (such as !, @, #, $), contain no spaces, and must not start or end with a whitespace character.",
+        );
+      }
     }
   }
 
   public validateAge(): void {
-    const currDate: number = Date.now();
-    const userBirth: number = new Date(this.target.value).getTime();
-    const difference: number = currDate - userBirth;
-    if (difference < 0) {
-      this.error("Incorrect date.");
-    } else {
-      const userAge: number = new Date(difference).getFullYear() - 1970;
-      if (userAge < 13) {
-        this.error("Users under the age of 13 are not allowed to register.");
+    if (this.target.value && this.target.value !== "") {
+      const currDate: number = Date.now();
+      const userBirth: number = new Date(this.target.value).getTime();
+      const difference: number = currDate - userBirth;
+      if (difference < 0) {
+        this.error("Incorrect date.");
       } else {
-        this.valid("Allowed age.");
+        const userAge: number = new Date(difference).getFullYear() - 1970;
+        if (userAge < 13) {
+          this.error("Users under the age of 13 are not allowed to register.");
+        } else {
+          this.valid("Allowed age.");
+        }
       }
+    } else {
+      this.error("This is a required field.");
     }
   }
 
   public validateSelect(): void {
     if (this.errorField) {
       if (this.target.value && this.target.value !== "") {
-        this.errorField.textContent = "";
-        this.target.classList.remove("invalid");
-        this.target.classList.add("valid");
-      } else {
+        console.log(this.target.value);
         this.errorField.textContent = "Select one option.";
         this.target.classList.remove("valid");
         this.target.classList.add("invalid");
+      } else {
+        this.errorField.textContent = "";
+        this.target.classList.remove("invalid");
+        this.target.classList.add("valid");
       }
     }
   }
