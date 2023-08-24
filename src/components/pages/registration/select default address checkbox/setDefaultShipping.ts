@@ -74,9 +74,9 @@ export default function setShippingDefault(): void {
       validateBillingFields(billingCity);
       validateBillingFields(billingPostalCode);
     } else {
-      shippingStreet.removeEventListener('input', updateBillingAddress);
-      shippingCity.removeEventListener('input', updateBillingAddress);
-      shippingPostalCode.removeEventListener('input', updateBillingAddress);
+      shippingStreet.removeEventListener("input", updateBillingAddress);
+      shippingCity.removeEventListener("input", updateBillingAddress);
+      shippingPostalCode.removeEventListener("input", updateBillingAddress);
       billingStreet.readOnly = false;
       billingBuilding.readOnly = false;
       billingApartment.readOnly = false;
@@ -101,8 +101,8 @@ export default function setShippingDefault(): void {
   }
 
   shippingStreet.addEventListener("input", updateBillingAddress);
-  shippingCity.addEventListener("input",updateBillingAddress);
-  shippingPostalCode.addEventListener("input",  updateBillingAddress);
+  shippingCity.addEventListener("input", updateBillingAddress);
+  shippingPostalCode.addEventListener("input", updateBillingAddress);
   shippingCountry.addEventListener("change", updateBillingAddress);
   shippingBuilding.addEventListener("input", updateBillingAddress);
   shippingApartment.addEventListener("input", updateBillingAddress);

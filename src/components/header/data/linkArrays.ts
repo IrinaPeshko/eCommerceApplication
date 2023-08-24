@@ -140,6 +140,10 @@ export const profileLinks: link[] = [
               if (postcodeField)
                 registration.validationForm(postcodeField as HTMLInputElement);
             }
+          } else if ((target as HTMLElement).tagName === "INPUT") {
+            if ((target as HTMLElement).id === "birthdate") {
+              registration.validationForm(target as HTMLInputElement);
+            }
           }
         }
       });
