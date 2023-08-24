@@ -35,18 +35,18 @@ const footerContent = `
     <ul class="footer_general__list follow_us__list">
       <li class="follow_us__item">
         <a class="follow_us__link" target="_blank" href="https://www.facebook.com/">
-          <span><img src="assets/icons/facebook.svg" alt="facebook"></span>
+          <span class="follow_us__img-wrapper"><img src="assets/icons/facebook.svg" alt="facebook"></span>
           <span>FACEBOOK</span>
         </a>
       </li>
       <li class="follow_us__item">
         <a class="follow_us__link" target="_blank" href="https://twitter.com/?lang=en">
-          <span><img src="./assets/icons/twitter.svg" alt="twitter"></span>
+          <span class="follow_us__img-wrapper"><img src="./assets/icons/twitter.svg" alt="twitter"></span>
           <span>TWITTER</span></li>
         </a>
       <li class="follow_us__item">
         <a class="follow_us__link" target="_blank" href="https://www.instagram.com/">
-          <span><img src="./assets/icons/instagram-photo-camera-symbol.svg" alt="instagram"></span>
+          <span class="follow_us__img-wrapper"><img src="./assets/icons/instagram-photo-camera-symbol.svg" alt="instagram"></span>
           <span>INSTAGRAM</span>
         </a>
       </li>
