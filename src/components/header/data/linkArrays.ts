@@ -83,7 +83,6 @@ export const profileLinks: link[] = [
               }
             }
           } else if (target instanceof HTMLAnchorElement) {
-            console.log("click");
             if (target.classList.contains("login__create-acc-btn")) {
               event.preventDefault();
               if (event instanceof MouseEvent) {

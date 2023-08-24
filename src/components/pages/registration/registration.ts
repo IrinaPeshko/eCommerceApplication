@@ -57,7 +57,6 @@ export default class Registration {
             elem.hasAttribute("readonly") ||
             elem.classList.contains("read-only")
           ) {
-            console.log("Есть");
             elem.classList.add("valid");
           }
         });
