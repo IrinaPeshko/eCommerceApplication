@@ -88,7 +88,8 @@ export default function setShippingDefault(): void {
   shippingCity.addEventListener("input", updateBillingAddress);
   shippingPostalCode.addEventListener("input", updateBillingAddress);
   shippingCountry.addEventListener("input", updateBillingAddress);
-  useLikeBillingAddressCheckbox.addEventListener("change",updateBillingAddress);
+  useLikeBillingAddressCheckbox.addEventListener(
+    "change",
+    updateBillingAddress,
+  );
 }
-
-
