@@ -17,6 +17,8 @@ import HeaderView from "../../header/header";
 
 export default class Login {
   public validationForm(target: HTMLInputElement): void {
+    const form: HTMLFormElement | null = document.querySelector(".login__form");
+    if (form) form.noValidate = true;
     const validate = new Validate(target);
     if (target.tagName === "INPUT") {
       if (target.type === FieldTypes.Email) {
