@@ -1,3 +1,5 @@
+import Validate from "../../../utils/validation";
+
 export default function setShippingDefault(): void {
   const useLikeBillingAddressCheckbox = document.getElementById(
     "billing_address_checkbox",
@@ -42,6 +44,15 @@ export default function setShippingDefault(): void {
     "shipping_country",
   ) as HTMLSelectElement;
 
+  function validateBillingFields(field: HTMLInputElement | HTMLSelectElement) {
+    const validate = new Validate(field);
+    if (field.tagName === "INPUT") {
+      validate.validateText();
+    } else if (field.tagName === "SELECT") {
+      validate.validateSelect();
+    }
+  }
+
   function updateBillingAddress() {
     const isChecked = useLikeBillingAddressCheckbox.checked;
 
@@ -61,6 +72,9 @@ export default function setShippingDefault(): void {
       billingPostalCode.readOnly = true;
       billingCountry.classList.add("read-only");
       defaultBillingCheckbox.closest("label")?.classList.add("read-only");
+      validateBillingFields(billingStreet);
+      validateBillingFields(billingCity);
+      validateBillingFields(billingPostalCode);
     } else {
       billingStreet.readOnly = false;
       billingBuilding.readOnly = false;
@@ -72,22 +86,38 @@ export default function setShippingDefault(): void {
 
       // Очищаем поля Billing Address
       billingStreet.value = "";
+      validateBillingFields(billingStreet);
       billingBuilding.value = "";
       billingApartment.value = "";
       billingCity.value = "";
+      validateBillingFields(billingCity);
       billingPostalCode.value = "";
+      validateBillingFields(billingPostalCode);
       billingCountry.value = "BY";
 
       // Оставляем значение страны BY
     }
   }
 
-  shippingStreet.addEventListener("input", updateBillingAddress);
+  shippingStreet.addEventListener("input", () => {
+    updateBillingAddress();
+    validateBillingFields(billingStreet);
+  }
+  );
+  shippingCity.addEventListener("input", () => {
+    updateBillingAddress();
+    validateBillingFields(billingCity);
+  });
+  shippingPostalCode.addEventListener("input", () => {
+    updateBillingAddress();
+    validateBillingFields(billingPostalCode);
+  });
+  shippingCountry.addEventListener("change", () => {
+    updateBillingAddress();
+    validateBillingFields(billingCountry);
+  });
   shippingBuilding.addEventListener("input", updateBillingAddress);
   shippingApartment.addEventListener("input", updateBillingAddress);
-  shippingCity.addEventListener("input", updateBillingAddress);
-  shippingPostalCode.addEventListener("input", updateBillingAddress);
-  shippingCountry.addEventListener("input", updateBillingAddress);
   useLikeBillingAddressCheckbox.addEventListener(
     "change",
     updateBillingAddress,

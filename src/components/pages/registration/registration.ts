@@ -23,7 +23,7 @@ export default class Registration {
     if (form) form.noValidate = true;
     const validate = new Validate(target);
     if (target.tagName === "INPUT") {
-      if(target.id === "password"){
+      if (target.id === "password") {
         validate.validatePassword();
       } else if (target.type === FieldTypes.Text) {
         validate.validateText();
