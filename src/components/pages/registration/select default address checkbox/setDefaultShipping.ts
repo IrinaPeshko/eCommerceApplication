@@ -84,9 +84,8 @@ export default function setShippingDefault(): void {
       billingApartment.readOnly = false;
       billingCity.readOnly = false;
       billingPostalCode.readOnly = false;
-      billingCountry.closest("label")?.classList.remove("read-only");
-
-      defaultBillingCheckbox.classList.remove("read-only");
+      billingCountry.classList.remove("read-only");
+      defaultBillingCheckbox.closest("label")?.classList.remove("read-only");
     }
   }
 }
