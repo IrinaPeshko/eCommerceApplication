@@ -95,13 +95,14 @@ h6 {
     cursor: pointer;
     background-color: $color5;
   }
-  &:focus,
+  &:focus-visible {
+    background-color: $color5;
+  }
   &:active {
     outline: none;
     border: none;
-    background-color: $color5;
-    background-color: #ffffff;
-    color: #000000;
+    opacity: 0.5;
+    color: #ffffff;
   }
   &.btn--light {
     background-color: #ffffff;
