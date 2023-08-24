@@ -44,7 +44,8 @@ export default class Registration {
     const form: HTMLFormElement | null = document.querySelector(
       ".registration__form",
     );
-    const datat: HTMLElement | null = document.getElementById("shipping_country");
+    const datat: HTMLElement | null =
+      document.getElementById("shipping_country");
     if (datat) console.log(typeof (datat as HTMLSelectElement).value);
     const userData: Obj = {};
     if (form) {
@@ -161,7 +162,9 @@ export default class Registration {
           fieldsArr
             .filter((elem) => !elem.classList.contains("valid"))
             .forEach((elem) => {
-              this.validationForm(elem as HTMLInputElement || elem as HTMLSelectElement);
+              this.validationForm(
+                (elem as HTMLInputElement) || (elem as HTMLSelectElement),
+              );
             });
         }
       }

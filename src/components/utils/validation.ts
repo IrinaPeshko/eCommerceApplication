@@ -13,7 +13,7 @@ export default class Validate {
       this.error("This is a required field.");
     } else {
       const reg = /^[ёЁA-zА-я ]+$/;
-        if (this.target.dataset.type === "code") {
+      if (this.target.dataset.type === "code") {
         let country: HTMLElement | null;
         let countryVal: string;
         if (this.target.id === "billing_postal_code") {
@@ -76,7 +76,7 @@ export default class Validate {
       this.error("This is a required field.");
     } else {
       const emailReg =
-      /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+        /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
       if (this.target.value.match(emailReg)) {
         this.target.value = this.target.value.trim();
         this.valid("Correct email!");
@@ -90,10 +90,10 @@ export default class Validate {
 
   public validatePassword(): void {
     if (!this.target.value || this.target.value === "") {
-      this.error("This is a required field.")
+      this.error("This is a required field.");
     } else {
       const passwordReg =
-      /^(?! )(?!.* $)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-])\S{8,}$/;
+        /^(?! )(?!.* $)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-])\S{8,}$/;
       if (this.target.value.match(passwordReg)) {
         this.valid("Strong Password!");
       } else {
