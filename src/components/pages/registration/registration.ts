@@ -16,7 +16,7 @@ import HeaderView from "../../header/header";
 import Popap from "../../popap/popap";
 
 export default class Registration {
-  public validationForm(target: HTMLInputElement): void {
+  public validationForm(target: HTMLInputElement | HTMLSelectElement): void {
     const form: HTMLFormElement | null = document.querySelector(
       ".registration__form",
     );
@@ -37,18 +37,17 @@ export default class Registration {
       } else if (target.type === FieldTypes.Date) {
         validate.validateAge();
       }
+    } else if (target.tagName === "SELECT") {
+      validate.validateSelect();
     }
-  }
-
-  public validationSelect(target: HTMLSelectElement): void {
-    const validate = new Validate(target);
-    validate.validateSelect();
   }
 
   public async submitForm(event: MouseEvent) {
     const form: HTMLFormElement | null = document.querySelector(
       ".registration__form",
     );
+    const datat: HTMLElement | null = document.getElementById("shipping_country");
+    if (datat) console.log(typeof (datat as HTMLSelectElement).value);
     const userData: Obj = {};
     if (form) {
       const fields = form.querySelectorAll(".form__field[required]");
@@ -164,7 +163,7 @@ export default class Registration {
           fieldsArr
             .filter((elem) => !elem.classList.contains("valid"))
             .forEach((elem) => {
-              elem.classList.add("invalid");
+              this.validationForm(elem as HTMLInputElement || elem as HTMLSelectElement);
             });
         }
       }

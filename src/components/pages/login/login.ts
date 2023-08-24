@@ -75,10 +75,11 @@ export default class Login {
             Popap.open(`<div>${(err as BadRequest).message}</div>`);
           }
         } else {
-          fieldsArr.filter((elem) => !elem.classList.contains("valid"))
-          .forEach((elem) => {
-            this.validationForm(elem as HTMLInputElement);
-          });
+          fieldsArr
+            .filter((elem) => !elem.classList.contains("valid"))
+            .forEach((elem) => {
+              this.validationForm(elem as HTMLInputElement);
+            });
         }
       }
     }
