@@ -49,23 +49,23 @@ export default class Validate {
       this.target.dataset.type === "names" ||
       this.target.dataset.type === "city"
     ) {
-      if (!reg.test(this.target.value)) {
-        this.error(
-          "Must contain at least one character and no special characters or numbers.",
-        );
-      } else {
+      if (this.target.value.match(reg)) {
         this.target.value = this.target.value.replace(
           /(-| |^)[а-яёa-z]/g,
           (firstLetter) => firstLetter.toUpperCase(),
         );
         this.valid("Correct!");
+      } else {
+        this.error(
+          "Must contain at least one character and no special characters or numbers.",
+        );
       }
     } else if (this.target.dataset.type === "street") {
       const street = /^.+$/;
-      if (!street.test(this.target.value)) {
-        this.error("Must be at least 1 character.");
-      } else {
+      if (this.target.value.match(street)) {
         this.valid("Correct street!");
+      } else {
+        this.error("Must be at least 1 character.");
       }
     }
   }
@@ -76,27 +76,25 @@ export default class Validate {
     if (!this.target.value || this.target.value === "") {
       this.error("This is a required field.");
     }
-    if (!emailReg.test(this.target.value)) {
+    if (this.target.value.match(emailReg)) {
+      this.target.value = this.target.value.trim();
+      this.valid("Correct email!");
+    } else {
       this.error(
         "Please enter a valid email address, e.g., user@example.com, and ensure it contains no leading or trailing whitespace, includes a domain name, and has an '@' symbol separating the local part and domain name.",
       );
-    } else {
-      this.target.value = this.target.value.trim();
-      this.valid("Correct email!");
     }
   }
 
   public validatePassword(): void {
     const passwordReg =
       /^(?! )(?!.* $)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-])\S{8,}$/;
-    if (!passwordReg.test(this.target.value)) {
+    if (this.target.value.match(passwordReg)) {
+      this.valid("Strong Password!");
+    } else {
       this.error(
         "Your password must contain at least 8 characters, at least one uppercase and lowercase letter, digit, and special character (such as !, @, #, $), contain no spaces, and must not start or end with a whitespace character.",
       );
-    } else if (this.target.value.length < 8) {
-      this.error("Password must be at least 8 characters long");
-    } else {
-      this.valid("Strong Password!");
     }
   }
 

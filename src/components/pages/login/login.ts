@@ -32,53 +32,53 @@ export default class Login {
 
   public async signIn(event: MouseEvent): Promise<void> {
     const form: HTMLFormElement | null = document.querySelector(".login__form");
-    const passwordField: HTMLElement | null =
-      document.getElementById("login-password");
-    const emailField: HTMLElement | null =
-      document.getElementById("login-email");
     const userData: Obj = {};
-    if (passwordField && emailField) {
-      if (
-        passwordField.classList.contains("valid") &&
-        emailField.classList.contains("valid")
-      ) {
-        if (form) {
+    if (form) {
+      const fields = form.querySelectorAll(".form__field[required]");
+      if (fields) {
+        const fieldsArr: Element[] = Array.from(fields);
+        if (fieldsArr.every((elem) => elem.classList.contains("valid"))) {
           const data = new FormData(form);
           for (const [key, value] of data.entries()) {
             userData[`${key}`] = `${value}`;
           }
-        }
-        const { email, password } = userData;
-        const tokenCache = new MyTokenCache();
-        const clientAPI = createPasswordClient(email, password, tokenCache);
-        const client = createClient(clientAPI);
-        const apiRoot: ApiRoot = createApiBuilderFromCtpClient(client);
-        try {
-          const resp = await getUser(email, password, apiRoot);
-          if (resp.statusCode !== 400) {
-            const { token } = tokenCache.get();
-            localStorage.setItem("token", token);
-            const popapContent = document.querySelector(".popap__content");
-            if (popapContent) {
-              const innerText = "Log in is successful";
-              Popap.open(`<div>${innerText}</div>`);
-            }
-            setTimeout((): void => {
-              Popap.close();
-              routeToNotAnchor(event, "/");
-              const newHeader = new HeaderView();
-              const headerElement = newHeader.getHTMLElement();
-              const header = document.querySelector("header");
-              if (header && header.parentNode && headerElement) {
-                header.parentNode.replaceChild(headerElement, header);
+          const { email, password } = userData;
+          const tokenCache = new MyTokenCache();
+          const clientAPI = createPasswordClient(email, password, tokenCache);
+          const client = createClient(clientAPI);
+          const apiRoot: ApiRoot = createApiBuilderFromCtpClient(client);
+          try {
+            const resp = await getUser(email, password, apiRoot);
+            if (resp.statusCode !== 400) {
+              const { token } = tokenCache.get();
+              localStorage.setItem("token", token);
+              const popapContent = document.querySelector(".popap__content");
+              if (popapContent) {
+                const innerText = "Log in is successful";
+                Popap.open(`<div>${innerText}</div>`);
               }
-              document.querySelector("body")?.classList.remove("lock");
-            }, 3 * 1000);
-          } else {
-            throw new Error("User not found!");
+              setTimeout((): void => {
+                Popap.close();
+                routeToNotAnchor(event, "/");
+                const newHeader = new HeaderView();
+                const headerElement = newHeader.getHTMLElement();
+                const header = document.querySelector("header");
+                if (header && header.parentNode && headerElement) {
+                  header.parentNode.replaceChild(headerElement, header);
+                }
+                document.querySelector("body")?.classList.remove("lock");
+              }, 3 * 1000);
+            } else {
+              throw new Error("User not found!");
+            }
+          } catch (err) {
+            Popap.open(`<div>${(err as BadRequest).message}</div>`);
           }
-        } catch (err) {
-          Popap.open(`<div>${(err as BadRequest).message}</div>`);
+        } else {
+          fieldsArr.filter((elem) => !elem.classList.contains("valid"))
+          .forEach((elem) => {
+            this.validationForm(elem as HTMLInputElement);
+          });
         }
       }
     }
