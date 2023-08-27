@@ -2,7 +2,6 @@ import "./style.scss";
 import App from "./components/app/app";
 import { handleLocation, route } from "./components/utils/router";
 import { profileLinks, pages } from "./components/header/data/linkArrays";
-import { getProducts } from "./sdk/sdk";
 
 function initializeApp(): void {
   App.createView();
@@ -26,6 +25,3 @@ declare global {
 }
 
 window.route = route;
-
-
-getProducts().then((res)=>console.log(res.body.results))

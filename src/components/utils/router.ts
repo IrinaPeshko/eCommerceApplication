@@ -4,13 +4,13 @@ import showPassword from "./showPassword";
 
 export const routers: Irouters = {
   "/": "pages/main.html",
-  "/catalogg": "pages/catalog.html",
+  "/catalog": "pages/catalog.html",
   "/aboutt": "pages/about.html",
   "/login": "pages/login.html",
   "/createaccount": "pages/createaccount.html",
   "/baskett": "pages/basket.html",
   "/404": "pages/404.html",
-  "/profilee": "pages/profile.html",
+  "/profile": "pages/profile.html",
 };
 
 export async function getNotFoundPage() {
@@ -33,18 +33,22 @@ async function getHTML() {
 }
 
 export async function handleLocation(callback?: () => void): Promise<void> {
-  const html = await getHTML();
+  try {
+    const html = await getHTML();
+    const main = document.querySelector(".main");
+    if (main) {
+      main.innerHTML = html;
+      const popap = new Popap();
+      const popapElement = popap.getHTMLElement();
+      if (popapElement) main.append(popapElement);
+      showPassword();
+    }
 
-  const main = document.querySelector(".main");
-  if (main) {
-    main.innerHTML = html;
-    const popap = new Popap();
-    const popapElement = popap.getHTMLElement();
-    if (popapElement) main.append(popapElement);
-    showPassword();
-  }
-  if (callback) {
-    callback();
+    if (callback) {
+      callback();
+    }
+  } catch (error) {
+    console.error("Произошла ошибка при выполнении handleLocation:", error);
   }
 }
 
@@ -52,13 +56,20 @@ export async function handleLocation(callback?: () => void): Promise<void> {
   handleLocation();
 };
 
-export const route = (e: MouseEvent): void => {
+export const route = (
+  e: MouseEvent,
+  callback?: ((params?: MouseEvent) => void) | undefined,
+): void => {
   const { currentTarget } = e;
 
   if (currentTarget instanceof HTMLAnchorElement) {
     window.history.pushState({}, "", currentTarget.href);
   }
-  handleLocation();
+  if (callback) {
+    handleLocation(callback);
+  } else {
+    handleLocation(callback);
+  }
 };
 
 export const routeforOtherLink = (e: MouseEvent): void => {

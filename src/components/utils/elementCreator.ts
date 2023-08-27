@@ -20,10 +20,6 @@ export default class ElementCreator {
       this.setInnerHTML(param.innerHTML);
     }
 
-    if (param.callback) {
-      this.setCallback(param.callback);
-    }
-
     if (param.href) {
       this.setHref(param.href);
     }

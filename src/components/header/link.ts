@@ -28,7 +28,7 @@ export default class LinkView extends View {
     };
     super(params);
     this.linkElements = linkElements;
-    this.configureView();
+    this.configureView(callback);
   }
 
   public setSelectedStatus(): void {
@@ -44,11 +44,13 @@ export default class LinkView extends View {
     element?.classList.remove(cssClasses.itemSelected);
   }
 
-  private configureView(): void {
+  private configureView(
+    callback: ((params?: MouseEvent) => void) | undefined,
+  ): void {
     const element = this.elementCreator.getElement();
     element?.addEventListener("click", (event) => {
       this.setSelectedStatus.bind(this);
-      route(event);
+      route(event, callback);
       event.preventDefault();
     });
   }
