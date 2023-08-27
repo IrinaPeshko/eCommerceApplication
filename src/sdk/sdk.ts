@@ -90,3 +90,7 @@ export function registerUser2(
     })
     .execute();
 }
+
+export function getProducts() {
+  return apiRoot.withProjectKey({ projectKey }).products().get().execute();
+}
