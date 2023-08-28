@@ -8,7 +8,8 @@
     & .card__img-block {
       & {
         .card__img {
-          max-height: 450px;
+          height: 450px;
+          width: 344px;
         }
       }
     }
@@ -28,6 +29,7 @@
         font-style: normal;
         font-weight: 600;
         line-height: normal;
+        height: 70px;
       }
       & .product__price {
         color: #000;

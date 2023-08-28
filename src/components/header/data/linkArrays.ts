@@ -8,7 +8,8 @@ import setShippingDefault from "../../pages/registration/select default address 
 import Login from "../../pages/login/login";
 import { routeforOtherLink } from "../../utils/router";
 import HeaderView from "../header";
-import { getProducts } from "../../../sdk/sdk";
+import { visualeCards } from "../../pages/catalog/catalog";
+// import { getSerchingProducts } from "../../../sdk/sdk";
 
 const namePage = {
   MAIN: "MAIN",
@@ -331,9 +332,8 @@ export const pages: link[] = [
     name: namePage.CATALOG,
     href: "/catalog",
     callback: (): void => {
-      const cards = document.querySelector(".catalog__card");
-      console.log(cards);
-      getProducts().then((res) => console.log(res.body.results));
+      visualeCards();
+      // getSerchingProducts().then((res)=>console.log(res));
     },
   },
 ];
