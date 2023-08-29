@@ -1,43 +1,88 @@
+.catalog__container{
+  display: flex;
+  justify-content: space-around;
+}
+
+.form__checkbox-label {
+  color: #3F3F3F;
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px;
+  text-transform: uppercase;
+  &.form__checkbox{
+    color: #000; 
+  }
+}
+
+.form__checkbox-label:hover {
+  cursor:pointer;
+}
+
+
+.label__yellow span {
+  color:yellow;
+  background-color: yellow;
+  border: solid 2px rgb(255, 230, 0);
+}
+
+.label__blue span {
+  color:blue;
+  background-color: blue;
+  border: solid 2px rgb(0, 0, 103);
+}
+
+.label__red span {
+  color:red;
+  background-color: red;
+  border: solid 2px rgb(108, 0, 0);
+}
+
+.label__black span {
+  color:black;
+  background-color: black;
+  border: solid 2px #525252;
+}
+
+.aside__filterBtn {
+  margin: 20px auto;
+}
+
 .catalog__products {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-around;
   gap: 26px;
   & .catalog__card {
-    max-width: 344px;
+    max-width: 300px;
     margin-top: 40px;
     & .card__img-block {
       & {
         .card__img {
-          height: 450px;
-          width: 344px;
+          height: 400px;
+          width: 300px;
         }
       }
     }
     & .card__caption {
+      font-family: Oswald;
+      font-style: normal;
+      line-height: normal;
+      font-weight: 600;
       & .product__name {
         color: #000;
-        font-family: Oswald;
         font-size: 20px;
-        font-weight: 600;
-        font-style: normal;
-        line-height: normal;
       }
       & .product__description {
         color: #868686;
-        font-family: Oswald;
         font-size: 14px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: normal;
-        height: 70px;
+        height: 90px;
       }
       & .product__price {
         color: #000;
-        font-family: Oswald;
         font-size: 22px;
-        font-style: normal;
         font-weight: 500;
-        line-height: normal;
         text-transform: uppercase;
       }
     }

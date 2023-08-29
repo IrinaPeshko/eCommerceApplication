@@ -1,4 +1,4 @@
-import { getProducts } from "../../../sdk/sdk";
+import { getProducts} from "../../../sdk/sdk";
 
 function creatCard(
   name: string,
@@ -22,7 +22,8 @@ function creatCard(
 }
 
 export function visualeCards() {
-  getProducts().then((res) => {
+  try {
+    getProducts().then((res) => {
     console.log(res.body.results);
     const arrProducts = res.body.results;
     arrProducts.forEach((el) => {
@@ -37,7 +38,7 @@ export function visualeCards() {
       if (imagesArr && pricesArr && pricesArr?.length !== 0) {
         url = imagesArr[0].url;
         price = pricesArr[0].value.centAmount;
-        price = +`${price}`.split("").splice(0, 3).join("");
+        price = +`${price}`.split("").slice(0, -2).join("");
       }
       if (description) {
         const card = creatCard(name, description, url, price, id);
@@ -46,6 +47,39 @@ export function visualeCards() {
       }
     });
   });
+} catch (error) {
+  console.error(`You have an error ${  error}`)
+}
+}
+
+// function createColorFilterStr () {
+//   const yellowCheckbox = document.getElementById("yellow__checkbox");
+//   const redCheckbox = document.getElementById("red__checkbox");
+//   const blueCheckbox = document.getElementById("blue__checkbox");
+//   const blackCheckbox = document.getElementById("black__checkbox");
+
+//   let str = 'variants.attributes.color.key:"color-black"'
+//   if (
+//     yellowCheckbox instanceof HTMLInputElement &&
+//     redCheckbox instanceof HTMLInputElement &&
+//     blueCheckbox instanceof HTMLInputElement &&
+//     blackCheckbox instanceof HTMLInputElement 
+//   ) {
+//     if (yellowCheckbox.checked){
+//       str+='"color-yellow"'
+//     }
+//   }
+// }
+
+export function onFilterBtnClick () {
+  // const cardContainer = document.querySelector(".catalog__products");
+  const params = [""];
+  
+console.log(params);
+  // getSerchingProducts(params).then((res) => console.log(res));
+  // [
+  //         'variants.attributes.color.key:"color-black"'
+  //       ],
 }
 
 // export async function getAllProducts() {
