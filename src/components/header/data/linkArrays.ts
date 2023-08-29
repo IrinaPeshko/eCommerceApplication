@@ -332,9 +332,8 @@ export const pages: link[] = [
     href: "/catalog",
     callback: (): void => {
       visualeCards();
-      const filterBtn = document.getElementById("filterBtn")
-      onFilterBtnClick()
-      filterBtn?.addEventListener("click", onFilterBtnClick)
+      const filterBtn = document.getElementById("filterBtn");
+      filterBtn?.addEventListener("click", onFilterBtnClick);
     },
   },
 ];
