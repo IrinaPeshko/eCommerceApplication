@@ -11,6 +11,7 @@ export const routers: Irouters = {
   "/baskett": "pages/basket.html",
   "/404": "pages/404.html",
   "/profile": "pages/profile.html",
+  "/product": "pages/product.html",
 };
 
 export async function getNotFoundPage() {
