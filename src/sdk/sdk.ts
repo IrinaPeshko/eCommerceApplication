@@ -107,3 +107,7 @@ export async function getSerchingProducts(filterParams: string[]) {
 export async function getProducts() {
   return apiRoot.withProjectKey({ projectKey }).products().get().execute();
 }
+
+export async function getCategories() {
+  return apiRoot.withProjectKey({ projectKey }).categories().get().execute();
+}
