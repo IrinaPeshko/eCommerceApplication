@@ -108,6 +108,16 @@ export async function getProducts() {
   return apiRoot.withProjectKey({ projectKey }).products().get().execute();
 }
 
+export async function getProduct(id: string) {
+  const res = apiRoot
+    .withProjectKey({ projectKey })
+    .products()
+    .withId({ ID: id })
+    .get()
+    .execute();
+  return res;
+}
+
 export async function getCategories() {
   return apiRoot.withProjectKey({ projectKey }).categories().get().execute();
 }

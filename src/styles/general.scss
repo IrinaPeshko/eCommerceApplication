@@ -116,14 +116,25 @@ main {
   flex: 1 0 auto;
 }
 
-.map {
+.breadcrumbs {
   text-align: center;
   font-family: Roboto;
   font-size: 14px;
   font-weight: 400;
   line-height: 485%;
   color: $color3;
-  span:not(:last-child)::after {
+  list-style: none;
+  padding: 0;
+  * {
+    display: inline-block;
+    a {
+      color: inherit;
+      &:hover {
+        color: #000;
+      }
+    }
+  }
+  li:not(:last-child)::after {
     content: " / ";
   }
 }
