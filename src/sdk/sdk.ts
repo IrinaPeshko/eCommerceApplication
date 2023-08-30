@@ -1,6 +1,6 @@
 import { ApiRoot } from "@commercetools/platform-sdk";
 import { apiRoot, projectKey } from "./commercetoolsApiRoot";
-import { Address } from "../types/types";
+import { Address, UpdateData, UpdateEmail } from "../types/types";
 
 export function getProjectDetails() {
   return apiRoot.withProjectKey({ projectKey }).get().execute();
@@ -37,6 +37,10 @@ export function registerUser(
       },
     })
     .execute();
+}
+
+export function getUserById(id: string) {
+  return apiRoot.withProjectKey({ projectKey }).customers().withId({ID: id}).get().execute();
 }
 
 export function getUser(
@@ -90,7 +94,33 @@ export function registerUser2(
     })
     .execute();
 }
-
+export function updateCustomer(id: string, customersUpdate: UpdateData[], version: number) {
+  return apiRoot.withProjectKey({ projectKey }).customers().withId({ ID: id }).post({
+    body: {
+      version,
+      actions: customersUpdate
+    }
+  }).execute();
+}
+export function updateCustomerEmail(id: string, customersUpdate: UpdateEmail[], version: number) {
+  return apiRoot.withProjectKey({ projectKey }).customers().withId({ ID: id }).post({
+    body: {
+      version,
+      actions: customersUpdate
+    }
+  }).execute();
+}
+export function changeCustomerPassword(id: string, currentpassword: string, newpassword: string, version: number) {
+  return apiRoot.withProjectKey({ projectKey }).customers().password()
+  .post({
+    body: {
+      id,
+      version,
+      currentPassword: currentpassword,
+      newPassword: newpassword
+    }
+  }).execute();
+}
 export function getProducts() {
   return apiRoot.withProjectKey({ projectKey }).products().get().execute();
 }

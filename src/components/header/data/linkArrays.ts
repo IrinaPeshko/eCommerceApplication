@@ -6,9 +6,11 @@ import Registration from "../../pages/registration/registration";
 import setShippingDefault from "../../pages/registration/select default address checkbox/setDefaultShipping";
 /* eslint-disable import/no-cycle */
 import Login from "../../pages/login/login";
+import Profile from "../../pages/profile/profile";
 import { routeforOtherLink } from "../../utils/router";
 import HeaderView from "../header";
-import { getProducts } from "../../../sdk/sdk";
+import { getProducts, getUserById } from "../../../sdk/sdk";
+import {ResponseAddress} from "../../../types/types";
 
 const namePage = {
   MAIN: "MAIN",
@@ -16,7 +18,7 @@ const namePage = {
   LOGOUT: "LOG OUT",
   CREATEACCOUNT: "CREATE ACCOUNT",
   CATALOG: "CATALOG",
-  USER: "USER",
+  PROFILE: "PROFILE",
   BASKET: "BASKET",
   ABOUT: "ABOUT US",
 };
@@ -254,7 +256,7 @@ m1653 -377 c75 -32 122 -103 122 -185 0 -138 -132 -233 -261 -188 -55 19 -88
     },
   },
   {
-    name: namePage.CREATEACCOUNT,
+    name: namePage.PROFILE,
     classList: ["account__item", "account__create", "active"],
     innerHTML: `<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
  width="40px" height="40px" viewBox="0 0 64.000000 64.000000"
@@ -303,7 +305,26 @@ fill="#ffffff" stroke="none">
 </g>
 </svg>`,
     href: "/profile",
-    callback: (): void => {},
+    callback: async (): Promise<void> => {
+      const id: string | null = localStorage.getItem("id");
+      if (id) {
+        const getUserData = await getUserById(id).then((res) => res).catch(err => console.log(err));
+        if (getUserData) {
+          if (getUserData.statusCode !== 400) {
+            const { firstName, lastName, dateOfBirth, email, password, version,
+              addresses, defaultShippingAddressId, defaultBillingAddressId,
+              shippingAddressIds,  billingAddressIds} = getUserData.body;
+            if (firstName && lastName && dateOfBirth && email && password && version && addresses && shippingAddressIds && billingAddressIds) {
+              const profilePage = new Profile(id, firstName, lastName, dateOfBirth, email, password, version,
+                addresses as ResponseAddress[], shippingAddressIds, billingAddressIds, defaultShippingAddressId, defaultBillingAddressId);
+              profilePage.init();
+            }
+            console.log(getUserData.body);
+          }
+        }
+      }
+      // profilePage.init();
+    },
   },
   {
     name: namePage.BASKET,

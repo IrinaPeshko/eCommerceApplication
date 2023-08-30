@@ -8,7 +8,7 @@
 
 body {
   font-size: 14px;
-  font-family: "Roboto-Regular";
+  font-family: "Roboto-Regular", Arial, sans-serif;
   display: flex;
   min-width: 100%;
   min-height: 100vh;
@@ -83,7 +83,7 @@ h6 {
   color: #ffffff;
   max-width: 100%;
   font: {
-    family: "Oswald-Regular", Arial, sans-serif;
+    family: "Oswald", Arial, sans-serif;
     size: 14px;
     weight: 500;
   }
@@ -148,7 +148,19 @@ h2 {
 body.lock {
   overflow: hidden;
 }
-
+.subtitle {
+  margin: 0;
+  padding: 0;
+  font: {
+    family: "Oswald-Medium", Arial, sans-serif;
+    size: 24px;
+    weight: 600;
+  }
+  line-height: 1.15;
+  &.subtitle--second-level {
+    font-size: 19px;
+  }
+}
 .form {
   display: flex;
   flex-direction: column;
@@ -158,14 +170,21 @@ body.lock {
     margin: 0;
     padding: 0;
   }
+  & .form__form-header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
   & .form__subtitle {
     padding: 0;
+    margin-bottom: 28px;
     font: {
-      family: "Oswald-Regular", Arial, sans-serif;
+      family: "Oswald-Medium", Arial, sans-serif;
       size: 24px;
-      weight: 400;
+      weight: 600;
     }
-    line-height: 283.333%;
+    // line-height: 283.333%;
     &.form__subtitle--second-level {
       font-size: 19px;
     }
@@ -208,6 +227,16 @@ body.lock {
     border: 1px solid #c4c4c4;
     font: inherit;
     line-height: 125%;
+    &:read-only {
+      border: none;
+      pointer-events: none;
+      & + .form__message {
+        display: none;
+      }
+      & ~ .password__btn {
+        display: none;
+      }
+    }
     &:active,
     &:focus {
       background-color: #ffffff;
@@ -234,11 +263,13 @@ body.lock {
     & + .form__message {
       // width: 100%;
       max-width: 100%;
-      padding: 8px 24px;
+      padding: 0;
       &.form__message--empty {
+        padding: 8px 24px;
         background-color: #f0f2f2;
       }
       &.form__message--short {
+        padding: 8px 24px;
         position: relative;
         background-color: #ffe3e3;
         &::after {
@@ -254,6 +285,7 @@ body.lock {
         }
       }
       &.form__message--strong {
+        padding: 8px 24px;
         position: relative;
         background-color: #e3ffe9;
         &::after {
@@ -335,7 +367,7 @@ body.lock {
 }
 .back-link {
   font: {
-    family: "Oswald-Regular", Arial, sans-serif;
+    family: "Oswald", Arial, sans-serif;
     size: 14px;
     weight: 500;
   }
@@ -384,6 +416,85 @@ input:read-only,
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.breadcrumbs {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  & .breadcrumbs__item {
+    color: #828282;
+    & + .breadcrumbs__item::before {
+      content: "/\00a0";
+      padding: 5px;
+      color: #828282;
+    }
+  }
+  & .breadcrumbs__link {
+    color: inherit;
+    &:hover {
+      cursor: pointer;
+      color: #000000;
+    }
+  }
+}
+.edit-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background-color: #E6F1FA;
+  background-image: url("./assets/icons/edit.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 24px 24px;
+  &:hover {
+    cursor: pointer;
+    background-color: #d0e4f2;
+  }
+}
+.delete-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background-color: #E6F1FA;
+  background-image: url("./assets/icons/close-remove.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 24px 24px;
+  &:hover {
+    cursor: pointer;
+    background-color: #d0e4f2;
+  }
+}
+.add-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background-color: #E6F1FA;
+  background-image: url("./assets/icons/add.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 24px 24px;
+  &:hover {
+    cursor: pointer;
+    background-color: #d0e4f2;
+  }
+}
+.address {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  & .address__info {
+    margin: 0;
+  }
+  & .address__btns-wrapper {
+    display: inline-flex;
+    align-items: center;
+    column-gap: 10px;
+  }
 }
 
 @media (max-width: 700px) {
