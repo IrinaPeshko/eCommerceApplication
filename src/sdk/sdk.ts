@@ -91,14 +91,18 @@ export function registerUser2(
     .execute();
 }
 
-// export async function getSerchingProducts() {
-//   return apiRoot
-//   .withProjectKey({ projectKey })
-//   .productProjections()
-//   .search()
-//   .get()
-//   .execute()
-// }
+export async function getSerchingProducts(filterParams: string[]) {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .productProjections()
+    .search()
+    .get({
+      queryArgs: {
+        filter: filterParams,
+      },
+    })
+    .execute();
+}
 
 export async function getProducts() {
   return apiRoot.withProjectKey({ projectKey }).products().get().execute();

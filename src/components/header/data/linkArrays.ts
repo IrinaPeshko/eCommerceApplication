@@ -8,8 +8,7 @@ import setShippingDefault from "../../pages/registration/select default address 
 import Login from "../../pages/login/login";
 import { routeforOtherLink } from "../../utils/router";
 import HeaderView from "../header";
-import { visualeCards } from "../../pages/catalog/catalog";
-// import { getSerchingProducts } from "../../../sdk/sdk";
+import { onFilterBtnClick, visualeCards } from "../../pages/catalog/catalog";
 
 const namePage = {
   MAIN: "MAIN",
@@ -333,7 +332,10 @@ export const pages: link[] = [
     href: "/catalog",
     callback: (): void => {
       visualeCards();
-      // getSerchingProducts().then((res)=>console.log(res));
+      const filterBtn = document.getElementById("filterBtn");
+      filterBtn?.addEventListener("click", onFilterBtnClick);
+      const resetBtn = document.getElementById("resetBtn");
+      resetBtn?.addEventListener("click", visualeCards);
     },
   },
 ];
