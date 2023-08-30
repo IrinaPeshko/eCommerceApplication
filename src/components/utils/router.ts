@@ -73,7 +73,7 @@ export const route = (
   }
 };
 
-export const routeforOtherLink = (e: MouseEvent): void => {
+export const routeforOtherLink = (e: Event): void => {
   const { target } = e;
 
   if (target instanceof HTMLAnchorElement) {
@@ -82,7 +82,7 @@ export const routeforOtherLink = (e: MouseEvent): void => {
   handleLocation();
 };
 
-export const routeToNotAnchor = (e: MouseEvent, href: string): void => {
+export const routeToNotAnchor = (e: Event, href: string): void => {
   const { target } = e;
 
   if (target) {

@@ -1,4 +1,5 @@
 import { getProducts, getSerchingProducts } from "../../../sdk/sdk";
+import { routeToNotAnchor } from "../../utils/router";
 import {
   createBrendFilterStr,
   createColorFilterStr,
@@ -41,6 +42,13 @@ export function visualeCards() {
           const card = creatCard(name, description, url, price, id);
           container?.appendChild(card);
         }
+      });
+      const cards = document.querySelectorAll(".catalog__card");
+      console.log(cards);
+      cards.forEach((el) => {
+        el.addEventListener("click", (ev) => {
+          routeToNotAnchor(ev, "/product");
+        });
       });
     });
   } catch (error) {
