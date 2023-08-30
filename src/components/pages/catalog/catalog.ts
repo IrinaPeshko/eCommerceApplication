@@ -29,6 +29,16 @@ function creatCard(
 
 export function visualeCards() {
   try {
+    const container = document.querySelector(".catalog__products");
+    if (container) {
+      container.innerHTML = "";
+    }
+    const checkboxes = document.querySelectorAll(".form__checkbox");
+    for (const checkbox of checkboxes) {
+      if (checkbox instanceof HTMLInputElement) {
+        checkbox.checked = false;
+      }
+    }
     getProducts().then((res) => {
       console.log(res.body.results);
       const arrProducts = res.body.results;
@@ -48,7 +58,6 @@ export function visualeCards() {
         }
         if (description) {
           const card = creatCard(name, description, url, price, id);
-          const container = document.querySelector(".catalog__products");
           container?.appendChild(card);
         }
       });

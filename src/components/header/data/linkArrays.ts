@@ -334,6 +334,8 @@ export const pages: link[] = [
       visualeCards();
       const filterBtn = document.getElementById("filterBtn");
       filterBtn?.addEventListener("click", onFilterBtnClick);
+      const resetBtn = document.getElementById("resetBtn");
+      resetBtn?.addEventListener("click", visualeCards);
     },
   },
 ];
