@@ -9,6 +9,7 @@ import Login from "../../pages/login/login";
 import { routeforOtherLink } from "../../utils/router";
 import HeaderView from "../header";
 import { onFilterBtnClick, visualeCards } from "../../pages/catalog/catalog";
+import { getCategories } from "../../../sdk/sdk";
 
 const namePage = {
   MAIN: "MAIN",
@@ -331,6 +332,9 @@ export const pages: link[] = [
     name: namePage.CATALOG,
     href: "/catalog",
     callback: (): void => {
+      getCategories().then((res) => {
+        console.log(res);
+      });
       visualeCards();
       const filterBtn = document.getElementById("filterBtn");
       filterBtn?.addEventListener("click", onFilterBtnClick);

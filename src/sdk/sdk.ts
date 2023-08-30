@@ -117,3 +117,7 @@ export async function getProduct(id: string) {
     .execute();
   return res;
 }
+
+export async function getCategories() {
+  return apiRoot.withProjectKey({ projectKey }).categories().get().execute();
+}

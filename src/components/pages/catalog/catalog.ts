@@ -1,31 +1,13 @@
 import { getProducts, getSerchingProducts } from "../../../sdk/sdk";
+import { routeToNotAnchor } from "../../utils/router";
 import {
   createBrendFilterStr,
   createColorFilterStr,
   createPriceFilterStr,
   createSizeFilterStr,
 } from "./createAttributeParams";
-
-function creatCard(
-  name: string,
-  description: string,
-  img: string,
-  price: number,
-  id: string,
-) {
-  const card = document.createElement("div");
-  card.className = "catalog__card";
-  card.setAttribute("products", id);
-  card.innerHTML = `<div class="card__img-block">
-          <img  class="card__img" src="${img}" alt="">
-        </div>
-        <div class="card__caption">
-          <h3 class="product__name">${name}</h3>
-          <p class="product__description">${description}</p>
-          <p class="product__price">${price}$</p>
-        </div>`;
-  return card;
-}
+import { creatCard } from "./createCard";
+import { visualeFilterCards } from "./ilterBtnClick";
 
 export function visualeCards() {
   try {
@@ -61,45 +43,12 @@ export function visualeCards() {
           container?.appendChild(card);
         }
       });
-    });
-  } catch (error) {
-    console.error(`You have an error ${error}`);
-  }
-}
-
-export function visualeFilterCards(params: string[]) {
-  const container = document.querySelector(".catalog__products");
-  if (container) {
-    container.innerHTML = "";
-  }
-  try {
-    getSerchingProducts(params).then((res) => {
-      console.log(res);
-      const arrProducts = res.body.results;
-      arrProducts.forEach((el) => {
-        const name = el.name.en;
-        const description = el.description?.en;
-        const imagesArr = el.masterVariant.images;
-        const pricesArr = el.masterVariant.prices;
-        const { id } = el;
-
-        let url = "";
-        let price = 0;
-        if (
-          imagesArr &&
-          pricesArr &&
-          pricesArr?.length !== 0 &&
-          imagesArr.length !== 0
-        ) {
-          url = imagesArr[0].url;
-          price = pricesArr[0].value.centAmount;
-          price = +`${price}`.split("").slice(0, -2).join("");
-        }
-        if (description) {
-          const card = creatCard(name, description, url, price, id);
-          // const container = document.querySelector(".catalog__products");
-          container?.appendChild(card);
-        }
+      const cards = document.querySelectorAll(".catalog__card");
+      console.log(cards);
+      cards.forEach((el) => {
+        el.addEventListener("click", (ev) => {
+          routeToNotAnchor(ev, "/product");
+        });
       });
     });
   } catch (error) {
@@ -139,6 +88,9 @@ export function onFilterBtnClick() {
   //         'variants.attributes.color.key:"color-black"'
   //       ],
 }
+getSerchingProducts([
+  'variants.categories.id:"f05de2d3-cca4-4fc6-a3b5-80429eb4d40f"',
+]).then((res) => console.log(res));
 
 // export async function getAllProducts() {
 //   try {
