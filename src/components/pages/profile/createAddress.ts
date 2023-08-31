@@ -1,10 +1,15 @@
 import { Address } from "@commercetools/platform-sdk";
-import { Countries, Obj, ChangeAddress, Actions } from "../../../types/types";
+import { Countries, Obj, ChangeAddress, RemoveAddress, Actions } from "../../../types/types";
 import Aside from "../../aside/aside";
-import { changeAddress } from "../../../sdk/sdk";
+import { changeAddress, deleteAddress } from "../../../sdk/sdk";
 
 export default class NewAddress {
-  constructor(private version: number, private id: string, private address: Address, private elemID: number) {
+  constructor(
+    private version: number,
+    private id: string,
+    private address: Address,
+    private elemID: number,
+  ) {
     this.id = id;
     this.version = version;
     this.address = address;
@@ -29,10 +34,14 @@ export default class NewAddress {
     }, ${this.chooseCountry(this.address.country)}, ${this.address.postalCode}`;
     addressEditBtn.className = "edit-btn address__edit-btn";
     addressDeleteBtn.className = "delete-btn address__delete-btn";
-    addressEditBtn.addEventListener("click", (e: Event) => {
+    addressEditBtn.addEventListener("click", (e: Event): void => {
       e.preventDefault();
       this.editAddress();
-    })
+    });
+    addressDeleteBtn.addEventListener("click", (e: Event): void => {
+      e.preventDefault();
+      this.removeAddress();
+    });
     addressBtnsWrapper.append(addressEditBtn, addressDeleteBtn);
     addressElem.append(addressInfo, addressBtnsWrapper);
     return addressElem;
@@ -44,11 +53,14 @@ export default class NewAddress {
     Aside.openAside(content);
     if (aside) {
       aside.addEventListener("click", (e: Event): void => {
-        if ((e.target as HTMLElement).tagName === "BUTTON" && (e.target as HTMLElement).id === "updateAddress") {
+        if (
+          (e.target as HTMLElement).tagName === "BUTTON" &&
+          (e.target as HTMLElement).id === "updateAddress"
+        ) {
           e.preventDefault();
           this.updateAddress();
         }
-      })
+      });
     }
   }
 
@@ -57,72 +69,126 @@ export default class NewAddress {
     const addressData: Obj = {};
     if (form) {
       if (form) {
-        const fields: NodeListOf<Element> = form.querySelectorAll(".form__field[required]");
+        const fields: NodeListOf<Element> = form.querySelectorAll(
+          ".form__field[required]",
+        );
         if (fields) {
           const fieldsArr: Element[] = Array.from(fields);
-          if (fieldsArr.every((elem): boolean => elem.classList.contains("valid"))) {
+          if (
+            fieldsArr.every((elem): boolean => elem.classList.contains("valid"))
+          ) {
             const data = new FormData(form);
             for (const val of data.entries()) {
               const key: string = val[0];
               const newVal: string = val[1] as string;
               addressData[`${key}`] = newVal;
             }
-            const {countryCode, postalCode, city, streetName, building, apartment} = addressData;
-            if (countryCode === this.address.country && postalCode === this.address.postalCode && city === this.address.city &&
-              streetName === this.address.streetName && building === this.address.building && apartment === this.address.apartment) {
-                Aside.closeAside();
+            const {
+              countryCode,
+              postalCode,
+              city,
+              streetName,
+              building,
+              apartment,
+            } = addressData;
+            if (
+              countryCode === this.address.country &&
+              postalCode === this.address.postalCode &&
+              city === this.address.city &&
+              streetName === this.address.streetName &&
+              building === this.address.building &&
+              apartment === this.address.apartment
+            ) {
+              Aside.closeAside();
             } else {
-                const addressObject: ChangeAddress[] = [];
-                if (this.address.id && this.address.key) {
-                  addressObject.push({
-                    action: Actions.address,
-                    addressId: this.address.id,
-                    address: {
-                      id: this.address.id,
-                      key: this.address.key,
-                      country: countryCode,
-                      city,
-                      postalCode,
-                      streetName,
-                      building,
-                      apartment
-                    }
-                  });
-                  try {
-                    const updateData = await changeAddress(this.version, this.id, addressObject);
-                    if (updateData.statusCode !== 400) {
-                      const { addresses } = updateData.body;
-                        if (addresses) {
-                          if (addresses.some(address => address.key === this.address.key)) {
-                            const a = addresses.find(address => address.id === this.address.id);
-                            if (a) {
-                              const b = {...a};
-                              if (b.key) {
-                                this.address = {...a};
-                                const addressElem: HTMLElement | null = document.getElementById(`address_${this.elemID}`);
-                                if (addressElem) {
-                                  const addressInfo: HTMLParagraphElement | null = addressElem.querySelector(".address__info");
-                                  if (addressInfo) addressInfo.innerText = `${this.address.city}, ${
-                                    this.address.streetName
-                                  }, ${this.address.building}, ${
-                                    this.address.apartment
-                                  }, ${this.chooseCountry(this.address.country)}, ${this.address.postalCode}`;
-                                }
-                              }
+              const addressObject: ChangeAddress[] = [];
+              if (this.address.id && this.address.key) {
+                addressObject.push({
+                  action: Actions.address,
+                  addressId: this.address.id,
+                  address: {
+                    id: this.address.id,
+                    key: this.address.key,
+                    country: countryCode,
+                    city,
+                    postalCode,
+                    streetName,
+                    building,
+                    apartment,
+                  },
+                });
+                try {
+                  const updateData = await changeAddress(
+                    this.version,
+                    this.id,
+                    addressObject,
+                  );
+                  if (updateData.statusCode !== 400) {
+                    const { addresses } = updateData.body;
+                    if (addresses) {
+                      if (
+                        addresses.some(
+                          (address) => address.key === this.address.key,
+                        )
+                      ) {
+                        const a = addresses.find(
+                          (address) => address.id === this.address.id,
+                        );
+                        if (a) {
+                          const b = { ...a };
+                          if (b.key) {
+                            this.address = { ...a };
+                            const addressElem: HTMLElement | null =
+                              document.getElementById(`address_${this.elemID}`);
+                            if (addressElem) {
+                              const addressInfo: HTMLParagraphElement | null =
+                                addressElem.querySelector(".address__info");
+                              if (addressInfo)
+                                addressInfo.innerText = `${
+                                  this.address.city
+                                }, ${this.address.streetName}, ${
+                                  this.address.building
+                                }, ${
+                                  this.address.apartment
+                                }, ${this.chooseCountry(
+                                  this.address.country,
+                                )}, ${this.address.postalCode}`;
                             }
                           }
-                            Aside.closeAside();
-                          }
-                    } else {
-                      throw new Error("Something is wrong");
+                        }
+                      }
+                      Aside.closeAside();
                     }
-                  } catch(error) {
-                    console.log(error);
+                  } else {
+                    throw new Error("Something is wrong");
                   }
+                } catch (error) {
+                  console.log(error);
                 }
               }
+            }
           }
         }
+      }
+    }
+  }
+
+  private async removeAddress(): Promise<void> {
+    const currentAddressElem: HTMLElement | null = document.getElementById(`address_${this.elemID}`);
+    if (this.address.id) {
+      const removedAddressObj: RemoveAddress[] = [{
+        action: Actions.removeaddress,
+        addressId: this.address.id
+      }];
+      try {
+        const removeCurrentAddress = await deleteAddress(this.version, this.id, removedAddressObj);
+        if (removeCurrentAddress.statusCode !== 400) {
+          if (currentAddressElem) currentAddressElem.remove();
+        } else {
+          throw new Error("Something is wrong");
+        }
+      } catch(err) {
+        console.log(err);
       }
     }
   }

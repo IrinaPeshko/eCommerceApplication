@@ -10,8 +10,8 @@ export default class Aside extends View {
       tag: "aside",
       classNames: ["aside", "aside--hidden"],
       textContent: undefined,
-      innerHTML: asideTemplate
-    }
+      innerHTML: asideTemplate,
+    };
     super(params);
     this.aside = this.getHTMLElement();
   }
@@ -26,9 +26,10 @@ export default class Aside extends View {
       if (asideContent) asideContent.innerHTML = innerdata;
       if (asideCloseBtn) {
         asideCloseBtn.addEventListener("click", (e: Event): void => {
-        e.preventDefault();
-        this.closeAside();
-      })}
+          e.preventDefault();
+          this.closeAside();
+        });
+      }
     }
   }
 

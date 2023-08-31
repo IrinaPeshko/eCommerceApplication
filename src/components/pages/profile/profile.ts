@@ -79,25 +79,30 @@ export default class Profile {
     if (shippingAddressesBlock && billingAddressesBlock) {
       this.addresses.forEach((address, idx) => {
         const elemID = idx;
-        const newAddress = new NewAddress(this.version, this.id, address, elemID);
+        const newAddress = new NewAddress(
+          this.version,
+          this.id,
+          address,
+          elemID,
+        );
         if (address.id) {
           if (this.shippingAddressIds.indexOf(address.id) !== -1) {
-          if (this.defaultShippingAddressId) {
-            if (address.id === this.defaultShippingAddressId) {
-              shippingAddressesBlock.prepend(newAddress.createAddress());
-            } else {
-              shippingAddressesBlock.append(newAddress.createAddress());
+            if (this.defaultShippingAddressId) {
+              if (address.id === this.defaultShippingAddressId) {
+                shippingAddressesBlock.prepend(newAddress.createAddress());
+              } else {
+                shippingAddressesBlock.append(newAddress.createAddress());
+              }
+            }
+          } else if (this.billingAddressIds.indexOf(address.id) !== -1) {
+            if (this.defaultBillingAddressId) {
+              if (address.id === this.defaultBillingAddressId) {
+                billingAddressesBlock.prepend(newAddress.createAddress());
+              } else {
+                billingAddressesBlock.append(newAddress.createAddress());
+              }
             }
           }
-        } else if (this.billingAddressIds.indexOf(address.id) !== -1) {
-          if (this.defaultBillingAddressId) {
-            if (address.id === this.defaultBillingAddressId) {
-              billingAddressesBlock.prepend(newAddress.createAddress());
-            } else {
-              billingAddressesBlock.append(newAddress.createAddress());
-            }
-          }
-        }
         }
       });
     }
@@ -145,7 +150,12 @@ export default class Profile {
           "click",
           (e: MouseEvent): void => {
             e.preventDefault();
-            if (!(btn as HTMLButtonElement).classList.contains("address__edit-btn")) this.editMode();
+            if (
+              !(btn as HTMLButtonElement).classList.contains(
+                "address__edit-btn",
+              )
+            )
+              this.editMode();
           },
         );
       });

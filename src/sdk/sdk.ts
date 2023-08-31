@@ -1,6 +1,12 @@
 import { ApiRoot } from "@commercetools/platform-sdk";
 import { apiRoot, projectKey } from "./commercetoolsApiRoot";
-import { Address, UpdateData, UpdateEmail, ChangeAddress } from "../types/types";
+import {
+  Address,
+  UpdateData,
+  UpdateEmail,
+  ChangeAddress,
+  RemoveAddress
+} from "../types/types";
 
 export function getProjectDetails() {
   return apiRoot.withProjectKey({ projectKey }).get().execute();
@@ -156,7 +162,7 @@ export function changeCustomerPassword(
 export function changeAddress(
   version: number,
   id: string,
-  addressObj: ChangeAddress[]
+  addressObj: ChangeAddress[],
 ) {
   return apiRoot
     .withProjectKey({ projectKey })
@@ -165,7 +171,24 @@ export function changeAddress(
     .post({
       body: {
         version,
-        actions: addressObj
+        actions: addressObj,
+      },
+    })
+    .execute();
+}
+export function deleteAddress(
+  version: number,
+  id: string,
+  addressObj: RemoveAddress[],
+) {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version,
+        actions: addressObj,
       },
     })
     .execute();

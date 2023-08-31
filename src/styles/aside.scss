@@ -1,45 +1,45 @@
 .aside {
-    height: 100vh;
-    width: 400px;
-    padding: 45px 30px;
+  height: 100vh;
+  width: 400px;
+  padding: 45px 30px;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: 0;
+  top: 0;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.14);
+  box-sizing: border-box;
+  &.aside--hidden {
+    display: none;
+  }
+  & .aside__close-btn-wrapper {
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    position: fixed;
-    right: 0;
-    top: 0;
-    background-color: #ffffff;
-    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.14);
-    box-sizing: border-box;
-    &.aside--hidden {
-        display: none;
+    justify-content: flex-start;
+    margin-bottom: 31px;
+  }
+  & .aside__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  & .form {
+    width: 100%;
+    & .form__wrapper {
+      flex-direction: column;
+      align-items: flex-start;
+      row-gap: 8px;
     }
-    & .aside__close-btn-wrapper {
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-        margin-bottom: 31px;
+    & .form__section {
+      width: 100%;
+      margin-bottom: 24px;
     }
-    & .aside__content {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    & .form__input-wrapper {
+      width: 100%;
     }
-    & .form {
-        width: 100%;
-        & .form__wrapper {
-            flex-direction: column;
-            align-items: flex-start;
-            row-gap: 8px;
-        }
-        & .form__section {
-            width: 100%;
-            margin-bottom: 24px;
-        }
-        & .form__input-wrapper {
-            width: 100%;
-        }
-    }
-    & .aside__btn {
-        width: 140px;
-    }
+  }
+  & .aside__btn {
+    width: 140px;
+  }
 }

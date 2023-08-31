@@ -48,7 +48,8 @@ export enum Actions {
   lastname = "setLastName",
   dateofbirth = "setDateOfBirth",
   email = "changeEmail",
-  address = "changeAddress"
+  address = "changeAddress",
+  removeaddress = "removeAddress"
 }
 export enum Countries {
   BY = "Belarus",
@@ -63,5 +64,9 @@ export interface UpdateEmail {
 export interface ChangeAddress {
   action: Actions.address;
   addressId: string;
-  address: Address
+  address: Address;
+}
+export interface RemoveAddress {
+  action: Actions.removeaddress;
+  addressId: string;
 }
