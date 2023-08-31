@@ -8,10 +8,12 @@ import setShippingDefault from "../../pages/registration/select default address 
 import Login from "../../pages/login/login";
 import { routeforOtherLink } from "../../utils/router";
 import HeaderView from "../header";
-import { onFilterBtnClick, visualeCards } from "../../pages/catalog/catalog";
-import { getCategories } from "../../../sdk/sdk";
+import {
+  createCategories,
+  onFilterBtnClick,
+  visualeCards,
+} from "../../pages/catalog/catalog";
 import { visualeFilterCards } from "../../pages/catalog/ilterBtnClick";
-import { createSubCategory } from "../../pages/catalog/createSubCategory";
 
 const namePage = {
   MAIN: "MAIN",
@@ -335,30 +337,14 @@ export const pages: link[] = [
     name: namePage.CATALOG,
     href: "/catalog",
     callback: (): void => {
-      const cotegoriesFirst = document.querySelector(
-        ".catalog__breadcrumbs.topmenu li"
-      );
-      getCategories().then((res) => {
-        const elementsWithOrderHintZero = res.body.results.filter(
-          (element) => element.orderHint === "0"
-        );
-        elementsWithOrderHintZero.forEach((el) => {
-          console.log(el.id);
-          const subEl = createSubCategory(el.id, `${el.name.en}`);
-          cotegoriesFirst?.appendChild(subEl);
-        });
-        console.log(cotegoriesFirst);
-
-        console.log(elementsWithOrderHintZero);
-        // console.log(res);
-      });
+      createCategories();
       visualeCards();
       const filterBtn = document.getElementById("filterBtn");
       filterBtn?.addEventListener("click", onFilterBtnClick);
       const resetBtn = document.getElementById("resetBtn");
       resetBtn?.addEventListener("click", visualeCards);
       const categoriesContainer = document.querySelector(
-        ".catalog__catigories"
+        ".catalog__catigories",
       );
       categoriesContainer?.addEventListener("click", (event) => {
         const el = event.target;
@@ -375,7 +361,8 @@ export const product: link[] = [
   {
     name: namePage.PRODUCT,
     href: "/product",
-    callback: (): void => {
+    callback: (id?: string): void => {
+      console.log(id);
       const img = document.querySelector(".product_page__img");
       console.log(img);
     },

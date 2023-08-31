@@ -1,4 +1,4 @@
-import { getProducts } from "../../../sdk/sdk";
+import { getCategories, getProducts } from "../../../sdk/sdk";
 /* eslint-disable import/no-cycle */
 import { routeToNotAnchor } from "../../utils/router";
 import {
@@ -9,7 +9,8 @@ import {
 } from "./createAttributeParams";
 import { creatCard } from "./createCard";
 import { visualeFilterCards } from "./ilterBtnClick";
-import {product} from "../../header/data/linkArrays"
+import { product } from "../../header/data/linkArrays";
+import { createSubCategory } from "./createSubCategory";
 
 export function visualeCards() {
   try {
@@ -47,7 +48,7 @@ export function visualeCards() {
       const cards = document.querySelectorAll(".catalog__card");
       cards.forEach((el) => {
         el.addEventListener("click", (ev) => {
-          const {callback} = product[0]
+          const { callback } = product[0];
           routeToNotAnchor(ev, "/product", callback);
         });
       });
@@ -84,3 +85,40 @@ export function onFilterBtnClick() {
   visualeFilterCards(params);
 }
 
+export function createCategories() {
+  const cotegoriesFirst = document.querySelector(
+    ".catalog__breadcrumbs.topmenu li",
+  );
+  getCategories().then((res) => {
+    console.log(res);
+    const elementsWithOrderHintZero = res.body.results.filter(
+      (element) => element.orderHint === "0",
+    );
+    const submenu = document.createElement("ul");
+    submenu.className = "catalog__breadcrumbs__submenu";
+    elementsWithOrderHintZero.forEach((el) => {
+      const subEl = createSubCategory(el.id, `${el.name.en}`);
+      function createChildrens(id: string, parentEl: HTMLElement) {
+        const parentMenu = document.createElement("ul");
+        parentMenu.className = "catalog__breadcrumbs__submenu";
+        if (res.body) {
+          const children = res.body.results.filter(
+            (element) => element.parent?.id === id,
+          );
+          children.forEach((element) => {
+            const subelement = createSubCategory(element.id, element.name.en);
+            createChildrens(element.id, subelement);
+            parentMenu.appendChild(subelement);
+          });
+          if (children.length !== 0) {
+            parentEl.appendChild(parentMenu);
+          }
+        }
+      }
+      createChildrens(el.id, subEl);
+
+      submenu.appendChild(subEl);
+    });
+    cotegoriesFirst?.appendChild(submenu);
+  });
+}
