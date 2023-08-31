@@ -47,9 +47,9 @@ export default class Registration {
     const form: HTMLFormElement | null = document.querySelector(
       ".registration__form",
     );
-    const datat: HTMLElement | null =
-      document.getElementById("shipping_country");
-    if (datat) console.log(typeof (datat as HTMLSelectElement).value);
+    // const datat: HTMLElement | null =
+    //   document.getElementById("shipping_country");
+    // if (datat) console.log(typeof (datat as HTMLSelectElement).value);
     const userData: Obj = {};
     if (form) {
       const fields = form.querySelectorAll(".form__field[required]");

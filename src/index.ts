@@ -1,12 +1,12 @@
 import "./style.scss";
 import App from "./components/app/app";
 import { handleLocation, route } from "./components/utils/router";
-import { profileLinks, pages } from "./components/header/data/linkArrays";
+import { profileLinks, pages, product } from "./components/header/data/linkArrays";
 
 function initializeApp(): void {
   App.createView();
   const currentPath = window.location.pathname;
-  const currentLink = [...profileLinks, ...pages].find(
+  const currentLink = [...profileLinks, ...pages, ...product].find(
     (link) => link.href === currentPath,
   );
   if (currentLink) {
