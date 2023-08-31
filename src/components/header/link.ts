@@ -1,5 +1,6 @@
 import Param from "../../types/elementCreator/param";
 import View from "../utils/view";
+/* eslint-disable import/no-cycle */
 import { route } from "../utils/router";
 
 const cssClasses = {

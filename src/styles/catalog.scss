@@ -32,13 +32,18 @@
 
 .catalog__breadcrumbs__submenu {
   position: absolute;
-  max-width: 400px;
+  min-width: 400px;
   z-index: 5;
+  transform-origin: 0 0;
+  transform: rotateX(-90deg);
+  transition: 0.3s linear;
+  visibility: hidden;
+  opacity: 0;
   .catalog__breadcrumbs-item {
     position: relative;
     .catalog__breadcrumbs-link {
       display: block;
-      background-color: peachpuff;
+      background-color: rgb(228, 228, 228);
       border-bottom: 1px solid black;
       padding: 10px 20px;
       display: inline-block;
@@ -50,12 +55,15 @@
 .catalog__breadcrumbs__submenu .catalog__breadcrumbs__submenu {
   position: absolute;
   top: 0;
-  left: 80%;
+  left: 43%;
+  z-index: 6;
+  transition: transform 0.3s linear;
+
   .catalog__breadcrumbs-item {
     position: relative;
     .catalog__breadcrumbs-link {
       display: block;
-      background-color: hotpink;
+      background-color: rgb(202, 202, 202);
     }
   }
 }
@@ -64,15 +72,26 @@
   .catalog__breadcrumbs__submenu
   .catalog__breadcrumbs__submenu {
   position: absolute;
+  top: 0;
+  left: 19%;
+  z-index: 7;
+  transition: transform 0.3s linear;
   .catalog__breadcrumbs-item {
     position: relative;
     .catalog__breadcrumbs-link {
       display: block;
-      background-color: crimson;
+      background-color: rgb(180, 180, 180);
     }
   }
 }
 
+.catalog__breadcrumbs.topmenu
+  .catalog__breadcrumbs-item:hover
+  > .catalog__breadcrumbs__submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: rotateX(0deg);
+}
 .form__checkbox-label {
   color: #3f3f3f;
   font-family: Roboto;

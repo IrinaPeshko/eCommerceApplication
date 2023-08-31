@@ -1,4 +1,10 @@
 import Irouters from "../../types/routers/routers";
+/* eslint-disable import/no-cycle */
+import {
+  pages,
+  profileLinks,
+  profileLinksOut,
+} from "../header/data/linkArrays";
 import Popap from "../popap/popap";
 import showPassword from "./showPassword";
 
@@ -53,8 +59,30 @@ export async function handleLocation(callback?: () => void): Promise<void> {
   }
 }
 
-(window as WindowEventHandlers).onpopstate = () => {
-  handleLocation();
+(window as WindowEventHandlers).onpopstate = (ev: PopStateEvent) => {
+  if (ev.currentTarget instanceof Window) {
+    const hrefToFind = ev.currentTarget.location.pathname;
+    const foundPage = pages.find((page) => page.href === hrefToFind);
+    console.log(foundPage);
+    if (foundPage) {
+      const { callback } = foundPage;
+      handleLocation(callback);
+    } else if (localStorage.token) {
+      const currentPage = profileLinksOut.find(
+        (page) => page.href === hrefToFind,
+      );
+      if (currentPage) {
+        const { callback } = currentPage;
+        handleLocation(callback);
+      }
+    } else {
+      const currentPage = profileLinks.find((page) => page.href === hrefToFind);
+      if (currentPage) {
+        const { callback } = currentPage;
+        handleLocation(callback);
+      }
+    }
+  }
 };
 
 export const route = (
@@ -69,7 +97,7 @@ export const route = (
   if (callback) {
     handleLocation(callback);
   } else {
-    handleLocation(callback);
+    handleLocation();
   }
 };
 

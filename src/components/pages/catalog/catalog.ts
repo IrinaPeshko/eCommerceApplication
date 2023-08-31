@@ -1,4 +1,5 @@
 import { getProducts, getSerchingProducts } from "../../../sdk/sdk";
+/* eslint-disable import/no-cycle */
 import { routeToNotAnchor } from "../../utils/router";
 import {
   createBrendFilterStr,

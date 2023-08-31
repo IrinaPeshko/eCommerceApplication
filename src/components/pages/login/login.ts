@@ -6,6 +6,7 @@ import { Obj, FieldTypes, BadRequest } from "../../../types/types";
 import Validate from "../../utils/validation";
 import { getUser } from "../../../sdk/sdk";
 import Popap from "../../popap/popap";
+/* eslint-disable import/no-cycle */
 import { routeToNotAnchor } from "../../utils/router";
 import {
   createPasswordClient,
