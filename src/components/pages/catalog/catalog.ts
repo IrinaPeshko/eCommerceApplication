@@ -1,4 +1,4 @@
-import { getProducts, getSerchingProducts } from "../../../sdk/sdk";
+import { getProducts } from "../../../sdk/sdk";
 /* eslint-disable import/no-cycle */
 import { routeToNotAnchor } from "../../utils/router";
 import {
@@ -23,7 +23,6 @@ export function visualeCards() {
       }
     }
     getProducts().then((res) => {
-      console.log(res.body.results);
       const arrProducts = res.body.results;
       arrProducts.forEach((el) => {
         const name = el.masterData.current.name.en;
@@ -45,7 +44,6 @@ export function visualeCards() {
         }
       });
       const cards = document.querySelectorAll(".catalog__card");
-      console.log(cards);
       cards.forEach((el) => {
         el.addEventListener("click", (ev) => {
           routeToNotAnchor(ev, "/product");
@@ -78,32 +76,9 @@ export function onFilterBtnClick() {
   if (priceParams) {
     params.push(priceParams);
   }
-  console.log(params);
   if (container) {
     container.innerHTML = "";
   }
   visualeFilterCards(params);
-  // getSerchingProducts(params).then((res) => console.log(res));
-
-  // [
-  //         'variants.attributes.color.key:"color-black"'
-  //       ],
 }
-getSerchingProducts([
-  'variants.categories.id:"f05de2d3-cca4-4fc6-a3b5-80429eb4d40f"',
-]).then((res) => console.log(res));
 
-// export async function getAllProducts() {
-//   try {
-//     const response = await getProducts();
-//       if (response.statusCode === 200) {
-//         const products = await response.json();
-//         return products;
-//       } else {
-//         throw new Error(`Ошибка при получении данных: ${response.statuCode}`);
-//       }
-//   } catch (error) {
-//     console.error("Ошибка при получении данных:", error);
-//     throw error; // Можете выбросить исключение, чтобы обработать его где-то выше
-//   }
-// }

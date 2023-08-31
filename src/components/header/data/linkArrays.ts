@@ -10,6 +10,8 @@ import { routeforOtherLink } from "../../utils/router";
 import HeaderView from "../header";
 import { onFilterBtnClick, visualeCards } from "../../pages/catalog/catalog";
 import { getCategories } from "../../../sdk/sdk";
+import { visualeFilterCards } from "../../pages/catalog/ilterBtnClick";
+import { createSubCategory } from "../../pages/catalog/createSubCategory";
 
 const namePage = {
   MAIN: "MAIN",
@@ -332,15 +334,37 @@ export const pages: link[] = [
     name: namePage.CATALOG,
     href: "/catalog",
     callback: (): void => {
-      console.log("click");
+      const cotegoriesFirst = document.querySelector(
+        ".catalog__breadcrumbs.topmenu li"
+      );
       getCategories().then((res) => {
-        console.log(res);
+        const elementsWithOrderHintZero = res.body.results.filter(
+          (element) => element.orderHint === "0"
+        );
+        elementsWithOrderHintZero.forEach((el)=>{
+          console.log(el.id);
+          const subEl = createSubCategory(el.id, `${el.name.en}`);
+          cotegoriesFirst?.appendChild(subEl);
+        })
+        console.log(cotegoriesFirst);
+        
+        console.log(elementsWithOrderHintZero);
+        // console.log(res);
       });
       visualeCards();
       const filterBtn = document.getElementById("filterBtn");
       filterBtn?.addEventListener("click", onFilterBtnClick);
       const resetBtn = document.getElementById("resetBtn");
       resetBtn?.addEventListener("click", visualeCards);
+      const categoriesContainer = document.querySelector(".catalog__catigories")
+      categoriesContainer?.addEventListener("click", (event)=>{
+        const el = event.target
+        if (el instanceof HTMLElement) {
+        const key = el.getAttribute("key");
+          visualeFilterCards([`variants.categories.id:"${key}"`]);
+        }
+      })
+
     },
   },
 ];

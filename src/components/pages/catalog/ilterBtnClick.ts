@@ -8,7 +8,6 @@ export function visualeFilterCards(params: string[]) {
   }
   try {
     getSerchingProducts(params).then((res) => {
-      console.log(res);
       const arrProducts = res.body.results;
       arrProducts.forEach((el) => {
         const name = el.name.en;

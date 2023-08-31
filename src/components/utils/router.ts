@@ -63,7 +63,6 @@ export async function handleLocation(callback?: () => void): Promise<void> {
   if (ev.currentTarget instanceof Window) {
     const hrefToFind = ev.currentTarget.location.pathname;
     const foundPage = pages.find((page) => page.href === hrefToFind);
-    console.log(foundPage);
     if (foundPage) {
       const { callback } = foundPage;
       handleLocation(callback);

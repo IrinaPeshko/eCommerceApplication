@@ -108,7 +108,6 @@ export default class Validate {
     if (!this.target.value && this.target.value === "") {
       this.error("This is a required field.");
     } else {
-      console.log(this.target.value, typeof this.target.value);
       const currDate: number = Date.now();
       const userBirth: number = new Date(this.target.value).getTime();
       const difference: number = currDate - userBirth;
