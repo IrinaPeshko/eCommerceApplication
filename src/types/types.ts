@@ -47,15 +47,21 @@ export enum Actions {
   firstname = "setFirstName",
   lastname = "setLastName",
   dateofbirth = "setDateOfBirth",
-  email = "changeEmail"
+  email = "changeEmail",
+  address = "changeAddress"
 }
 export enum Countries {
   BY = "Belarus",
   DE = "Germany",
   PL = "Poland",
-  GE = "Georgia"
+  GE = "Georgia",
 }
 export interface UpdateEmail {
   action: Actions.email;
   email: string;
+}
+export interface ChangeAddress {
+  action: Actions.address;
+  addressId: string;
+  address: Address
 }

@@ -10,7 +10,7 @@ import Profile from "../../pages/profile/profile";
 import { routeforOtherLink } from "../../utils/router";
 import HeaderView from "../header";
 import { getProducts, getUserById } from "../../../sdk/sdk";
-import {ResponseAddress} from "../../../types/types";
+import { Address } from "../../../types/types";
 
 const namePage = {
   MAIN: "MAIN",
@@ -308,15 +308,49 @@ fill="#ffffff" stroke="none">
     callback: async (): Promise<void> => {
       const id: string | null = localStorage.getItem("id");
       if (id) {
-        const getUserData = await getUserById(id).then((res) => res).catch(err => console.log(err));
+        const getUserData = await getUserById(id)
+          .then((res) => res)
+          .catch((err) => console.log(err));
         if (getUserData) {
           if (getUserData.statusCode !== 400) {
-            const { firstName, lastName, dateOfBirth, email, password, version,
-              addresses, defaultShippingAddressId, defaultBillingAddressId,
-              shippingAddressIds,  billingAddressIds} = getUserData.body;
-            if (firstName && lastName && dateOfBirth && email && password && version && addresses && shippingAddressIds && billingAddressIds) {
-              const profilePage = new Profile(id, firstName, lastName, dateOfBirth, email, password, version,
-                addresses as ResponseAddress[], shippingAddressIds, billingAddressIds, defaultShippingAddressId, defaultBillingAddressId);
+            const {
+              firstName,
+              lastName,
+              dateOfBirth,
+              email,
+              password,
+              version,
+              addresses,
+              defaultShippingAddressId,
+              defaultBillingAddressId,
+              shippingAddressIds,
+              billingAddressIds,
+            } = getUserData.body;
+            if (
+              firstName &&
+              lastName &&
+              dateOfBirth &&
+              email &&
+              password &&
+              version &&
+              addresses &&
+              shippingAddressIds &&
+              billingAddressIds
+            ) {
+              const profilePage = new Profile(
+                id,
+                firstName,
+                lastName,
+                dateOfBirth,
+                email,
+                password,
+                version,
+                addresses as Address[],
+                shippingAddressIds,
+                billingAddressIds,
+                defaultShippingAddressId,
+                defaultBillingAddressId,
+              );
               profilePage.init();
             }
             console.log(getUserData.body);

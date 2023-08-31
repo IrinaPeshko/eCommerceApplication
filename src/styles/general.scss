@@ -445,7 +445,7 @@ input:read-only,
   width: 24px;
   height: 24px;
   border: none;
-  background-color: #E6F1FA;
+  background-color: #e6f1fa;
   background-image: url("./assets/icons/edit.svg");
   background-repeat: no-repeat;
   background-position: center center;
@@ -459,7 +459,7 @@ input:read-only,
   width: 24px;
   height: 24px;
   border: none;
-  background-color: #E6F1FA;
+  background-color: #e6f1fa;
   background-image: url("./assets/icons/close-remove.svg");
   background-repeat: no-repeat;
   background-position: center center;
@@ -473,7 +473,7 @@ input:read-only,
   width: 24px;
   height: 24px;
   border: none;
-  background-color: #E6F1FA;
+  background-color: #e6f1fa;
   background-image: url("./assets/icons/add.svg");
   background-repeat: no-repeat;
   background-position: center center;
@@ -481,6 +481,18 @@ input:read-only,
   &:hover {
     cursor: pointer;
     background-color: #d0e4f2;
+  }
+}
+.close-btn {
+  width: 21px;
+  height: 21px;
+  border: none;
+  background-color: transparent;
+  &:hover {
+    cursor: pointer;
+    & svg path {
+      stroke: #828282;
+    }
   }
 }
 .address {
