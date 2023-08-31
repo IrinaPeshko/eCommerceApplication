@@ -228,8 +228,6 @@ body.lock {
     font: inherit;
     line-height: 125%;
     &:read-only {
-      border: none;
-      pointer-events: none;
       & + .form__message {
         display: none;
       }

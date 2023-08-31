@@ -19,6 +19,8 @@ import {
   changeCustomerPassword,
 } from "../../../sdk/sdk";
 import NewAddress from "./createAddress";
+import { createaAddressTemplate } from "./templates";
+import Aside from "../../aside/aside";
 
 export default class Profile {
   constructor(
@@ -108,23 +110,37 @@ export default class Profile {
     }
   }
 
-  public validationForm(target: HTMLInputElement) {
-    const form: HTMLFormElement | null = document.querySelector(".login__form");
-    if (form) form.noValidate = true;
+  public validationForm(target: HTMLInputElement): void {
+    const forms: NodeListOf<HTMLFormElement> = document.querySelectorAll(".profile__form");
     const validate = new Validate(target);
-    if (target.tagName === "INPUT") {
-      if (target.type === FieldTypes.Text) {
-        validate.validateText();
-      } else if (target.type === FieldTypes.Date) {
-        validate.validateAge();
+    forms.forEach(form => {
+      if (form) {
+        form.noValidate = true;
+        if (target.tagName === "INPUT") {
+          if (target.id === "password") {
+            validate.validatePassword();
+          } else if (target.type === FieldTypes.Text) {
+            validate.validateText();
+          } else if (
+            target.type === FieldTypes.Password ||
+            target.name === "password"
+          ) {
+            validate.validatePassword();
+          } else if (target.type === FieldTypes.Email) {
+            validate.validateEmail();
+          } else if (target.type === FieldTypes.Date) {
+            validate.validateAge();
+          }
+        }
       }
-    }
+    });
   }
 
   public init(): void {
     const editBtn: NodeListOf<Element> = document.querySelectorAll(".edit-btn");
     const saveBtn: HTMLButtonElement | null =
       document.querySelector(".profile__save-btn");
+    const addBtn: HTMLButtonElement | null = document.querySelector(".profile__add-btn");
     const profileSaveBtn: HTMLElement | null =
       document.getElementById("account_btn");
     const tabs: NodeListOf<HTMLElement> =
@@ -173,15 +189,21 @@ export default class Profile {
           this.saveAccountData();
         },
       );
+      if (addBtn) {
+        addBtn.addEventListener("click", (e: Event) => {
+          e.preventDefault();
+          this.addNewAddress();
+        })
+      }
     if (tabs) {
       Array.prototype.forEach.call(tabs, (tab) => {
         tab.addEventListener("click", (e: Event) => {
           e.preventDefault();
           const activeTab: HTMLElement | null =
-            document.querySelector("[aria-selected]");
+            document.querySelector(".profile__item > [aria-selected]");
           if (e.target !== activeTab) {
             if (activeTab)
-              this.switchTab(e.target as HTMLElement, activeTab, tabs, panels);
+              this.switchTab(e.target as HTMLElement, activeTab, tabs, panels, "profile__link--active");
           }
         });
       });
@@ -191,10 +213,10 @@ export default class Profile {
 
   private editMode(): void {
     const activeLink: Element | null =
-      document.querySelector("[aria-selected]");
+      document.querySelector(".profile__item > [aria-selected]");
     if (activeLink) {
       const activePage: HTMLElement | null = document.querySelector(
-        `[aria-labelledby = ${(activeLink as HTMLElement).id}]`,
+        `.profile__border-wrapper > [aria-labelledby = ${(activeLink as HTMLElement).id}]`,
       );
       if (activePage) {
         const fieldsArr: NodeListOf<Element> =
@@ -261,6 +283,25 @@ export default class Profile {
     }
   }
 
+  private addNewAddress(): void {
+    Aside.openAside(this.createNewAddressTemplate());
+    const asideTabs: NodeListOf<HTMLElement> = document.querySelectorAll(".aside__link");
+    const asidePanels: NodeListOf<HTMLElement> = document.querySelectorAll(".aside__panel");
+    if (asideTabs) {
+      Array.prototype.forEach.call(asideTabs, (asideTab) => {
+        asideTab.addEventListener("click", (e: Event) => {
+          e.preventDefault();
+          const activeTab: HTMLElement | null =
+            document.querySelector(".aside__item > [aria-selected]");
+          if (e.target !== activeTab) {
+            if (activeTab)
+              this.switchTab(e.target as HTMLElement, activeTab, asideTabs, asidePanels, "aside__link--active");
+          }
+        });
+      });
+    }
+  }
+
   private saveAccountData(): void {
     const emailCheckbox: HTMLElement | null = document.getElementById(
       "profile_change_email",
@@ -299,7 +340,6 @@ export default class Profile {
   }
 
   private async changePassword(): Promise<void> {
-    console.log(this.password);
     const currentPassword: HTMLElement | null = document.getElementById(
       "profile_curr_password",
     );
@@ -325,18 +365,36 @@ export default class Profile {
     prevTab: HTMLElement,
     tabs: NodeListOf<HTMLElement>,
     panels: NodeListOf<HTMLElement>,
+    activeClass: string
   ) {
     currTab.focus();
-    currTab.classList.add("profile__link--active");
+    currTab.classList.add(activeClass);
     currTab.removeAttribute("tabindex");
     currTab.setAttribute("aria-selected", "true");
-    prevTab.classList.remove("profile__link--active");
+    prevTab.classList.remove(activeClass);
     prevTab.removeAttribute("aria-selected");
     prevTab.setAttribute("tabindex", "-1");
     const currIdx: number = Array.prototype.indexOf.call(tabs, currTab);
     const oldIdx: number = Array.prototype.indexOf.call(tabs, prevTab);
     panels[oldIdx].hidden = true;
     panels[currIdx].hidden = false;
+  }
+
+  private createNewAddressTemplate(): string {
+    return `
+    <nav class="aside__nav">
+      <ul role="tablist" class="aside__list">
+          <li role="presentation" class="aside__item">
+              <a role="tab" href="#shipping" id="tab-1" class="aside__link aside__link--active" aria-selected="true">Shipping Address</a>
+          </li>
+          <li role="presentation" class="aside__item">
+              <a role="tab" href="#billing" id="tab-2" class="aside__link" tabindex="-1">Billing Address</a>
+          </li>
+      </ul>
+    </nav>
+    <section class="aside__panel" id="shipping" role="tabpanel" aria-labelledby="tab-1">${createaAddressTemplate("Add Shipping Address")}</section>
+    <section class="aside__panel" id="billing" role="tabpanel" aria-labelledby="tab-2" hidden>${createaAddressTemplate("Add Billing Address")}</section>
+    `;
   }
 }
 // TODO: показывать ошибки и определить поведение при смене email/password

@@ -21,6 +21,7 @@
   }
   & .aside__content {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
   }
@@ -38,6 +39,45 @@
     & .form__input-wrapper {
       width: 100%;
     }
+  }
+  & .aside__nav {
+    width: 100%;
+    margin-bottom: 32px;
+  }
+  & .aside__list {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style-type: none;
+  }
+  & .aside__item {
+    width: 50%;
+  }
+  & .aside__link {
+    display: block;
+    width: 100%;
+    padding: 11px 13px;
+    box-sizing: border-box;
+    font: {
+      family: "Oswald", Arial, sans-serif;
+      size: 14px;
+      weight: 400;
+    }
+    text-align: center;
+    color: #000000;
+    &.aside__link--active {
+        background-color: #f0f2f2;
+        font: {
+          family: "Oswald-Medium", Arial, sans-serif;
+          size: 14px;
+          weight: 600;
+        }
+    }
+  }
+  & .aside__panel {
+    width: 100%;
   }
   & .aside__btn {
     width: 140px;

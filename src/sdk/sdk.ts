@@ -5,7 +5,8 @@ import {
   UpdateData,
   UpdateEmail,
   ChangeAddress,
-  RemoveAddress
+  RemoveAddress,
+  AddAddress
 } from "../types/types";
 
 export function getProjectDetails() {
@@ -163,6 +164,23 @@ export function changeAddress(
   version: number,
   id: string,
   addressObj: ChangeAddress[],
+) {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version,
+        actions: addressObj,
+      },
+    })
+    .execute();
+}
+export function addAddress(
+  version: number,
+  id: string,
+  addressObj: AddAddress[],
 ) {
   return apiRoot
     .withProjectKey({ projectKey })

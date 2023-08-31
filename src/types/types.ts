@@ -26,15 +26,13 @@ export interface Address {
   building?: string | undefined;
   apartment?: string | undefined;
 }
-export interface ResponseAddress {
-  id: string;
-  key: string;
-  country: string;
-  city: string;
-  postalCode: string;
-  streetName: string;
-  building: string;
-  apartment: string;
+export interface AddressData {
+  countryCode: string,
+  streetName: string,
+  building: string,
+  apartment: string,
+  city: string,
+  postalCode: string
 }
 export interface UpdateData {
   action: Actions.firstname | Actions.lastname | Actions.dateofbirth;
@@ -49,7 +47,8 @@ export enum Actions {
   dateofbirth = "setDateOfBirth",
   email = "changeEmail",
   address = "changeAddress",
-  removeaddress = "removeAddress"
+  removeaddress = "removeAddress",
+  addaddress = "addAddress"
 }
 export enum Countries {
   BY = "Belarus",
@@ -69,4 +68,8 @@ export interface ChangeAddress {
 export interface RemoveAddress {
   action: Actions.removeaddress;
   addressId: string;
+}
+export interface AddAddress {
+  action: Actions.addaddress;
+  address: Address;
 }
