@@ -4,6 +4,7 @@ import {
   pages,
   profileLinks,
   profileLinksOut,
+  product
 } from "../header/data/linkArrays";
 import Popap from "../popap/popap";
 import showPassword from "./showPassword";
@@ -63,12 +64,16 @@ export async function handleLocation(callback?: () => void): Promise<void> {
   if (ev.currentTarget instanceof Window) {
     const hrefToFind = ev.currentTarget.location.pathname;
     const foundPage = pages.find((page) => page.href === hrefToFind);
+    const productPage = product.find((page)=> page.href === hrefToFind)
     if (foundPage) {
       const { callback } = foundPage;
       handleLocation(callback);
+    } else if (productPage) {
+      const { callback } = productPage;
+      handleLocation(callback);
     } else if (localStorage.token) {
       const currentPage = profileLinksOut.find(
-        (page) => page.href === hrefToFind,
+        (page) => page.href === hrefToFind
       );
       if (currentPage) {
         const { callback } = currentPage;
@@ -100,20 +105,28 @@ export const route = (
   }
 };
 
-export const routeforOtherLink = (e: Event): void => {
+export const routeforOtherLink = (e: Event, callback?: () => void): void => {
   const { target } = e;
 
   if (target instanceof HTMLAnchorElement) {
     window.history.pushState({}, "", target.href);
   }
-  handleLocation();
+  if (callback) {
+    handleLocation(callback);
+  } else {
+    handleLocation();
+  }
 };
 
-export const routeToNotAnchor = (e: Event, href: string): void => {
+export const routeToNotAnchor = (e: Event, href: string, callback?:()=>void): void => {
   const { target } = e;
 
   if (target) {
     window.history.pushState({}, "", href);
   }
-  handleLocation();
+  if (callback) {
+    handleLocation(callback);
+  } else {
+    handleLocation();
+  }
 };

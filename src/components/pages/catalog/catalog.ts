@@ -9,6 +9,7 @@ import {
 } from "./createAttributeParams";
 import { creatCard } from "./createCard";
 import { visualeFilterCards } from "./ilterBtnClick";
+import {product} from "../../header/data/linkArrays"
 
 export function visualeCards() {
   try {
@@ -46,7 +47,8 @@ export function visualeCards() {
       const cards = document.querySelectorAll(".catalog__card");
       cards.forEach((el) => {
         el.addEventListener("click", (ev) => {
-          routeToNotAnchor(ev, "/product");
+          const {callback} = product[0]
+          routeToNotAnchor(ev, "/product", callback);
         });
       });
     });

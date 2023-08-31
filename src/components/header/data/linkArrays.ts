@@ -22,6 +22,7 @@ const namePage = {
   USER: "USER",
   BASKET: "BASKET",
   ABOUT: "ABOUT US",
+  PRODUCT: "PRODUCT",
 };
 
 export const profileLinks: link[] = [
@@ -341,13 +342,13 @@ export const pages: link[] = [
         const elementsWithOrderHintZero = res.body.results.filter(
           (element) => element.orderHint === "0"
         );
-        elementsWithOrderHintZero.forEach((el)=>{
+        elementsWithOrderHintZero.forEach((el) => {
           console.log(el.id);
           const subEl = createSubCategory(el.id, `${el.name.en}`);
           cotegoriesFirst?.appendChild(subEl);
-        })
+        });
         console.log(cotegoriesFirst);
-        
+
         console.log(elementsWithOrderHintZero);
         // console.log(res);
       });
@@ -356,15 +357,27 @@ export const pages: link[] = [
       filterBtn?.addEventListener("click", onFilterBtnClick);
       const resetBtn = document.getElementById("resetBtn");
       resetBtn?.addEventListener("click", visualeCards);
-      const categoriesContainer = document.querySelector(".catalog__catigories")
-      categoriesContainer?.addEventListener("click", (event)=>{
-        const el = event.target
+      const categoriesContainer = document.querySelector(
+        ".catalog__catigories"
+      );
+      categoriesContainer?.addEventListener("click", (event) => {
+        const el = event.target;
         if (el instanceof HTMLElement) {
-        const key = el.getAttribute("key");
+          const key = el.getAttribute("key");
           visualeFilterCards([`variants.categories.id:"${key}"`]);
         }
-      })
+      });
+    },
+  },
+];
 
+export const product: link[] = [
+  {
+    name: namePage.PRODUCT,
+    href: "/product",
+    callback: (): void => {
+      const img = document.querySelector(".product_page__img");
+      console.log(img);
     },
   },
 ];
