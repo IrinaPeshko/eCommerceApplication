@@ -3,5 +3,5 @@ export default interface Ilink {
   classList?: string[];
   innerHTML?: string;
   href?: string;
-  callback: () => void;
+  callback: (id?: string) => void;
 }

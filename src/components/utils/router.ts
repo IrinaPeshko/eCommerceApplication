@@ -4,7 +4,7 @@ import {
   pages,
   profileLinks,
   profileLinksOut,
-  product
+  product,
 } from "../header/data/linkArrays";
 import Popap from "../popap/popap";
 import showPassword from "./showPassword";
@@ -64,7 +64,7 @@ export async function handleLocation(callback?: () => void): Promise<void> {
   if (ev.currentTarget instanceof Window) {
     const hrefToFind = ev.currentTarget.location.pathname;
     const foundPage = pages.find((page) => page.href === hrefToFind);
-    const productPage = product.find((page)=> page.href === hrefToFind)
+    const productPage = product.find((page) => page.href === hrefToFind);
     if (foundPage) {
       const { callback } = foundPage;
       handleLocation(callback);
@@ -73,7 +73,7 @@ export async function handleLocation(callback?: () => void): Promise<void> {
       handleLocation(callback);
     } else if (localStorage.token) {
       const currentPage = profileLinksOut.find(
-        (page) => page.href === hrefToFind
+        (page) => page.href === hrefToFind,
       );
       if (currentPage) {
         const { callback } = currentPage;
@@ -118,7 +118,11 @@ export const routeforOtherLink = (e: Event, callback?: () => void): void => {
   }
 };
 
-export const routeToNotAnchor = (e: Event, href: string, callback?:()=>void): void => {
+export const routeToNotAnchor = (
+  e: Event,
+  href: string,
+  callback?: () => void,
+): void => {
   const { target } = e;
 
   if (target) {
