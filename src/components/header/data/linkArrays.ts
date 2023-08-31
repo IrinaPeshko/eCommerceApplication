@@ -332,6 +332,7 @@ export const pages: link[] = [
     name: namePage.CATALOG,
     href: "/catalog",
     callback: (): void => {
+      console.log("click");
       getCategories().then((res) => {
         console.log(res);
       });

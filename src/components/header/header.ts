@@ -1,6 +1,7 @@
 import Param from "../../types/elementCreator/param";
 import ElementCreator from "../utils/elementCreator";
 import View from "../utils/view";
+/* eslint-disable import/no-cycle */
 import LinkView from "./link";
 import {
   paramLogo,
