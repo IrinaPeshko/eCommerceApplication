@@ -6,3 +6,9 @@ export interface IImageData {
   label: string;
   url: string;
 }
+
+export interface Category {
+  id: string;
+  name: string;
+  parentId: string | null;
+}

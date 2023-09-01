@@ -59,7 +59,6 @@ export function visualeCards() {
 }
 
 export function onFilterBtnClick() {
-  // const cardContainer = document.querySelector(".catalog__products");
   const params: string[] = [];
   const colorParams = createColorFilterStr();
   const brendParams = createBrendFilterStr();
@@ -90,7 +89,6 @@ export function createCategories() {
     ".catalog__breadcrumbs.topmenu li",
   );
   getCategories().then((res) => {
-    console.log(res);
     const elementsWithOrderHintZero = res.body.results.filter(
       (element) => element.orderHint === "0",
     );

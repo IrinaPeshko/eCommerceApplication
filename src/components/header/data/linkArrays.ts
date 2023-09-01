@@ -14,6 +14,9 @@ import {
   visualeCards,
 } from "../../pages/catalog/catalog";
 import { visualeFilterCards } from "../../pages/catalog/ilterBtnClick";
+import { getCategoryPath } from "../../pages/catalog/getCategoryPath";
+import { getCategories } from "../../../sdk/sdk";
+import { Category } from "../../../types/catalog/catalogTypes";
 
 const namePage = {
   MAIN: "MAIN",
@@ -347,11 +350,30 @@ export const pages: link[] = [
         ".catalog__catigories",
       );
       categoriesContainer?.addEventListener("click", (event) => {
-        const el = event.target;
-        if (el instanceof HTMLElement) {
-          const key = el.getAttribute("key");
-          visualeFilterCards([`variants.categories.id:"${key}"`]);
+        const categories: Record<string, Category> = {};
+        async function getCategoriesArr() {
+          const categoriesRes = await getCategories();
+          const categoriesArr = categoriesRes.body.results;
+          categoriesArr.forEach((el) => {
+            const categoryObj: Category = {
+              id: el.id,
+              name: el.name.en,
+              parentId: `${el.parent?.id}`,
+            };
+            categories[el.id] = categoryObj;
+          });
+          const el = event.target;
+          if (el instanceof HTMLElement) {
+            const key = el.getAttribute("key");
+            const categoryPathElement = document.getElementById("categoryPath");
+            if (categoryPathElement && key) {
+              const categoryPath = getCategoryPath(key, categories);
+              categoryPathElement.textContent = categoryPath;
+            }
+            visualeFilterCards([`variants.categories.id:"${key}"`]);
+          }
         }
+        getCategoriesArr();
       });
     },
   },

@@ -212,7 +212,6 @@ body.lock {
     }
   }
   & .form__field {
-    // width: 100%;
     max-width: 100%;
     padding: 12px 16px;
     background-color: #ffffff;
@@ -243,7 +242,6 @@ body.lock {
       padding: 12px 16px;
     }
     & + .form__message {
-      // width: 100%;
       max-width: 100%;
       padding: 8px 24px;
       &.form__message--empty {

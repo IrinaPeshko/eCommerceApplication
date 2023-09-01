@@ -13,12 +13,11 @@
       margin-top: 16px;
       .catalog__breadcrumbs.topmenu {
         & .catalog__breadcrumbs-item {
-          color: #828282;
           & .catalog__breadcrumbs-link {
             color: inherit;
             padding: 10px 20px;
             display: inline-block;
-            font-size: 22px;
+            font-size: 16px;
             &:hover {
               cursor: pointer;
               color: #000000;
@@ -32,7 +31,7 @@
 
 .catalog__breadcrumbs__submenu {
   position: absolute;
-  min-width: 400px;
+  min-width: 300px;
   z-index: 5;
   transform-origin: 0 0;
   transform: rotateX(-90deg);

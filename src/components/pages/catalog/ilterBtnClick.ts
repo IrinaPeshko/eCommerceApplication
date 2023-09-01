@@ -30,7 +30,6 @@ export function visualeFilterCards(params: string[]) {
         }
         if (description) {
           const card = creatCard(name, description, url, price, id);
-          // const container = document.querySelector(".catalog__products");
           container?.appendChild(card);
         }
       });

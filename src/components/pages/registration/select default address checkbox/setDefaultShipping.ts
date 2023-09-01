@@ -85,7 +85,6 @@ export default function setShippingDefault(): void {
       billingCountry.classList.remove("read-only");
       defaultBillingCheckbox.closest("label")?.classList.remove("read-only");
 
-      // Очищаем поля Billing Address
       billingStreet.value = "";
       validateBillingFields(billingStreet);
       billingBuilding.value = "";
@@ -95,8 +94,6 @@ export default function setShippingDefault(): void {
       billingPostalCode.value = "";
       validateBillingFields(billingPostalCode);
       billingCountry.value = "BY";
-
-      // Оставляем значение страны BY
     }
   }
 
