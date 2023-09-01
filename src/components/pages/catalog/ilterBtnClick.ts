@@ -14,7 +14,14 @@ export function visualeFilterCards(params: string[]) {
         const description = el.description?.en;
         const imagesArr = el.masterVariant.images;
         const pricesArr = el.masterVariant.prices;
+        let discount: string | undefined = "";
         const { id } = el;
+        if (pricesArr) {
+          const disc = pricesArr[0].discounted?.value.centAmount;
+          if (disc) {
+            discount = `${disc}`.split("").slice(0, -2).join("");
+          }
+        }
 
         let url = "";
         let price = 0;
@@ -29,8 +36,13 @@ export function visualeFilterCards(params: string[]) {
           price = +`${price}`.split("").slice(0, -2).join("");
         }
         if (description) {
-          const card = creatCard(name, description, url, price, id);
-          container?.appendChild(card);
+          if (discount) {
+            const card = creatCard(name, description, url, price, id, discount);
+            container?.appendChild(card);
+          } else {
+            const card = creatCard(name, description, url, price, id);
+            container?.appendChild(card);
+          }
         }
       });
     });

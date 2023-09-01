@@ -185,9 +185,22 @@
   }
 }
 
-.catalog__card:hover{
+.catalog__card:hover {
   background-color: #f0f0f0;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   transform: scale(1.05);
+}
 
+.prices__block {
+  display: flex;
+  .not-discount {
+    text-decoration: line-through;
+    font-size: 16px;
+  }
+  .discount {
+    font-size: 28px;
+    color: red;
+    padding-left: 10px;
+    margin: 20px 0;
+  }
 }
