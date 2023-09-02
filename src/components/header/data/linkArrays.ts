@@ -343,7 +343,6 @@ fill="#ffffff" stroke="none">
                 lastName,
                 dateOfBirth,
                 email,
-                password,
                 version,
                 addresses as Address[],
                 shippingAddressIds,

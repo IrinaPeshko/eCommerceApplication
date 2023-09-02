@@ -27,12 +27,12 @@ export interface Address {
   apartment?: string | undefined;
 }
 export interface AddressData {
-  countryCode: string,
-  streetName: string,
-  building: string,
-  apartment: string,
-  city: string,
-  postalCode: string
+  countryCode: string;
+  streetName: string;
+  building: string;
+  apartment: string;
+  city: string;
+  postalCode: string;
 }
 export interface UpdateData {
   action: Actions.firstname | Actions.lastname | Actions.dateofbirth;
@@ -48,7 +48,9 @@ export enum Actions {
   email = "changeEmail",
   address = "changeAddress",
   removeaddress = "removeAddress",
-  addaddress = "addAddress"
+  addaddress = "addAddress",
+  addshippingaddress = "addShippingAddressId",
+  addbillingaddress = "addBillingAddressId"
 }
 export enum Countries {
   BY = "Belarus",
@@ -73,3 +75,12 @@ export interface AddAddress {
   action: Actions.addaddress;
   address: Address;
 }
+export interface AddShippingAddress {
+  action: Actions.addshippingaddress;
+  addressKey: string;
+}
+export interface AddBillingAddress {
+  action: Actions.addbillingaddress;
+  addressKey: string;
+}
+export type Tuple = [AddAddress, AddShippingAddress | AddBillingAddress];

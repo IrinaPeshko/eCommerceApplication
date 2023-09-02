@@ -6,7 +6,7 @@ import {
   UpdateEmail,
   ChangeAddress,
   RemoveAddress,
-  AddAddress
+  Tuple,
 } from "../types/types";
 
 export function getProjectDetails() {
@@ -180,7 +180,7 @@ export function changeAddress(
 export function addAddress(
   version: number,
   id: string,
-  addressObj: AddAddress[],
+  addressObj: Tuple,
 ) {
   return apiRoot
     .withProjectKey({ projectKey })

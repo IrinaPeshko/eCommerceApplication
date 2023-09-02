@@ -1,6 +1,7 @@
 import Irouters from "../../types/routers/routers";
 import Popap from "../popap/popap";
 import Aside from "../aside/aside";
+import Alert from "../alerts/alert";
 import showPassword from "./showPassword";
 
 export const routers: Irouters = {
@@ -43,8 +44,11 @@ export async function handleLocation(callback?: () => void): Promise<void> {
       const popapElement = popap.getHTMLElement();
       const aside = new Aside();
       const asideElem = aside.getHTMLElement();
+      const alert = new Alert();
+      const alertElem = alert.getHTMLElement();
       if (popapElement) main.append(popapElement);
       if (asideElem) main.append(asideElem);
+      if (alertElem) main.append(alertElem);
       showPassword();
     }
 
