@@ -48,8 +48,9 @@ export function visualeCards() {
       const cards = document.querySelectorAll(".catalog__card");
       cards.forEach((el) => {
         el.addEventListener("click", (ev) => {
+          const id = el.getAttribute("products");
           const { callback } = product[0];
-          routeToNotAnchor(ev, "/product", callback);
+          routeToNotAnchor(ev, "/product", callback.bind(null, `${id}`));
         });
       });
     });

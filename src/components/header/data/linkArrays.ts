@@ -14,6 +14,7 @@ import {
   visualeCards,
 } from "../../pages/catalog/catalog";
 import { visualeFilterCards } from "../../pages/catalog/ilterBtnClick";
+import { Product } from "../../pages/product/product";
 
 const namePage = {
   MAIN: "MAIN",
@@ -362,9 +363,7 @@ export const product: link[] = [
     name: namePage.PRODUCT,
     href: "/product",
     callback: (id?: string): void => {
-      console.log(id);
-      const img = document.querySelector(".product_page__img");
-      console.log(img);
+      Product.init(`${id}`);
     },
   },
 ];

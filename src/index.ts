@@ -6,6 +6,7 @@ import {
   pages,
   product,
 } from "./components/header/data/linkArrays";
+import { swiper } from "./components/slider/swiper";
 
 function initializeApp(): void {
   App.createView();
@@ -29,3 +30,5 @@ declare global {
 }
 
 window.route = route;
+
+const slider = swiper;
