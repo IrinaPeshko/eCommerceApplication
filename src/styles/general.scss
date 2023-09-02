@@ -306,6 +306,17 @@ body.lock {
         color 0s 600000s;
     }
   }
+  & .form__checkboxes-wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 17px;
+    &.form__checkboxes-wrapper--hidden {
+      display: none;
+    }
+  }
+  & .form__checkbox-wrapper {
+    margin: 0;
+  }
   & .form__checkbox-label {
     display: block;
     position: relative;

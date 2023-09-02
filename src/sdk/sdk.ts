@@ -177,11 +177,7 @@ export function changeAddress(
     })
     .execute();
 }
-export function addAddress(
-  version: number,
-  id: string,
-  addressObj: Tuple,
-) {
+export function addAddress(version: number, id: string, addressObj: Tuple) {
   return apiRoot
     .withProjectKey({ projectKey })
     .customers()

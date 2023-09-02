@@ -1,4 +1,4 @@
-const alert =  `
+const alert = `
   <p class="alert__message"></p>
   <button class="close-btn alert__close-btn">
     <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">

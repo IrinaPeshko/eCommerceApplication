@@ -5,7 +5,7 @@ import {
   Actions,
   UpdateEmail,
   Obj,
-  Tuple
+  Tuple,
   // Address,
 } from "../../../types/types";
 import Validate from "../../utils/validation";
@@ -13,7 +13,7 @@ import {
   updateCustomer,
   updateCustomerEmail,
   changeCustomerPassword,
-  addAddress
+  addAddress,
 } from "../../../sdk/sdk";
 import NewAddress from "./createAddress";
 import { createaAddressTemplate } from "./templates";
@@ -85,7 +85,9 @@ export default class Profile {
     const billingAddressesBlock: HTMLDivElement | null = document.querySelector(
       ".profile__billing-addresses",
     );
-    const addressesWrapper: HTMLDivElement | null = document.querySelector(".profile__addresses-wrapper");
+    const addressesWrapper: HTMLDivElement | null = document.querySelector(
+      ".profile__addresses-wrapper",
+    );
     if (shippingAddressesBlock && billingAddressesBlock && addressesWrapper) {
       shippingAddressesBlock.innerHTML = "";
       billingAddressesBlock.innerHTML = "";
@@ -100,19 +102,19 @@ export default class Profile {
         if (address.id) {
           if (this.shippingAddressIds.indexOf(address.id) !== -1) {
             // if (this.defaultShippingAddressId) {
-              if (address.id === this.defaultShippingAddressId) {
-                shippingAddressesBlock.prepend(newAddress.createAddress());
-              } else {
-                shippingAddressesBlock.append(newAddress.createAddress());
-              }
+            if (address.id === this.defaultShippingAddressId) {
+              shippingAddressesBlock.prepend(newAddress.createAddress());
+            } else {
+              shippingAddressesBlock.append(newAddress.createAddress());
+            }
             // }
           } else if (this.billingAddressIds.indexOf(address.id) !== -1) {
             // if (this.defaultBillingAddressId) {
-              if (address.id === this.defaultBillingAddressId) {
-                billingAddressesBlock.prepend(newAddress.createAddress());
-              } else {
-                billingAddressesBlock.append(newAddress.createAddress());
-              }
+            if (address.id === this.defaultBillingAddressId) {
+              billingAddressesBlock.prepend(newAddress.createAddress());
+            } else {
+              billingAddressesBlock.append(newAddress.createAddress());
+            }
             // }
           } else {
             addressesWrapper.append(newAddress.createAddress());
@@ -246,6 +248,7 @@ export default class Profile {
       if (activePage) {
         const fieldsArr: NodeListOf<Element> =
           activePage.querySelectorAll(".form__field");
+        const checkboxesWrapper: HTMLDivElement | null = activePage.querySelector(".form__checkboxes-wrapper");
         const saveBtn: HTMLButtonElement | null =
           activePage.querySelector(".profile__save-btn");
         fieldsArr.forEach((elem) => {
@@ -255,6 +258,12 @@ export default class Profile {
             (elem as HTMLInputElement).readOnly = true;
           }
         });
+        if (checkboxesWrapper) {
+          if (checkboxesWrapper.classList.contains("form__checkboxes-wrapper--hidden"))
+            checkboxesWrapper.classList.remove("form__checkboxes-wrapper--hidden");
+          else
+            checkboxesWrapper.classList.add("form__checkboxes-wrapper--hidden");
+        }
         if (saveBtn) {
           if (saveBtn.classList.contains("profile__save-btn--hidden"))
             saveBtn.classList.remove("profile__save-btn--hidden");
@@ -301,7 +310,7 @@ export default class Profile {
         const update = await updateCustomer(this.id, updateArr, this.version)
           .then((res) => {
             if (res.statusCode !== 400) {
-              const {firstName, lastName, dateOfBirth, version} = res.body;
+              const { firstName, lastName, dateOfBirth, version } = res.body;
               if (firstName && lastName && dateOfBirth) {
                 this.version = version;
                 Emitter.emit("updateVersion", this.version);
@@ -358,25 +367,28 @@ export default class Profile {
         e.preventDefault();
         e.stopPropagation();
         if ((e.target as HTMLElement).tagName === "BUTTON") {
-          if ((e.target as HTMLElement).dataset.action === "saveshippingaddress") {
+          if (
+            (e.target as HTMLElement).dataset.action === "saveshippingaddress"
+          ) {
             this.addAddressAction("shipping");
-          } else if ((e.target as HTMLElement).dataset.action === "savebillingaddress") {
+          } else if (
+            (e.target as HTMLElement).dataset.action === "savebillingaddress"
+          ) {
             this.addAddressAction("billing");
           }
         }
-      })
+      });
     }
   }
 
   private async addAddressAction(addressType: string): Promise<void> {
     if (this.activeAsideTab) {
       const activeAsidePage: HTMLElement | null = document.querySelector(
-        `.aside__content > [aria-labelledby = ${
-          this.activeAsideTab.id
-        }]`,
+        `.aside__content > [aria-labelledby = ${this.activeAsideTab.id}]`,
       );
       if (activeAsidePage) {
-        const form: HTMLFormElement | null = activeAsidePage.querySelector(".aside__form");
+        const form: HTMLFormElement | null =
+          activeAsidePage.querySelector(".aside__form");
         const addressData: Obj = {};
         if (form) {
           const fields: NodeListOf<Element> = form.querySelectorAll(
@@ -384,7 +396,11 @@ export default class Profile {
           );
           if (fields) {
             const fieldsArr: Element[] = Array.from(fields);
-            if (fieldsArr.every((elem): boolean => elem.classList.contains("valid"))) {
+            if (
+              fieldsArr.every((elem): boolean =>
+                elem.classList.contains("valid"),
+              )
+            ) {
               const data = new FormData(form);
               for (const val of data.entries()) {
                 const key: string = val[0];
@@ -397,7 +413,7 @@ export default class Profile {
                 building,
                 apartment,
                 city,
-                postalCode
+                postalCode,
               } = addressData;
               const newKey: string = randomKeyGenerator();
               const newAddressObj: Tuple = [
@@ -410,17 +426,28 @@ export default class Profile {
                     postalCode,
                     streetName,
                     building,
-                    apartment
-                  }
-                }, addressType === "shipping" ? {action: Actions.addshippingaddress, addressKey: newKey}
-                : {action: Actions.addbillingaddress, addressKey: newKey}
+                    apartment,
+                  },
+                },
+                addressType === "shipping"
+                  ? { action: Actions.addshippingaddress, addressKey: newKey }
+                  : { action: Actions.addbillingaddress, addressKey: newKey },
               ];
               try {
-                const res = await addAddress(this.version, this.id, newAddressObj);
+                const res = await addAddress(
+                  this.version,
+                  this.id,
+                  newAddressObj,
+                );
                 if (res.statusCode !== 400) {
                   Aside.closeAside();
                   Alert.showAlert(false, "New address successfully added");
-                  const { addresses, shippingAddressIds, billingAddressIds, version } = res.body;
+                  const {
+                    addresses,
+                    shippingAddressIds,
+                    billingAddressIds,
+                    version,
+                  } = res.body;
                   if (addresses && shippingAddressIds && billingAddressIds) {
                     this.version = version;
                     this.addresses = addresses;
@@ -433,23 +460,23 @@ export default class Profile {
                   Alert.showAlert(true, "New address not added");
                   throw new Error("Something is wrong");
                 }
-              } catch(err) {
+              } catch (err) {
                 console.log(err);
               }
             } else {
               fieldsArr
-            .filter((elem) => !elem.classList.contains("valid"))
-            .forEach((elem) => {
-              this.validationForm(
-                (elem as HTMLInputElement) || (elem as HTMLSelectElement),
-              );
-            });
+                .filter((elem) => !elem.classList.contains("valid"))
+                .forEach((elem) => {
+                  this.validationForm(
+                    (elem as HTMLInputElement) || (elem as HTMLSelectElement),
+                  );
+                });
             }
           }
         }
       }
     }
-}
+  }
 
   private saveAccountData(): void {
     const emailCheckbox: HTMLElement | null = document.getElementById(
@@ -567,16 +594,17 @@ export default class Profile {
       </ul>
     </nav>
     <section class="aside__panel" id="shipping" role="tabpanel" aria-labelledby="tab-1">${createaAddressTemplate(
-      "Add Shipping Address", "saveshippingaddress"
+      "Add Shipping Address",
+      "saveshippingaddress",
     )}</section>
     <section class="aside__panel" id="billing" role="tabpanel" aria-labelledby="tab-2" hidden>${createaAddressTemplate(
       "Add Billing Address",
-      "savebillingaddress"
+      "savebillingaddress",
     )}</section>
     `;
   }
 }
-// TODO: показывать ошибки и определить поведение при смене email/password; +-
+// TODO:
 // проверить postalCodes в Addresses;
 // запускать все при перезагрузке;
 // дефолтные адреса(отмечать и выбрать)

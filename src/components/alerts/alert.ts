@@ -13,14 +13,16 @@ export default class Alert extends View {
       innerHTML: alert,
     };
     super(params);
-    this.alertElem = this.getHTMLElement()
+    this.alertElem = this.getHTMLElement();
   }
 
   public static showAlert(error: boolean, message: string): void {
     console.log(error, message);
     const alertBlock: HTMLDivElement | null = document.querySelector(".alert");
-    const alertText: HTMLParagraphElement | null = document.querySelector(".alert__message");
-    const alertCloseBtn: HTMLButtonElement | null = document.querySelector(".alert__close-btn");
+    const alertText: HTMLParagraphElement | null =
+      document.querySelector(".alert__message");
+    const alertCloseBtn: HTMLButtonElement | null =
+      document.querySelector(".alert__close-btn");
     if (alertBlock) {
       alertBlock.classList.remove("alert--hidden");
       if (error === true) {
@@ -47,7 +49,8 @@ export default class Alert extends View {
 
   public static closeAlert(): void {
     const alertBlock: HTMLDivElement | null = document.querySelector(".alert");
-    const alertText: HTMLParagraphElement | null = document.querySelector(".alert__message");
+    const alertText: HTMLParagraphElement | null =
+      document.querySelector(".alert__message");
     if (alertBlock) {
       alertBlock.classList.remove("alert--success");
       alertBlock.classList.remove("alert--error");

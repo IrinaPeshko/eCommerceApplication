@@ -77,15 +77,24 @@ export default class NewAddress {
         city: this.address.city,
         postalCode: this.address.postalCode,
       };
-      const content: string = createaAddressTemplate("Edit Address", "updateaddress", obj);
+      const content: string = createaAddressTemplate(
+        "Edit Address",
+        "updateaddress",
+        obj,
+      );
       Aside.openAside(content);
       if (aside) {
-        const countryField: HTMLSelectElement | null = aside.querySelector("#country");
-        const streetField: HTMLInputElement | null = aside.querySelector("#street");
+        const countryField: HTMLSelectElement | null =
+          aside.querySelector("#country");
+        const streetField: HTMLInputElement | null =
+          aside.querySelector("#street");
         const cityField: HTMLInputElement | null = aside.querySelector("#city");
-        const postalCodeField: HTMLInputElement | null = aside.querySelector("#postal_code");
-        const buildingField: HTMLInputElement | null = aside.querySelector("#building");
-        const apartmentField: HTMLInputElement | null = aside.querySelector("#apartment");
+        const postalCodeField: HTMLInputElement | null =
+          aside.querySelector("#postal_code");
+        const buildingField: HTMLInputElement | null =
+          aside.querySelector("#building");
+        const apartmentField: HTMLInputElement | null =
+          aside.querySelector("#apartment");
         if (streetField) streetField.classList.add("valid");
         if (cityField) cityField.classList.add("valid");
         if (postalCodeField) postalCodeField.classList.add("valid");
@@ -95,10 +104,22 @@ export default class NewAddress {
             (e.target as HTMLElement).tagName === "BUTTON" &&
             (e.target as HTMLElement).dataset.action === "updateaddress"
           ) {
-            if (countryField && streetField && cityField && postalCodeField && buildingField && apartmentField) {
-              if (countryField.value === this.address.country && streetField.value === this.address.streetName &&
-                cityField.value === this.address.city && postalCodeField.value === this.address.postalCode &&
-                buildingField.value === this.address.building && apartmentField.value === this.address.apartment) {
+            if (
+              countryField &&
+              streetField &&
+              cityField &&
+              postalCodeField &&
+              buildingField &&
+              apartmentField
+            ) {
+              if (
+                countryField.value === this.address.country &&
+                streetField.value === this.address.streetName &&
+                cityField.value === this.address.city &&
+                postalCodeField.value === this.address.postalCode &&
+                buildingField.value === this.address.building &&
+                apartmentField.value === this.address.apartment
+              ) {
                 Aside.closeAside();
               } else {
                 this.updateAddress();
@@ -113,101 +134,99 @@ export default class NewAddress {
   private async updateAddress(): Promise<void> {
     const form: HTMLFormElement | null = document.querySelector(".aside__form");
     const addressData: Obj = {};
-      if (form) {
-        const fields: NodeListOf<Element> = form.querySelectorAll(
-          ".form__field[required]",
-        );
-        if (fields) {
-          const fieldsArr: Element[] = Array.from(fields);
-          if (
-            fieldsArr.every((elem): boolean => elem.classList.contains("valid"))
-          ) {
-            const data = new FormData(form);
-            for (const val of data.entries()) {
-              const key: string = val[0];
-              const newVal: string = val[1] as string;
-              addressData[`${key}`] = newVal;
-            }
-            const {
-              countryCode,
-              postalCode,
-              city,
-              streetName,
-              building,
-              apartment,
-            } = addressData;
-            const addressObject: ChangeAddress[] = [];
-            if (this.address.id && this.address.key) {
-              addressObject.push({
-                action: Actions.address,
-                addressId: this.address.id,
-                address: {
-                  id: this.address.id,
-                  key: this.address.key,
-                  country: countryCode,
-                  city,
-                  postalCode,
-                  streetName,
-                  building,
-                  apartment,
-                },
-              });
-              try {
-                const updateData = await changeAddress(
-                  this.version,
-                  this.id,
-                  addressObject,
-                );
-                if (updateData.statusCode !== 400) {
-                  Alert.showAlert(false, "Address succesfully updated");
-                  const { addresses, version } = updateData.body;
-                  this.version = version;
-                  Emitter.emit("updateVersionFromAside", this.version);
-                  if (addresses) {
-                    if (
-                      addresses.some(
-                        (address) => address.key === this.address.key,
-                      )
-                    ) {
-                      const a = addresses.find(
-                        (address) => address.id === this.address.id,
-                      );
-                      if (a) {
-                        const b = { ...a };
-                        if (b.key) {
-                          this.address = { ...a };
-                          const addressElem: HTMLElement | null =
-                            document.getElementById(`address_${this.elemID}`);
-                          if (addressElem) {
-                            const addressInfo: HTMLParagraphElement | null =
-                              addressElem.querySelector(".address__info");
-                            if (addressInfo)
-                              addressInfo.innerText = `${
-                                this.address.city
-                              }, ${this.address.streetName}, ${
-                                this.address.building
-                              }, ${
-                                this.address.apartment
-                              }, ${this.chooseCountry(
-                                this.address.country,
-                              )}, ${this.address.postalCode}`;
-                          }
+    if (form) {
+      const fields: NodeListOf<Element> = form.querySelectorAll(
+        ".form__field[required]",
+      );
+      if (fields) {
+        const fieldsArr: Element[] = Array.from(fields);
+        if (
+          fieldsArr.every((elem): boolean => elem.classList.contains("valid"))
+        ) {
+          const data = new FormData(form);
+          for (const val of data.entries()) {
+            const key: string = val[0];
+            const newVal: string = val[1] as string;
+            addressData[`${key}`] = newVal;
+          }
+          const {
+            countryCode,
+            postalCode,
+            city,
+            streetName,
+            building,
+            apartment,
+          } = addressData;
+          const addressObject: ChangeAddress[] = [];
+          if (this.address.id && this.address.key) {
+            addressObject.push({
+              action: Actions.address,
+              addressId: this.address.id,
+              address: {
+                id: this.address.id,
+                key: this.address.key,
+                country: countryCode,
+                city,
+                postalCode,
+                streetName,
+                building,
+                apartment,
+              },
+            });
+            try {
+              const updateData = await changeAddress(
+                this.version,
+                this.id,
+                addressObject,
+              );
+              if (updateData.statusCode !== 400) {
+                Alert.showAlert(false, "Address succesfully updated");
+                const { addresses, version } = updateData.body;
+                this.version = version;
+                Emitter.emit("updateVersionFromAside", this.version);
+                if (addresses) {
+                  if (
+                    addresses.some(
+                      (address) => address.key === this.address.key,
+                    )
+                  ) {
+                    const a = addresses.find(
+                      (address) => address.id === this.address.id,
+                    );
+                    if (a) {
+                      const b = { ...a };
+                      if (b.key) {
+                        this.address = { ...a };
+                        const addressElem: HTMLElement | null =
+                          document.getElementById(`address_${this.elemID}`);
+                        if (addressElem) {
+                          const addressInfo: HTMLParagraphElement | null =
+                            addressElem.querySelector(".address__info");
+                          if (addressInfo)
+                            addressInfo.innerText = `${this.address.city}, ${
+                              this.address.streetName
+                            }, ${this.address.building}, ${
+                              this.address.apartment
+                            }, ${this.chooseCountry(this.address.country)}, ${
+                              this.address.postalCode
+                            }`;
                         }
                       }
                     }
-                    Aside.closeAside();
                   }
-                } else {
-                  Alert.showAlert(true, "Address not updated");
-                  throw new Error("Something is wrong");
+                  Aside.closeAside();
                 }
-              } catch (error) {
-                console.log(error);
+              } else {
+                Alert.showAlert(true, "Address not updated");
+                throw new Error("Something is wrong");
               }
+            } catch (error) {
+              console.log(error);
             }
           }
         }
       }
+    }
   }
 
   private async removeAddress(): Promise<void> {

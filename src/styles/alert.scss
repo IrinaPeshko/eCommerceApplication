@@ -16,9 +16,9 @@
     transform: translateX(100%);
   }
   &.alert--success {
-    background-color: #E3FFE9;
+    background-color: #e3ffe9;
     & .alert__message {
-      color: #27AE60;
+      color: #27ae60;
       &::before {
         content: "";
         width: 10px;
@@ -33,9 +33,9 @@
     }
   }
   &.alert--error {
-    background-color: #FFE3E3;
+    background-color: #ffe3e3;
     & .alert__message {
-      color: #EB5757;
+      color: #eb5757;
       &::before {
         content: "";
         width: 10px;

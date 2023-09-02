@@ -50,7 +50,7 @@ export enum Actions {
   removeaddress = "removeAddress",
   addaddress = "addAddress",
   addshippingaddress = "addShippingAddressId",
-  addbillingaddress = "addBillingAddressId"
+  addbillingaddress = "addBillingAddressId",
 }
 export enum Countries {
   BY = "Belarus",
