@@ -315,6 +315,7 @@ fill="#ffffff" stroke="none">
 </svg>`,
     href: "/profile",
     callback: async (): Promise<void> => {
+      console.log(document.querySelector(".form__subtitle"));
       const id: string | null = localStorage.getItem("id");
       if (id) {
         const getUserData = await getUserById(id)

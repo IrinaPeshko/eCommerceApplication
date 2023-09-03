@@ -5,14 +5,18 @@ import {
   profileLinks,
   pages,
   product,
+  profileLinksOut,
 } from "./components/header/data/linkArrays";
 
 function initializeApp(): void {
   App.createView();
   const currentPath = window.location.pathname;
-  const currentLink = [...profileLinks, ...pages, ...product].find(
-    (link) => link.href === currentPath,
-  );
+  const currentLink = [
+    ...profileLinks,
+    ...profileLinksOut,
+    ...pages,
+    ...product,
+  ].find((link) => link.href === currentPath);
   if (currentLink) {
     handleLocation(currentLink.callback);
   } else {
