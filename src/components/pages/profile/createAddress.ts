@@ -6,9 +6,11 @@ import {
   RemoveAddress,
   Actions,
   AddressData,
+  SetDefaultBilling,
+  SetDefaultShipping
 } from "../../../types/types";
 import Aside from "../../aside/aside";
-import { changeAddress, deleteAddress } from "../../../sdk/sdk";
+import { changeAddress, deleteAddress, setDefaultAddress } from "../../../sdk/sdk";
 import { createaAddressTemplate } from "./templates";
 import Alert from "../../alerts/alert";
 import { Emitter } from "../../utils/eventEmitter";
@@ -19,11 +21,19 @@ export default class NewAddress {
     private id: string,
     private address: Address,
     private elemID: number,
+    private shippingAddressIds: string[],
+    private billingAddressIds: string[],
+    private defaultShippingAddressId: string | undefined,
+    private defaultBillingAddressId: string | undefined
   ) {
     this.id = id;
     this.version = version;
     this.address = address;
     this.elemID = elemID;
+    this.shippingAddressIds = shippingAddressIds;
+    this.billingAddressIds = billingAddressIds;
+    this.defaultShippingAddressId = defaultShippingAddressId;
+    this.defaultBillingAddressId = defaultBillingAddressId;
     Emitter.on("updateVersion", (versionFromProfile: number): void => {
       this.version = versionFromProfile;
     });
@@ -36,6 +46,8 @@ export default class NewAddress {
     const addressEditBtn: HTMLButtonElement = document.createElement("button");
     const addressDeleteBtn: HTMLButtonElement =
       document.createElement("button");
+    const makeDefaultBtn: HTMLButtonElement = document.createElement("button");
+    const defautMark: HTMLSpanElement = document.createElement("span");
     addressElem.className = "address profile__address";
     addressElem.id = `address_${this.elemID}`;
     addressInfo.classList.add("address__info");
@@ -47,6 +59,10 @@ export default class NewAddress {
     }, ${this.chooseCountry(this.address.country)}, ${this.address.postalCode}`;
     addressEditBtn.className = "edit-btn address__edit-btn";
     addressDeleteBtn.className = "delete-btn address__delete-btn";
+    makeDefaultBtn.className = "address__default-btn";
+    makeDefaultBtn.innerText = "Add as default";
+    defautMark.className = "address__default-mark";
+    defautMark.innerText = "Default";
     addressEditBtn.addEventListener("click", (e: Event): void => {
       e.preventDefault();
       this.editAddress();
@@ -57,6 +73,37 @@ export default class NewAddress {
     });
     addressBtnsWrapper.append(addressEditBtn, addressDeleteBtn);
     addressElem.append(addressInfo, addressBtnsWrapper);
+    if (this.address.id) {
+      if (this.shippingAddressIds.indexOf(this.address.id) !== -1) {
+        if (this.defaultShippingAddressId !== undefined) {
+          if (this.address.id === this.defaultShippingAddressId) {
+            addressBtnsWrapper.append(defautMark);
+          } else {
+            addressBtnsWrapper.append(makeDefaultBtn);
+          }
+        } else {
+          addressBtnsWrapper.append(makeDefaultBtn);
+        }
+        makeDefaultBtn.addEventListener("click", (e: Event): void => {
+          e.preventDefault();
+          this.addAsDefaultAddress("shipping");
+        });
+      } else if (this.billingAddressIds.indexOf(this.address.id) !== -1) {
+        if (this.defaultBillingAddressId !== undefined) {
+          if (this.address.id === this.defaultBillingAddressId) {
+            addressBtnsWrapper.append(defautMark);
+          } else {
+            addressBtnsWrapper.append(makeDefaultBtn);
+          }
+        } else {
+          addressBtnsWrapper.append(makeDefaultBtn);
+        }
+        makeDefaultBtn.addEventListener("click", (e: Event): void => {
+          e.preventDefault();
+          this.addAsDefaultAddress("billing");
+        });
+      }
+    }
     return addressElem;
   }
 
@@ -247,7 +294,7 @@ export default class NewAddress {
           removedAddressObj,
         );
         if (removeCurrentAddress.statusCode !== 400) {
-          Alert.showAlert(false, "Address succesfully removed");
+          Alert.showAlert(false, "Address successfully removed");
           const { version } = removeCurrentAddress.body;
           this.version = version;
           Emitter.emit("updateVersionFromAside", this.version);
@@ -257,6 +304,56 @@ export default class NewAddress {
           throw new Error("Something is wrong");
         }
       } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
+  private async addAsDefaultAddress(addressType: string): Promise<void> {
+    if (this.address.key && this.id && this.version) {
+      const addDefaultAddressObj: SetDefaultShipping[] | SetDefaultBilling[] = addressType === "shipping" ?
+      [{
+        action: Actions.setdefaultshipping,
+        addressKey: this.address.key
+      }] :
+      [{
+        action: Actions.setdefaultbilling,
+        addressKey: this.address.key
+      }];
+      try {
+        const setDefaultCurrAddress = await setDefaultAddress(
+          this.version,
+          this.id,
+          addDefaultAddressObj
+        );
+        if (setDefaultCurrAddress.statusCode !== 400) {
+          Alert.showAlert(false, "Address successfully set as default");
+          console.log(setDefaultCurrAddress.body);
+          const { version, billingAddressIds, shippingAddressIds, defaultBillingAddressId, defaultShippingAddressId} = setDefaultCurrAddress.body;
+          this.version = version;
+          if (billingAddressIds) {
+            this.billingAddressIds = billingAddressIds;
+          }
+          if (shippingAddressIds) {
+            this.shippingAddressIds = shippingAddressIds;
+          }
+          this.defaultBillingAddressId = defaultBillingAddressId;
+          this.defaultShippingAddressId = defaultShippingAddressId;
+          Emitter.emit("updateVersionFromAside", this.version);
+          if (addressType === "shipping") {
+            if (this.defaultShippingAddressId) {
+              Emitter.emit("updateAllAddressesShipping", this.shippingAddressIds, this.defaultShippingAddressId);
+            }
+          } else if (addressType === "billing") {
+            if (this.defaultBillingAddressId) {
+              Emitter.emit("updateAllAddressesBilling", this.billingAddressIds, this.defaultBillingAddressId);
+            }
+          }
+        } else {
+          Alert.showAlert(true, "Address was not set as default");
+          throw new Error("Something is wrong");
+        }
+      } catch(err) {
         console.log(err);
       }
     }

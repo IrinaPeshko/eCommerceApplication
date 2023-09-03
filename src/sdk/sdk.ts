@@ -7,6 +7,8 @@ import {
   ChangeAddress,
   RemoveAddress,
   Tuple,
+  SetDefaultBilling,
+  SetDefaultShipping
 } from "../types/types";
 
 export function getProjectDetails() {
@@ -194,6 +196,23 @@ export function deleteAddress(
   version: number,
   id: string,
   addressObj: RemoveAddress[],
+) {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version,
+        actions: addressObj,
+      },
+    })
+    .execute();
+}
+export function setDefaultAddress(
+  version: number,
+  id: string,
+  addressObj: SetDefaultShipping[] | SetDefaultBilling[],
 ) {
   return apiRoot
     .withProjectKey({ projectKey })

@@ -51,6 +51,8 @@ export enum Actions {
   addaddress = "addAddress",
   addshippingaddress = "addShippingAddressId",
   addbillingaddress = "addBillingAddressId",
+  setdefaultbilling = "setDefaultBillingAddress",
+  setdefaultshipping = "setDefaultShippingAddress"
 }
 export enum Countries {
   BY = "Belarus",
@@ -83,4 +85,14 @@ export interface AddBillingAddress {
   action: Actions.addbillingaddress;
   addressKey: string;
 }
+export interface SetDefaultBilling {
+  action: Actions.setdefaultbilling;
+  addressKey: string;
+}
+export interface SetDefaultShipping {
+  action: Actions.setdefaultshipping;
+  addressKey: string;
+}
 export type Tuple = [AddAddress, AddShippingAddress | AddBillingAddress];
+export type ShippingAddress = string;
+export type BillingAddress = string;

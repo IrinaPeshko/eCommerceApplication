@@ -5,8 +5,7 @@ import {
   Actions,
   UpdateEmail,
   Obj,
-  Tuple,
-  // Address,
+  Tuple
 } from "../../../types/types";
 import Validate from "../../utils/validation";
 import {
@@ -35,7 +34,7 @@ export default class Profile {
     private addresses: Address[],
     private shippingAddressIds: string[],
     private billingAddressIds: string[],
-    private defaultShippingAddressId: string | undefined,
+    private defaultShippingAddressId?: string | undefined,
     private defaultBillingAddressId?: string | undefined,
   ) {
     this.id = id;
@@ -52,6 +51,16 @@ export default class Profile {
     this.activeAsideTab = null;
     Emitter.on("updateVersionFromAside", (versionFromAside: number): void => {
       this.version = versionFromAside;
+    });
+    Emitter.on("updateAllAddressesShipping", (shippingIds: string[], defaultShippingId: string): void => {
+      this.shippingAddressIds = shippingIds;
+      this.defaultShippingAddressId = defaultShippingId;
+      this.updateAddresses();
+    });
+    Emitter.on("updateAllAddressesBilling", (billingIds: string[], defaultBillingId: string): void => {
+      this.billingAddressIds = billingIds;
+      this.defaultShippingAddressId = defaultBillingId;
+      this.updateAddresses();
     });
   }
 
@@ -98,24 +107,24 @@ export default class Profile {
           this.id,
           address,
           elemID,
+          this.shippingAddressIds,
+          this.billingAddressIds,
+          this.defaultShippingAddressId ? this.defaultShippingAddressId : undefined,
+          this.defaultBillingAddressId ? this.defaultBillingAddressId : undefined
         );
         if (address.id) {
           if (this.shippingAddressIds.indexOf(address.id) !== -1) {
-            // if (this.defaultShippingAddressId) {
             if (address.id === this.defaultShippingAddressId) {
               shippingAddressesBlock.prepend(newAddress.createAddress());
             } else {
               shippingAddressesBlock.append(newAddress.createAddress());
             }
-            // }
           } else if (this.billingAddressIds.indexOf(address.id) !== -1) {
-            // if (this.defaultBillingAddressId) {
             if (address.id === this.defaultBillingAddressId) {
               billingAddressesBlock.prepend(newAddress.createAddress());
             } else {
               billingAddressesBlock.append(newAddress.createAddress());
             }
-            // }
           } else {
             addressesWrapper.append(newAddress.createAddress());
           }
@@ -612,6 +621,4 @@ export default class Profile {
   }
 }
 // TODO:
-// проверить postalCodes в Addresses;
-// запускать все при перезагрузке;
-// дефолтные адреса(отмечать и выбрать)
+// скрывать при изменении email\пароль и сбрасывать классы и чекбоксы;

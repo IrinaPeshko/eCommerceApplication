@@ -67,7 +67,7 @@ h6 {
   color: #fff;
   background-color: black;
   font-size: 18px;
-  font-family: "Oswald Medium";
+  font-family: "Oswald Medium", Arial, sans-serif;
   line-height: normal;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -114,29 +114,6 @@ h6 {
 main {
   width: 100%;
   flex: 1 0 auto;
-}
-
-.breadcrumbs {
-  text-align: center;
-  font-family: Roboto;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 485%;
-  color: $color3;
-  list-style: none;
-  padding: 0;
-  * {
-    display: inline-block;
-    a {
-      color: inherit;
-      &:hover {
-        color: #000;
-      }
-    }
-  }
-  li:not(:last-child)::after {
-    content: " / ";
-  }
 }
 
 h1 {
@@ -524,6 +501,23 @@ input:read-only,
     display: inline-flex;
     align-items: center;
     column-gap: 10px;
+  }
+  & .address__default-btn {
+    border: none;
+    background-color: #e6f1fa;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5.1px 10px;
+    &:hover {
+      cursor: pointer;
+      background-color: #d0e4f2;
+    }
+  }
+  & .address__default-mark {
+    display: inline-block;
+    width: 97.3px;
+    text-align: center;
+    color: #828282;
   }
 }
 
