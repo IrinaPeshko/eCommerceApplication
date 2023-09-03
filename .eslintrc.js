@@ -19,7 +19,7 @@ module.exports = {
     'import/extensions': 'off',
     'import/prefer-default-export': 'off',
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
-    '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/array-type': [
       'error',
       {

@@ -9,7 +9,11 @@ export default class Validate {
   }
 
   public validateText(): void {
-    if (!this.target.value || this.target.value === "") {
+    if (
+      (!this.target.value || this.target.value === "") &&
+      (!this.target.id.includes("building") ||
+        !this.target.id.includes("apartment"))
+    ) {
       this.error("This is a required field.");
     } else {
       const reg = /^[ёЁA-zА-я ]+$/;
@@ -32,6 +36,20 @@ export default class Validate {
           }
         } else if (this.target.id === "shipping_postal_code") {
           country = document.getElementById("shipping_country");
+          if (country) {
+            countryVal = (country as HTMLSelectElement).value;
+            if (this.target.value !== "") {
+              if (!postcodeValidator(this.target.value, countryVal)) {
+                this.error("Incorrect postcode.");
+              } else {
+                this.valid("Correct postcode!");
+              }
+            } else {
+              this.error("This is a required field.");
+            }
+          }
+        } else if (this.target.id === "postal_code") {
+          country = document.getElementById("country");
           if (country) {
             countryVal = (country as HTMLSelectElement).value;
             if (this.target.value !== "") {

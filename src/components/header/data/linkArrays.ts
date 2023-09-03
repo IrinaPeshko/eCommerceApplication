@@ -6,6 +6,7 @@ import Registration from "../../pages/registration/registration";
 import setShippingDefault from "../../pages/registration/select default address checkbox/setDefaultShipping";
 /* eslint-disable import/no-cycle */
 import Login from "../../pages/login/login";
+import Profile from "../../pages/profile/profile";
 import { routeforOtherLink } from "../../utils/router";
 import HeaderView from "../header";
 import {
@@ -15,7 +16,8 @@ import {
 } from "../../pages/catalog/catalog";
 import { visualeFilterCards } from "../../pages/catalog/ilterBtnClick";
 import { getCategoryPath } from "../../pages/catalog/getCategoryPath";
-import { getCategories } from "../../../sdk/sdk";
+import { getUserById, getCategories } from "../../../sdk/sdk";
+import { Address } from "../../../types/types";
 import { Category } from "../../../types/catalog/catalogTypes";
 
 const namePage = {
@@ -24,7 +26,7 @@ const namePage = {
   LOGOUT: "LOG OUT",
   CREATEACCOUNT: "CREATE ACCOUNT",
   CATALOG: "CATALOG",
-  USER: "USER",
+  PROFILE: "PROFILE",
   BASKET: "BASKET",
   ABOUT: "ABOUT US",
   PRODUCT: "PRODUCT",
@@ -263,7 +265,7 @@ m1653 -377 c75 -32 122 -103 122 -185 0 -138 -132 -233 -261 -188 -55 19 -88
     },
   },
   {
-    name: namePage.CREATEACCOUNT,
+    name: namePage.PROFILE,
     classList: ["account__item", "account__create", "active"],
     innerHTML: `<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
  width="40px" height="40px" viewBox="0 0 64.000000 64.000000"
@@ -312,7 +314,57 @@ fill="#ffffff" stroke="none">
 </g>
 </svg>`,
     href: "/profile",
-    callback: (): void => {},
+    callback: async (): Promise<void> => {
+      const id: string | null = localStorage.getItem("id");
+      if (id) {
+        const getUserData = await getUserById(id)
+          .then((res) => {
+            if (res.statusCode !== 400) {
+              const {
+                firstName,
+                lastName,
+                dateOfBirth,
+                email,
+                password,
+                version,
+                addresses,
+                defaultShippingAddressId,
+                defaultBillingAddressId,
+                shippingAddressIds,
+                billingAddressIds,
+              } = res.body;
+              if (
+                firstName &&
+                lastName &&
+                dateOfBirth &&
+                email &&
+                password &&
+                version &&
+                addresses &&
+                shippingAddressIds &&
+                billingAddressIds
+              ) {
+                const profilePage = new Profile(
+                  id,
+                  firstName,
+                  lastName,
+                  dateOfBirth,
+                  email,
+                  version,
+                  addresses as Address[],
+                  shippingAddressIds,
+                  billingAddressIds,
+                  defaultShippingAddressId,
+                  defaultBillingAddressId,
+                );
+                profilePage.init();
+              }
+            }
+          })
+          .catch((err) => console.log(err));
+        console.log(getUserData);
+      }
+    },
   },
   {
     name: namePage.BASKET,

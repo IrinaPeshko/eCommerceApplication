@@ -1,6 +1,13 @@
 import { ApiRoot } from "@commercetools/platform-sdk";
 import { apiRoot, projectKey } from "./commercetoolsApiRoot";
-import { Address } from "../types/types";
+import {
+  Address,
+  UpdateData,
+  UpdateEmail,
+  ChangeAddress,
+  RemoveAddress,
+  Tuple,
+} from "../types/types";
 
 export function getProjectDetails() {
   return apiRoot.withProjectKey({ projectKey }).get().execute();
@@ -36,6 +43,15 @@ export function registerUser(
         defaultShippingAddress: 0,
       },
     })
+    .execute();
+}
+
+export function getUserById(id: string) {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: id })
+    .get()
     .execute();
 }
 
@@ -90,6 +106,107 @@ export function registerUser2(
     })
     .execute();
 }
+export function updateCustomer(
+  id: string,
+  customersUpdate: UpdateData[],
+  version: number,
+) {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version,
+        actions: customersUpdate,
+      },
+    })
+    .execute();
+}
+export function updateCustomerEmail(
+  id: string,
+  customersUpdate: UpdateEmail[],
+  version: number,
+) {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version,
+        actions: customersUpdate,
+      },
+    })
+    .execute();
+}
+export function changeCustomerPassword(
+  id: string,
+  currentpassword: string,
+  newpassword: string,
+  version: number,
+) {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .password()
+    .post({
+      body: {
+        id,
+        version,
+        currentPassword: currentpassword,
+        newPassword: newpassword,
+      },
+    })
+    .execute();
+}
+export function changeAddress(
+  version: number,
+  id: string,
+  addressObj: ChangeAddress[],
+) {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version,
+        actions: addressObj,
+      },
+    })
+    .execute();
+}
+export function addAddress(version: number, id: string, addressObj: Tuple) {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version,
+        actions: addressObj,
+      },
+    })
+    .execute();
+}
+export function deleteAddress(
+  version: number,
+  id: string,
+  addressObj: RemoveAddress[],
+) {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version,
+        actions: addressObj,
+      },
+    })
+    .execute();
+}
 
 export async function getSerchingProducts(
   filterParams: string[],
@@ -109,7 +226,7 @@ export async function getSerchingProducts(
     .execute();
 }
 
-export async function getProducts() {
+export function getProducts() {
   return apiRoot.withProjectKey({ projectKey }).products().get().execute();
 }
 
