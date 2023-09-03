@@ -1,4 +1,4 @@
-import { getCategories, getProducts } from "../../../sdk/sdk";
+import { getCategories, getSerchingProducts } from "../../../sdk/sdk";
 /* eslint-disable import/no-cycle */
 import { routeToNotAnchor } from "../../utils/router";
 import {
@@ -24,13 +24,32 @@ export function visualeCards() {
         checkbox.checked = false;
       }
     }
-    getProducts().then((res) => {
+    const sortSelect = document.getElementById("sort-select");
+    let sortParam = "";
+    if (sortSelect instanceof HTMLSelectElement) {
+      if (sortSelect.value === "name-asc") {
+        sortParam = "name.en asc";
+      } else if (sortSelect.value === "name-desc") {
+        sortParam = "name.en desc";
+      } else if (sortSelect.value === "price-desc") {
+        sortParam = "price desc";
+      } else {
+        sortParam = "price asc";
+      }
+    }
+    const params: string[] = [];
+    const selectedEl = document.querySelector(".selected");
+    if (selectedEl) {
+      const key = selectedEl.getAttribute("key");
+      params.push(`variants.categories.id:"${key}"`);
+    }
+    getSerchingProducts(params, sortParam).then((res) => {
       const arrProducts = res.body.results;
       arrProducts.forEach((el) => {
-        const name = el.masterData.current.name.en;
-        const description = el.masterData.current.metaDescription?.en;
-        const imagesArr = el.masterData.current.masterVariant.images;
-        const pricesArr = el.masterData.current.masterVariant.prices;
+        const name = el.name.en;
+        const description = el.description?.en;
+        const imagesArr = el.masterVariant.images;
+        const pricesArr = el.masterVariant.prices;
         let discount: string | undefined = "";
         const { id } = el;
         if (pricesArr) {
@@ -93,6 +112,11 @@ export function onFilterBtnClick() {
   }
   if (container) {
     container.innerHTML = "";
+  }
+  const selectedCategory = document.querySelector(".selected");
+  if (selectedCategory) {
+    const selctedKey = selectedCategory.getAttribute("key");
+    params.push(`variants.categories.id:"${selctedKey}"`);
   }
   visualeFilterCards(params);
 }

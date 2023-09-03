@@ -19,7 +19,7 @@
             padding: 10px 20px;
             display: inline-block;
             font-size: 16px;
-            color:#868686;
+            color: #868686;
             @media (max-width: 680px) {
               padding: 5px 7px;
               display: inline-block;
@@ -48,7 +48,7 @@
   opacity: 0;
   @media (max-width: 680px) {
     min-width: 110px;
-    padding-left: 0px;;
+    padding-left: 0px;
   }
   .catalog__breadcrumbs-item {
     position: relative;
@@ -218,5 +218,22 @@
     color: red;
     padding-left: 10px;
     margin: 20px 0;
+  }
+}
+
+.catalog__sorting {
+  margin-bottom: 20px;
+
+  label {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+
+  select {
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
   }
 }

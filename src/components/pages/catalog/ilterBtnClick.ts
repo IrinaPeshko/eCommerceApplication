@@ -3,11 +3,24 @@ import { creatCard } from "./createCard";
 
 export function visualeFilterCards(params: string[]) {
   const container = document.querySelector(".catalog__products");
+  const sortSelect = document.getElementById("sort-select");
   if (container) {
     container.innerHTML = "";
   }
+  let sortParam = "";
+  if (sortSelect instanceof HTMLSelectElement) {
+    if (sortSelect.value === "name-asc") {
+      sortParam = "name.en asc";
+    } else if (sortSelect.value === "name-desc") {
+      sortParam = "name.en desc";
+    } else if (sortSelect.value === "price-desc") {
+      sortParam = "price desc";
+    } else {
+      sortParam = "price asc";
+    }
+  }
   try {
-    getSerchingProducts(params).then((res) => {
+    getSerchingProducts(params, sortParam).then((res) => {
       const arrProducts = res.body.results;
       arrProducts.forEach((el) => {
         const name = el.name.en;

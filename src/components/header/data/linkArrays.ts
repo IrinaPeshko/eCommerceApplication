@@ -350,6 +350,18 @@ export const pages: link[] = [
         ".catalog__catigories",
       );
       categoriesContainer?.addEventListener("click", (event) => {
+        const inputs = document.querySelectorAll(".form__checkbox");
+        inputs.forEach((el) => {
+          if (el instanceof HTMLInputElement) {
+            el.checked = false;
+          }
+        });
+        const itemArr = Array.from(
+          document.querySelectorAll(".catalog__breadcrumbs-item"),
+        );
+        itemArr.forEach((el) => {
+          el.classList.remove("selected");
+        });
         const categories: Record<string, Category> = {};
         async function getCategoriesArr() {
           const categoriesRes = await getCategories();
@@ -364,6 +376,14 @@ export const pages: link[] = [
           });
           const el = event.target;
           if (el instanceof HTMLElement) {
+            if (el.tagName === "A") {
+              const { parentElement } = el;
+              if (parentElement) {
+                parentElement.classList.add("selected");
+              }
+            } else {
+              el.classList.add("selected");
+            }
             const key = el.getAttribute("key");
             const categoryPathElement = document.getElementById("categoryPath");
             if (categoryPathElement && key) {
@@ -375,6 +395,18 @@ export const pages: link[] = [
         }
         getCategoriesArr();
       });
+      const sortSelect = document.getElementById("sort-select");
+      if (sortSelect instanceof HTMLSelectElement) {
+        sortSelect?.addEventListener("change", () => {
+          const selected = document.querySelector(".selected");
+          if (selected) {
+            const categoryKey = selected.getAttribute("key");
+            visualeFilterCards([`variants.categories.id:"${categoryKey}"`]);
+          } else {
+            visualeFilterCards([]);
+          }
+        });
+      }
     },
   },
 ];

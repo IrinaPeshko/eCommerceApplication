@@ -91,7 +91,10 @@ export function registerUser2(
     .execute();
 }
 
-export async function getSerchingProducts(filterParams: string[]) {
+export async function getSerchingProducts(
+  filterParams: string[],
+  sortParam: string,
+) {
   return apiRoot
     .withProjectKey({ projectKey })
     .productProjections()
@@ -99,6 +102,8 @@ export async function getSerchingProducts(filterParams: string[]) {
     .get({
       queryArgs: {
         filter: filterParams,
+        sort: sortParam,
+        // sort: "name.en asc",
       },
     })
     .execute();
