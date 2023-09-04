@@ -59,8 +59,8 @@
                 <form class="form profile__form">
                     <fieldset class="form__section profile__form-section">
                         <div class="form__form-header-wrapper">
-                            <legend class="form__subtitle profile__subtitle">Account information</legend>
-                            <button class="edit-btn"></button>
+                            <legend class="form__subtitle profile__subtitle">Email</legend>
+                            <button class="edit-btn" data-btntype="email"></button>
                         </div>
                         <p class="form__wrapper">
                             <label class="form__label" for="email">Email</label>
@@ -69,6 +69,16 @@
                                 <span class="form__message" aria-live="polite"></span>
                             </span>
                         </p>
+                    </fieldset>
+                    <button class="btn profile__save-btn profile__save-btn--hidden" id="email_save_btn" type="submit">Save</button>
+                </form>
+                <hr class="profile__line">
+                <form class="form profile__form">
+                    <fieldset class="form__section profile__form-section">
+                        <div class="form__form-header-wrapper">
+                            <legend class="form__subtitle profile__subtitle">Password</legend>
+                            <button class="edit-btn" data-btntype="password"></button>
+                        </div>
                         <p class="form__wrapper">
                             <label class="form__label" for="curr-password">Current Password</label>
                             <span class="form__input-wrapper profile__input-wrapper password">
@@ -85,22 +95,8 @@
                                 <span class="password__btn"><img src="../assets/icons/211739_eye_icon.svg" alt="eye"></span>
                             </span>
                         </p>
-                        <div class="form__checkboxes-wrapper form__checkboxes-wrapper--hidden">
-                            <p class="form__checkbox-wrapper">
-                                <label class="form__checkbox-label" for="profile_change_email" name="change_data">
-                                    <input class="form__checkbox" id="profile_change_email" name="changeEmail" type="checkbox">
-                                    <span class="form__checkbox-indicator"></span>
-                            Change Email</label>
-                            </p>
-                            <p class="form__checkbox-wrapper">
-                                <label class="form__checkbox-label" for="profile_change_password" name="change_data">
-                                    <input class="form__checkbox" id="profile_change_password" name="chanhePassword" type="checkbox">
-                                    <span class="form__checkbox-indicator"></span>
-                            Change Password</label>
-                            </p>
-                        </div>
                     </fieldset>
-                    <button class="btn profile__save-btn profile__save-btn--hidden" id="account_btn" type="submit">Save</button>
+                    <button class="btn profile__save-btn profile__save-btn--hidden" id="password_save_btn" type="submit">Save</button>
                 </form>
             </div>
             <div class="profile__data" id="addresses" role="tabpanel" aria-labelledby="tab3" hidden>

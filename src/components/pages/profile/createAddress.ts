@@ -7,10 +7,14 @@ import {
   Actions,
   AddressData,
   SetDefaultBilling,
-  SetDefaultShipping
+  SetDefaultShipping,
 } from "../../../types/types";
 import Aside from "../../aside/aside";
-import { changeAddress, deleteAddress, setDefaultAddress } from "../../../sdk/sdk";
+import {
+  changeAddress,
+  deleteAddress,
+  setDefaultAddress,
+} from "../../../sdk/sdk";
 import { createaAddressTemplate } from "./templates";
 import Alert from "../../alerts/alert";
 import { Emitter } from "../../utils/eventEmitter";
@@ -24,7 +28,7 @@ export default class NewAddress {
     private shippingAddressIds: string[],
     private billingAddressIds: string[],
     private defaultShippingAddressId: string | undefined,
-    private defaultBillingAddressId: string | undefined
+    private defaultBillingAddressId: string | undefined,
   ) {
     this.id = id;
     this.version = version;
@@ -311,25 +315,36 @@ export default class NewAddress {
 
   private async addAsDefaultAddress(addressType: string): Promise<void> {
     if (this.address.key && this.id && this.version) {
-      const addDefaultAddressObj: SetDefaultShipping[] | SetDefaultBilling[] = addressType === "shipping" ?
-      [{
-        action: Actions.setdefaultshipping,
-        addressKey: this.address.key
-      }] :
-      [{
-        action: Actions.setdefaultbilling,
-        addressKey: this.address.key
-      }];
+      const addDefaultAddressObj: SetDefaultShipping[] | SetDefaultBilling[] =
+        addressType === "shipping"
+          ? [
+              {
+                action: Actions.setdefaultshipping,
+                addressKey: this.address.key,
+              },
+            ]
+          : [
+              {
+                action: Actions.setdefaultbilling,
+                addressKey: this.address.key,
+              },
+            ];
       try {
         const setDefaultCurrAddress = await setDefaultAddress(
           this.version,
           this.id,
-          addDefaultAddressObj
+          addDefaultAddressObj,
         );
         if (setDefaultCurrAddress.statusCode !== 400) {
           Alert.showAlert(false, "Address successfully set as default");
           console.log(setDefaultCurrAddress.body);
-          const { version, billingAddressIds, shippingAddressIds, defaultBillingAddressId, defaultShippingAddressId} = setDefaultCurrAddress.body;
+          const {
+            version,
+            billingAddressIds,
+            shippingAddressIds,
+            defaultBillingAddressId,
+            defaultShippingAddressId,
+          } = setDefaultCurrAddress.body;
           this.version = version;
           if (billingAddressIds) {
             this.billingAddressIds = billingAddressIds;
@@ -342,18 +357,26 @@ export default class NewAddress {
           Emitter.emit("updateVersionFromAside", this.version);
           if (addressType === "shipping") {
             if (this.defaultShippingAddressId) {
-              Emitter.emit("updateAllAddressesShipping", this.shippingAddressIds, this.defaultShippingAddressId);
+              Emitter.emit(
+                "updateAllAddressesShipping",
+                this.shippingAddressIds,
+                this.defaultShippingAddressId,
+              );
             }
           } else if (addressType === "billing") {
             if (this.defaultBillingAddressId) {
-              Emitter.emit("updateAllAddressesBilling", this.billingAddressIds, this.defaultBillingAddressId);
+              Emitter.emit(
+                "updateAllAddressesBilling",
+                this.billingAddressIds,
+                this.defaultBillingAddressId,
+              );
             }
           }
         } else {
           Alert.showAlert(true, "Address was not set as default");
           throw new Error("Something is wrong");
         }
-      } catch(err) {
+      } catch (err) {
         console.log(err);
       }
     }

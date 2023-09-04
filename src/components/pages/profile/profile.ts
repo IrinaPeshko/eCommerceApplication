@@ -5,7 +5,7 @@ import {
   Actions,
   UpdateEmail,
   Obj,
-  Tuple
+  Tuple,
 } from "../../../types/types";
 import Validate from "../../utils/validation";
 import {
@@ -52,16 +52,22 @@ export default class Profile {
     Emitter.on("updateVersionFromAside", (versionFromAside: number): void => {
       this.version = versionFromAside;
     });
-    Emitter.on("updateAllAddressesShipping", (shippingIds: string[], defaultShippingId: string): void => {
-      this.shippingAddressIds = shippingIds;
-      this.defaultShippingAddressId = defaultShippingId;
-      this.updateAddresses();
-    });
-    Emitter.on("updateAllAddressesBilling", (billingIds: string[], defaultBillingId: string): void => {
-      this.billingAddressIds = billingIds;
-      this.defaultShippingAddressId = defaultBillingId;
-      this.updateAddresses();
-    });
+    Emitter.on(
+      "updateAllAddressesShipping",
+      (shippingIds: string[], defaultShippingId: string): void => {
+        this.shippingAddressIds = shippingIds;
+        this.defaultShippingAddressId = defaultShippingId;
+        this.updateAddresses();
+      },
+    );
+    Emitter.on(
+      "updateAllAddressesBilling",
+      (billingIds: string[], defaultBillingId: string): void => {
+        this.billingAddressIds = billingIds;
+        this.defaultShippingAddressId = defaultBillingId;
+        this.updateAddresses();
+      },
+    );
   }
 
   public setUserData(): void {
@@ -109,8 +115,12 @@ export default class Profile {
           elemID,
           this.shippingAddressIds,
           this.billingAddressIds,
-          this.defaultShippingAddressId ? this.defaultShippingAddressId : undefined,
-          this.defaultBillingAddressId ? this.defaultBillingAddressId : undefined
+          this.defaultShippingAddressId
+            ? this.defaultShippingAddressId
+            : undefined,
+          this.defaultBillingAddressId
+            ? this.defaultBillingAddressId
+            : undefined,
         );
         if (address.id) {
           if (this.shippingAddressIds.indexOf(address.id) !== -1) {
@@ -166,8 +176,10 @@ export default class Profile {
       document.querySelector(".profile__save-btn");
     const addBtn: HTMLButtonElement | null =
       document.querySelector(".profile__add-btn");
-    const profileSaveBtn: HTMLElement | null =
-      document.getElementById("account_btn");
+    const emailSaveBtn: HTMLElement | null =
+      document.getElementById("email_save_btn");
+    const passwordSaveBtn: HTMLElement | null =
+      document.getElementById("password_save_btn");
     const tabs: NodeListOf<HTMLElement> =
       document.querySelectorAll(".profile__link");
     const panels: NodeListOf<HTMLElement> =
@@ -191,12 +203,13 @@ export default class Profile {
           "click",
           (e: MouseEvent): void => {
             e.preventDefault();
-            if (
-              !(btn as HTMLButtonElement).classList.contains(
-                "address__edit-btn",
-              )
-            )
-              this.editMode();
+            if (!(btn as HTMLButtonElement).classList.contains("address__edit-btn")) {
+              if ((btn as HTMLButtonElement).dataset.btntype === "email" || (btn as HTMLButtonElement).dataset.btntype === "password") {
+                this.editMode(e.target as HTMLButtonElement);
+              } else {
+                this.editMode();
+              }
+            }
           },
         );
       });
@@ -206,12 +219,20 @@ export default class Profile {
         e.preventDefault();
         this.savePersonalData();
       });
-    if (profileSaveBtn)
-      (profileSaveBtn as HTMLButtonElement).addEventListener(
+    if (emailSaveBtn)
+      (emailSaveBtn as HTMLButtonElement).addEventListener(
         "click",
         (e: MouseEvent): void => {
           e.preventDefault();
-          this.saveAccountData();
+          this.changeEmail(e.target as HTMLButtonElement);
+        },
+      );
+      if (passwordSaveBtn)
+      (passwordSaveBtn as HTMLButtonElement).addEventListener(
+        "click",
+        (e: MouseEvent): void => {
+          e.preventDefault();
+          this.changePassword(e.target as HTMLButtonElement);
         },
       );
     if (addBtn) {
@@ -244,7 +265,7 @@ export default class Profile {
     this.updateAddresses();
   }
 
-  private editMode(): void {
+  private editMode(target?: HTMLButtonElement): void {
     const activeLink: Element | null = document.querySelector(
       ".profile__item > [aria-selected]",
     );
@@ -255,10 +276,27 @@ export default class Profile {
         }]`,
       );
       if (activePage) {
+      if (target) {
+        const formElem: HTMLFormElement | null = target.closest(".profile__form");
+          if (formElem) {
+            const fieldsArr: NodeListOf<Element> = formElem.querySelectorAll(".form__field");
+            const saveBtn: HTMLButtonElement | null = formElem.querySelector(".profile__save-btn");
+            fieldsArr.forEach((elem) => {
+              if ((elem as HTMLInputElement).readOnly === true) {
+                (elem as HTMLInputElement).readOnly = false;
+              } else {
+                (elem as HTMLInputElement).readOnly = true;
+              }
+            });
+            if (saveBtn) {
+              if (saveBtn.classList.contains("profile__save-btn--hidden"))
+                saveBtn.classList.remove("profile__save-btn--hidden");
+              else saveBtn.classList.add("profile__save-btn--hidden");
+            }
+          }
+      } else {
         const fieldsArr: NodeListOf<Element> =
           activePage.querySelectorAll(".form__field");
-        const checkboxesWrapper: HTMLDivElement | null =
-          activePage.querySelector(".form__checkboxes-wrapper");
         const saveBtn: HTMLButtonElement | null =
           activePage.querySelector(".profile__save-btn");
         fieldsArr.forEach((elem) => {
@@ -268,18 +306,6 @@ export default class Profile {
             (elem as HTMLInputElement).readOnly = true;
           }
         });
-        if (checkboxesWrapper) {
-          if (
-            checkboxesWrapper.classList.contains(
-              "form__checkboxes-wrapper--hidden",
-            )
-          )
-            checkboxesWrapper.classList.remove(
-              "form__checkboxes-wrapper--hidden",
-            );
-          else
-            checkboxesWrapper.classList.add("form__checkboxes-wrapper--hidden");
-        }
         if (saveBtn) {
           if (saveBtn.classList.contains("profile__save-btn--hidden"))
             saveBtn.classList.remove("profile__save-btn--hidden");
@@ -288,6 +314,7 @@ export default class Profile {
       }
     }
   }
+}
 
   public async savePersonalData(): Promise<void> {
     const firstNameField: HTMLElement | null =
@@ -494,22 +521,7 @@ export default class Profile {
     }
   }
 
-  private saveAccountData(): void {
-    const emailCheckbox: HTMLElement | null = document.getElementById(
-      "profile_change_email",
-    );
-    const passwordCheckbox: HTMLElement | null = document.getElementById(
-      "profile_change_password",
-    );
-    if ((emailCheckbox as HTMLInputElement).checked) {
-      this.changeEmail();
-    }
-    if ((passwordCheckbox as HTMLInputElement).checked) {
-      this.changePassword();
-    }
-  }
-
-  private async changeEmail(): Promise<void> {
+  private async changeEmail(target: HTMLButtonElement): Promise<void> {
     const emailField: HTMLElement | null =
       document.getElementById("profile_email");
     const updateEmail: UpdateEmail[] = [];
@@ -531,7 +543,10 @@ export default class Profile {
               this.version = version;
               Emitter.emit("updateVersion", this.version);
               this.email = email;
-              this.editMode();
+              this.editMode(target);
+              if ((emailField as HTMLInputElement).classList.contains("valid")) {
+                (emailField as HTMLInputElement).classList.remove("valid");
+              }
             } else {
               Alert.showAlert(true, "Email not updated");
               throw new Error("Email not be added");
@@ -543,7 +558,7 @@ export default class Profile {
     }
   }
 
-  private async changePassword(): Promise<void> {
+  private async changePassword(target: HTMLButtonElement): Promise<void> {
     const currentPassword: HTMLElement | null = document.getElementById(
       "profile_curr_password",
     );
@@ -562,9 +577,18 @@ export default class Profile {
       .then((res) => {
         if (res.statusCode !== 400) {
           Alert.showAlert(false, "Password succesfully changed");
+          (currentPassword as HTMLInputElement).value = "";
+          (newPassword as HTMLInputElement).value = "";
           const { version } = res.body;
           this.version = version;
           Emitter.emit("updateVersion", this.version);
+          this.editMode(target);
+          if ((currentPassword as HTMLInputElement).classList.contains("valid")) {
+            (currentPassword as HTMLInputElement).classList.remove("valid");
+          }
+          if ((newPassword as HTMLInputElement).classList.contains("valid")) {
+            (newPassword as HTMLInputElement).classList.remove("valid");
+          }
         } else {
           Alert.showAlert(true, "Password not changed");
           throw new Error("Password not changed");

@@ -8,7 +8,7 @@ import {
   RemoveAddress,
   Tuple,
   SetDefaultBilling,
-  SetDefaultShipping
+  SetDefaultShipping,
 } from "../types/types";
 
 export function getProjectDetails() {

@@ -52,7 +52,7 @@ export enum Actions {
   addshippingaddress = "addShippingAddressId",
   addbillingaddress = "addBillingAddressId",
   setdefaultbilling = "setDefaultBillingAddress",
-  setdefaultshipping = "setDefaultShippingAddress"
+  setdefaultshipping = "setDefaultShippingAddress",
 }
 export enum Countries {
   BY = "Belarus",
