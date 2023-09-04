@@ -82,7 +82,7 @@ export class Product {
     );
     Product.createSlides(data.slides, productPageSwiperMain);
 
-    Product.clickSlide(DOM.sliderMain, data.slidesPopap);
+    Product.clickSlide(DOM.sliderMain, data.slidesPopap, productPageSwiperMain);
 
     Product.showContent(DOM.name, data.name);
     Product.showContent(DOM.productBreadcrumbs, data.name);
@@ -134,18 +134,26 @@ export class Product {
   private static clickSlide(
     slider: Element | null,
     data: HTMLElement[] | undefined,
+    mainSlider: Swiper | Swiper[] | undefined
   ) {
     slider?.addEventListener("click", (e) => {
       if (
         e.target instanceof HTMLElement &&
-        e.target.classList.contains("product_page__img")
+        e.target.classList.contains("product_page__img") &&
+        mainSlider !== undefined &&
+        mainSlider instanceof Swiper
       ) {
+        const activeSlide = mainSlider.activeIndex;
+        productPageSwiperPopapSetting.initialSlide = activeSlide;
+
         Popap.open(productPopap);
         const productPageSwiperPopap = new Swiper(
           ".product_page__swiper-popap",
           productPageSwiperPopapSetting,
         );
+        productPageSwiperPopap.update();
         Product.createSlides(data, productPageSwiperPopap);
+        productPageSwiperPopap.controller.control = mainSlider;
       }
     });
   }
