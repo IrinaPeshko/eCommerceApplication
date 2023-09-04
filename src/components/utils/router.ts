@@ -141,4 +141,5 @@ export const routeToNotAnchor = (
   } else {
     handleLocation();
   }
+  window.scrollTo(0,0);
 };

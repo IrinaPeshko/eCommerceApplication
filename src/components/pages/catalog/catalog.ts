@@ -1,15 +1,13 @@
 import { getCategories, getSerchingProducts } from "../../../sdk/sdk";
-/* eslint-disable import/no-cycle */
-import { routeToNotAnchor } from "../../utils/router";
 import {
   createBrendFilterStr,
   createColorFilterStr,
   createPriceFilterStr,
   createSizeFilterStr,
 } from "./createAttributeParams";
+// eslint-disable-next-line import/no-cycle
 import { creatCard } from "./createCard";
 import { visualeFilterCards } from "./ilterBtnClick";
-import { product } from "../../header/data/linkArrays";
 import { createSubCategory } from "./createSubCategory";
 
 export function visualeCards() {
@@ -76,14 +74,6 @@ export function visualeCards() {
             container?.appendChild(card);
           }
         }
-      });
-      const cards = document.querySelectorAll(".catalog__card");
-      cards.forEach((el) => {
-        el.addEventListener("click", (ev) => {
-          const id = el.getAttribute("products");
-          const { callback } = product[0];
-          routeToNotAnchor(ev, "/product", callback.bind(null, `${id}`));
-        });
       });
     });
   } catch (error) {
