@@ -134,7 +134,7 @@ export class Product {
   private static clickSlide(
     slider: Element | null,
     data: HTMLElement[] | undefined,
-    mainSlider: Swiper | Swiper[] | undefined
+    mainSlider: Swiper | Swiper[] | undefined,
   ) {
     slider?.addEventListener("click", (e) => {
       if (

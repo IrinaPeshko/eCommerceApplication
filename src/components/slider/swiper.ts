@@ -3,7 +3,7 @@ import {
   Navigation,
   Pagination,
   Scrollbar,
-  Controller
+  Controller,
 } from "swiper/modules";
 
 export const productPageSwiperMainSetting = {
