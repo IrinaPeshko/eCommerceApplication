@@ -8,7 +8,6 @@ import AddressElem from "./address";
 import switchTab from "../../utils/switchTab";
 
 export default class Profile {
-
   constructor(
     private id: string,
     private firstName: string,
@@ -36,25 +35,44 @@ export default class Profile {
     Emitter.on("updateVersionFromAside", (versionFromAside: number): void => {
       this.version = versionFromAside;
     });
-    Emitter.on("updatePersonalData", (personalVersion: number, personalFirstName: string, personalLastName: string, personalDateOfBirth: string): void => {
-      this.version = personalVersion;
-      this.firstName = personalFirstName;
-      this.lastName = personalLastName;
-      this.dateOfBirth = personalDateOfBirth;
-    });
-    Emitter.on("updateEmail", (accountEmail: string, accountVersion: number): void => {
-      this.version = accountVersion;
-      this.email = accountEmail;
-    });
+    Emitter.on(
+      "updatePersonalData",
+      (
+        personalVersion: number,
+        personalFirstName: string,
+        personalLastName: string,
+        personalDateOfBirth: string,
+      ): void => {
+        this.version = personalVersion;
+        this.firstName = personalFirstName;
+        this.lastName = personalLastName;
+        this.dateOfBirth = personalDateOfBirth;
+      },
+    );
+    Emitter.on(
+      "updateEmail",
+      (accountEmail: string, accountVersion: number): void => {
+        this.version = accountVersion;
+        this.email = accountEmail;
+      },
+    );
     Emitter.on("updateCurrComponent", (currPage: HTMLElement) => {
       this.loadCurrPage(currPage);
     });
-    Emitter.on("updateAddressData", (addressVersion: number, addressAddresses: Address[], addressShippingAddressIds: string[], addressBillingAddressIds: string[]) => {
-      this.version = addressVersion;
-      this.addresses = addressAddresses;
-      this.shippingAddressIds = addressShippingAddressIds;
-      this.billingAddressIds = addressBillingAddressIds;
-    });
+    Emitter.on(
+      "updateAddressData",
+      (
+        addressVersion: number,
+        addressAddresses: Address[],
+        addressShippingAddressIds: string[],
+        addressBillingAddressIds: string[],
+      ) => {
+        this.version = addressVersion;
+        this.addresses = addressAddresses;
+        this.shippingAddressIds = addressShippingAddressIds;
+        this.billingAddressIds = addressBillingAddressIds;
+      },
+    );
     Emitter.on(
       "updateAllAddressesShipping",
       (shippingIds: string[], defaultShippingId: string): void => {
@@ -69,18 +87,31 @@ export default class Profile {
         this.defaultShippingAddressId = defaultBillingId;
       },
     );
-    Emitter.on("changeAdressFromAside", (changeVersion : number, changeAddresses: Address[]) => {
-      this.version = changeVersion;
-      this.addresses = changeAddresses;
-    });
-    Emitter.on("removeAddress", (changeVersion: number, changeAddresses: Address[], changeBillingAddressIds: string[], changeShippingAddressIds: string[], changeDefaultBillingAddressId: string | undefined, changeDefaultShippingAddressId: string | undefined) => {
-      this.version = changeVersion;
-      this.addresses = changeAddresses;
-      this.billingAddressIds = changeBillingAddressIds;
-      this.shippingAddressIds = changeShippingAddressIds;
-      this.defaultBillingAddressId = changeDefaultBillingAddressId;
-      this.defaultShippingAddressId = changeDefaultShippingAddressId;
-    });
+    Emitter.on(
+      "changeAdressFromAside",
+      (changeVersion: number, changeAddresses: Address[]) => {
+        this.version = changeVersion;
+        this.addresses = changeAddresses;
+      },
+    );
+    Emitter.on(
+      "removeAddress",
+      (
+        changeVersion: number,
+        changeAddresses: Address[],
+        changeBillingAddressIds: string[],
+        changeShippingAddressIds: string[],
+        changeDefaultBillingAddressId: string | undefined,
+        changeDefaultShippingAddressId: string | undefined,
+      ) => {
+        this.version = changeVersion;
+        this.addresses = changeAddresses;
+        this.billingAddressIds = changeBillingAddressIds;
+        this.shippingAddressIds = changeShippingAddressIds;
+        this.defaultBillingAddressId = changeDefaultBillingAddressId;
+        this.defaultShippingAddressId = changeDefaultShippingAddressId;
+      },
+    );
   }
 
   public validationForm(target: HTMLInputElement): void {
@@ -120,9 +151,9 @@ export default class Profile {
       ".profile__item > [aria-selected]",
     );
     if (initialActiveTab) {
-      const initialPage: HTMLElement | null = document.querySelector(`.profile__border-wrapper > [aria-labelledby = ${
-          initialActiveTab.id
-      }]`);
+      const initialPage: HTMLElement | null = document.querySelector(
+        `.profile__border-wrapper > [aria-labelledby = ${initialActiveTab.id}]`,
+      );
       if (initialPage) this.loadCurrPage(initialPage);
     }
     document.addEventListener("keyup", (e: Event): void => {
@@ -149,7 +180,7 @@ export default class Profile {
                 "address__edit-btn",
               )
             ) {
-                this.editMode(e.target as HTMLButtonElement);
+              this.editMode(e.target as HTMLButtonElement);
             }
           },
         );
@@ -225,20 +256,53 @@ export default class Profile {
     }
   }
 
-
   private loadCurrPage(currpage: HTMLElement): void {
     currpage.innerHTML = "";
-    const currPageAttr: string | null = currpage.getAttribute("aria-labelledby");
+    const currPageAttr: string | null =
+      currpage.getAttribute("aria-labelledby");
     if (currPageAttr) {
       switch (currPageAttr) {
-        case "tab1" : currpage.append(new Personal(this.firstName, this.lastName, this.dateOfBirth, this.id, this.version).createPersonal());
-        break;
-        case "tab2" : currpage.append(new Account(this.email, this.id, this.version).createAccount());
-        break;
-        case "tab3" : currpage.append(new AddressElem(this.addresses, this.shippingAddressIds, this.billingAddressIds, this.id, this.version, this.defaultShippingAddressId, this.defaultBillingAddressId).createAccount()); Emitter.emit("addressLoad");
-        break;
-        default: currpage.append(new Personal(this.firstName, this.lastName, this.dateOfBirth, this.id, this.version).createPersonal());
-        break;
+        case "tab1":
+          currpage.append(
+            new Personal(
+              this.firstName,
+              this.lastName,
+              this.dateOfBirth,
+              this.id,
+              this.version,
+            ).createPersonal(),
+          );
+          break;
+        case "tab2":
+          currpage.append(
+            new Account(this.email, this.id, this.version).createAccount(),
+          );
+          break;
+        case "tab3":
+          currpage.append(
+            new AddressElem(
+              this.addresses,
+              this.shippingAddressIds,
+              this.billingAddressIds,
+              this.id,
+              this.version,
+              this.defaultShippingAddressId,
+              this.defaultBillingAddressId,
+            ).createAccount(),
+          );
+          Emitter.emit("addressLoad");
+          break;
+        default:
+          currpage.append(
+            new Personal(
+              this.firstName,
+              this.lastName,
+              this.dateOfBirth,
+              this.id,
+              this.version,
+            ).createPersonal(),
+          );
+          break;
       }
     }
   }

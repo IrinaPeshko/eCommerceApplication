@@ -4,18 +4,24 @@ import { updateCustomer } from "../../../sdk/sdk";
 import { Emitter } from "../../utils/eventEmitter";
 
 export default class Personal {
-    constructor(private firstName: string, private lastName: string, private dateOfBirth: string, private id: string, private version: number) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
-        this.id = id;
-        this.version = version;
-    }
+  constructor(
+    private firstName: string,
+    private lastName: string,
+    private dateOfBirth: string,
+    private id: string,
+    private version: number,
+  ) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.dateOfBirth = dateOfBirth;
+    this.id = id;
+    this.version = version;
+  }
 
-    public createPersonal(): HTMLFormElement {
-        const form: HTMLFormElement = document.createElement("form");
-        form.className = "form profile__form profile__personal-form";
-        form.innerHTML = `
+  public createPersonal(): HTMLFormElement {
+    const form: HTMLFormElement = document.createElement("form");
+    form.className = "form profile__form profile__personal-form";
+    form.innerHTML = `
         <fieldset class="form__section profile__form-section">
             <div class="form__form-header-wrapper">
                 <legend class="form__subtitle profile__subtitle">Personal information</legend>
@@ -45,125 +51,133 @@ export default class Personal {
         </fieldset>
         <button class="btn profile__save-btn profile__save-btn--hidden" id="personal_btn" type="submit">Save</button>
         `;
-        form.addEventListener("click", (e: Event) => {
-            e.preventDefault();
-            const { target } = e;
-            if ((target as HTMLElement).tagName === "BUTTON") {
-                if ((target as HTMLElement).id === "personal_btn") {
-                    this.savePersonalData();
-                }
-                else if ((target as HTMLElement).id === "personal_edit_btn") {
-                    this.editPersonalData();
-                }
-            }
-        })
-        return form;
-    }
+    form.addEventListener("click", (e: Event) => {
+      e.preventDefault();
+      const { target } = e;
+      if ((target as HTMLElement).tagName === "BUTTON") {
+        if ((target as HTMLElement).id === "personal_btn") {
+          this.savePersonalData();
+        } else if ((target as HTMLElement).id === "personal_edit_btn") {
+          this.editPersonalData();
+        }
+      }
+    });
+    return form;
+  }
 
-    public async savePersonalData(): Promise<void> {
-        const firstNameField: HTMLElement | null =
-            document.getElementById("profile_name");
-        const lastNameField: HTMLElement | null =
-            document.getElementById("profile_last-name");
-        const birthdateField: HTMLElement | null =
-            document.getElementById("profile_birthdate");
-        const updateArr: UpdateData[] = [];
-        if (firstNameField && lastNameField && birthdateField) {
-            if (
-            (firstNameField as HTMLInputElement).value === this.firstName &&
-            (lastNameField as HTMLInputElement).value === this.lastName &&
-            (birthdateField as HTMLInputElement).value === this.dateOfBirth
-            ) {
-                this.editPersonalData();
-            } else {
-            if ((firstNameField as HTMLInputElement).value !== this.firstName) {
-                updateArr.push({
-                action: Actions.firstname,
-                firstName: `${(firstNameField as HTMLInputElement).value}`,
-                });
-            }
-            if ((lastNameField as HTMLInputElement).value !== this.lastName) {
-                updateArr.push({
-                action: Actions.lastname,
-                lastName: `${(lastNameField as HTMLInputElement).value}`,
-                });
-            }
-            if ((birthdateField as HTMLInputElement).value !== this.dateOfBirth) {
-                updateArr.push({
-                action: Actions.dateofbirth,
-                dateOfBirth: `${(birthdateField as HTMLInputElement).value}`,
-                });
-            }
-            const update = await updateCustomer(this.id, updateArr, this.version)
-                .then((res) => {
-                if (res.statusCode !== 400) {
-                    const { firstName, lastName, dateOfBirth, version } = res.body;
-                    if (firstName && lastName && dateOfBirth) {
-                        this.version = version;
-                        this.firstName = firstName;
-                        this.lastName = lastName;
-                        this.dateOfBirth = dateOfBirth;
-                        Emitter.emit("updatePersonalData", this.version, this.firstName, this,lastName, this.dateOfBirth);
-                    }
-                    Alert.showAlert(false, "Personal data successfully updated");
-                    this.updateUserData();
-                    this.editPersonalData();
-                } else {
-                    Alert.showAlert(true, "Personal data not updated");
-                    throw new Error("Personal data not changed");
-                }
-                })
-                .catch((err) => console.log(err));
-            console.log(update);
-            }
+  public async savePersonalData(): Promise<void> {
+    const firstNameField: HTMLElement | null =
+      document.getElementById("profile_name");
+    const lastNameField: HTMLElement | null =
+      document.getElementById("profile_last-name");
+    const birthdateField: HTMLElement | null =
+      document.getElementById("profile_birthdate");
+    const updateArr: UpdateData[] = [];
+    if (firstNameField && lastNameField && birthdateField) {
+      if (
+        (firstNameField as HTMLInputElement).value === this.firstName &&
+        (lastNameField as HTMLInputElement).value === this.lastName &&
+        (birthdateField as HTMLInputElement).value === this.dateOfBirth
+      ) {
+        this.editPersonalData();
+      } else {
+        if ((firstNameField as HTMLInputElement).value !== this.firstName) {
+          updateArr.push({
+            action: Actions.firstname,
+            firstName: `${(firstNameField as HTMLInputElement).value}`,
+          });
         }
-    }
-
-    private updateUserData(): void {
-        const firstNameField: HTMLElement | null =
-          document.getElementById("profile_name");
-        const lastNameField: HTMLElement | null =
-          document.getElementById("profile_last-name");
-        const birthdateField: HTMLElement | null =
-          document.getElementById("profile_birthdate");
-        if (firstNameField) {
-          (firstNameField as HTMLInputElement).value = this.firstName;
+        if ((lastNameField as HTMLInputElement).value !== this.lastName) {
+          updateArr.push({
+            action: Actions.lastname,
+            lastName: `${(lastNameField as HTMLInputElement).value}`,
+          });
         }
-        if (lastNameField) {
-          (lastNameField as HTMLInputElement).value = this.lastName;
+        if ((birthdateField as HTMLInputElement).value !== this.dateOfBirth) {
+          updateArr.push({
+            action: Actions.dateofbirth,
+            dateOfBirth: `${(birthdateField as HTMLInputElement).value}`,
+          });
         }
-        if (birthdateField) {
-          (birthdateField as HTMLInputElement).value = this.dateOfBirth;
-        }
-    }
-
-    private editPersonalData(): void {
-        const formElem: HTMLFormElement | null = document.querySelector(".profile__personal-form");
-        if (formElem) {
-            const fieldsArr: NodeListOf<Element> =
-              formElem.querySelectorAll(".form__field");
-            const saveBtn: HTMLButtonElement | null =
-              formElem.querySelector("#personal_btn");
-            fieldsArr.forEach((elem) => {
-              if ((elem as HTMLInputElement).readOnly === true) {
-                (elem as HTMLInputElement).readOnly = false;
-              } else {
-                (elem as HTMLInputElement).readOnly = true;
-                (elem as HTMLInputElement).classList.remove("valid");
-                (elem as HTMLInputElement).classList.remove("invalid");
-                if ((elem as HTMLInputElement).id === "profile_name")
-                    (elem as HTMLInputElement).value = this.firstName;
-                if ((elem as HTMLInputElement).id === "profile_last-name")
-                    (elem as HTMLInputElement).value = this.lastName;
-                if ((elem as HTMLInputElement).id === "profile_birthdate")
-                    (elem as HTMLInputElement).value = this.dateOfBirth;
+        const update = await updateCustomer(this.id, updateArr, this.version)
+          .then((res) => {
+            if (res.statusCode !== 400) {
+              const { firstName, lastName, dateOfBirth, version } = res.body;
+              if (firstName && lastName && dateOfBirth) {
+                this.version = version;
+                this.firstName = firstName;
+                this.lastName = lastName;
+                this.dateOfBirth = dateOfBirth;
+                Emitter.emit(
+                  "updatePersonalData",
+                  this.version,
+                  this.firstName,
+                  this,
+                  lastName,
+                  this.dateOfBirth,
+                );
               }
-            });
-            if (saveBtn) {
-              if (saveBtn.classList.contains("profile__save-btn--hidden"))
-                saveBtn.classList.remove("profile__save-btn--hidden");
-              else saveBtn.classList.add("profile__save-btn--hidden");
+              Alert.showAlert(false, "Personal data successfully updated");
+              this.updateUserData();
+              this.editPersonalData();
+            } else {
+              Alert.showAlert(true, "Personal data not updated");
+              throw new Error("Personal data not changed");
             }
-        }
+          })
+          .catch((err) => console.log(err));
+        console.log(update);
+      }
     }
+  }
+
+  private updateUserData(): void {
+    const firstNameField: HTMLElement | null =
+      document.getElementById("profile_name");
+    const lastNameField: HTMLElement | null =
+      document.getElementById("profile_last-name");
+    const birthdateField: HTMLElement | null =
+      document.getElementById("profile_birthdate");
+    if (firstNameField) {
+      (firstNameField as HTMLInputElement).value = this.firstName;
+    }
+    if (lastNameField) {
+      (lastNameField as HTMLInputElement).value = this.lastName;
+    }
+    if (birthdateField) {
+      (birthdateField as HTMLInputElement).value = this.dateOfBirth;
+    }
+  }
+
+  private editPersonalData(): void {
+    const formElem: HTMLFormElement | null = document.querySelector(
+      ".profile__personal-form",
+    );
+    if (formElem) {
+      const fieldsArr: NodeListOf<Element> =
+        formElem.querySelectorAll(".form__field");
+      const saveBtn: HTMLButtonElement | null =
+        formElem.querySelector("#personal_btn");
+      fieldsArr.forEach((elem) => {
+        if ((elem as HTMLInputElement).readOnly === true) {
+          (elem as HTMLInputElement).readOnly = false;
+        } else {
+          (elem as HTMLInputElement).readOnly = true;
+          (elem as HTMLInputElement).classList.remove("valid");
+          (elem as HTMLInputElement).classList.remove("invalid");
+          if ((elem as HTMLInputElement).id === "profile_name")
+            (elem as HTMLInputElement).value = this.firstName;
+          if ((elem as HTMLInputElement).id === "profile_last-name")
+            (elem as HTMLInputElement).value = this.lastName;
+          if ((elem as HTMLInputElement).id === "profile_birthdate")
+            (elem as HTMLInputElement).value = this.dateOfBirth;
+        }
+      });
+      if (saveBtn) {
+        if (saveBtn.classList.contains("profile__save-btn--hidden"))
+          saveBtn.classList.remove("profile__save-btn--hidden");
+        else saveBtn.classList.add("profile__save-btn--hidden");
+      }
+    }
+  }
 }

@@ -300,7 +300,14 @@ export default class NewAddress {
         if (removeCurrentAddress.statusCode !== 400) {
           // если дефолт
           Alert.showAlert(false, "Address successfully removed");
-          const { version, addresses, billingAddressIds, shippingAddressIds, defaultBillingAddressId, defaultShippingAddressId } = removeCurrentAddress.body;
+          const {
+            version,
+            addresses,
+            billingAddressIds,
+            shippingAddressIds,
+            defaultBillingAddressId,
+            defaultShippingAddressId,
+          } = removeCurrentAddress.body;
           this.version = version;
           if (billingAddressIds) {
             this.billingAddressIds = billingAddressIds;
@@ -310,7 +317,15 @@ export default class NewAddress {
           }
           this.defaultBillingAddressId = defaultBillingAddressId;
           this.defaultShippingAddressId = defaultShippingAddressId;
-          Emitter.emit("removeAddress", this.version, addresses, this.billingAddressIds, this.shippingAddressIds, this.defaultBillingAddressId, this.defaultShippingAddressId);
+          Emitter.emit(
+            "removeAddress",
+            this.version,
+            addresses,
+            this.billingAddressIds,
+            this.shippingAddressIds,
+            this.defaultBillingAddressId,
+            this.defaultShippingAddressId,
+          );
           if (currentAddressElem) currentAddressElem.remove();
         } else {
           Alert.showAlert(true, "Address not removed");

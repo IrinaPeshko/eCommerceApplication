@@ -10,59 +10,78 @@ import NewAddress from "./createAddress";
 import switchTab from "../../utils/switchTab";
 
 export default class AddressElem {
-    private activeAsideTab: HTMLElement | null;
+  private activeAsideTab: HTMLElement | null;
 
-    constructor(private addresses: Address[], private shippingAddressIds: string[], private billingAddressIds: string[],
-        private id: string, private version: number, private defaultShippingAddressId?: string | undefined,
-        private defaultBillingAddressId?: string | undefined) {
-        this.addresses = addresses;
-        this.defaultShippingAddressId = defaultShippingAddressId;
-        this.defaultBillingAddressId = defaultBillingAddressId;
-        this.shippingAddressIds = shippingAddressIds;
-        this.billingAddressIds = billingAddressIds;
-        this.id = id;
-        this.version = version;
-        this.activeAsideTab = null;
-        Emitter.on(
-            "updateAllAddressesShipping",
-            (shippingIds: string[], defaultShippingId: string): void => {
-              this.shippingAddressIds = shippingIds;
-              this.defaultShippingAddressId = defaultShippingId;
-              this.updateAddresses();
-            },
-          );
-          Emitter.on(
-            "updateAllAddressesBilling",
-            (billingIds: string[], defaultBillingId: string): void => {
-              this.billingAddressIds = billingIds;
-              this.defaultShippingAddressId = defaultBillingId;
-              this.updateAddresses();
-            },
-          );
-          Emitter.on("addressLoad", (): void => {
-            this.updateAddresses();
-          });
-          Emitter.on("updateAsideLink", (currTab: HTMLElement): void => {
-            this.activeAsideTab = currTab;
-          });
-          Emitter.on("changeAdressFromAside", (changeVersion : number, changeAddresses: Address[]) => {
-            this.version = changeVersion;
-            this.addresses = changeAddresses;
-          });
-          Emitter.on("removeAddress", (changeVersion: number, changeAddresses: Address[], changeBillingAddressIds: string[], changeShippingAddressIds: string[], changeDefaultBillingAddressId: string | undefined, changeDefaultShippingAddressId: string | undefined) => {
-            this.version = changeVersion;
-            this.addresses = changeAddresses;
-            this.billingAddressIds = changeBillingAddressIds;
-            this.shippingAddressIds = changeShippingAddressIds;
-            this.defaultBillingAddressId = changeDefaultBillingAddressId;
-            this.defaultShippingAddressId = changeDefaultShippingAddressId;
-          });
-    }
+  constructor(
+    private addresses: Address[],
+    private shippingAddressIds: string[],
+    private billingAddressIds: string[],
+    private id: string,
+    private version: number,
+    private defaultShippingAddressId?: string | undefined,
+    private defaultBillingAddressId?: string | undefined,
+  ) {
+    this.addresses = addresses;
+    this.defaultShippingAddressId = defaultShippingAddressId;
+    this.defaultBillingAddressId = defaultBillingAddressId;
+    this.shippingAddressIds = shippingAddressIds;
+    this.billingAddressIds = billingAddressIds;
+    this.id = id;
+    this.version = version;
+    this.activeAsideTab = null;
+    Emitter.on(
+      "updateAllAddressesShipping",
+      (shippingIds: string[], defaultShippingId: string): void => {
+        this.shippingAddressIds = shippingIds;
+        this.defaultShippingAddressId = defaultShippingId;
+        this.updateAddresses();
+      },
+    );
+    Emitter.on(
+      "updateAllAddressesBilling",
+      (billingIds: string[], defaultBillingId: string): void => {
+        this.billingAddressIds = billingIds;
+        this.defaultShippingAddressId = defaultBillingId;
+        this.updateAddresses();
+      },
+    );
+    Emitter.on("addressLoad", (): void => {
+      this.updateAddresses();
+    });
+    Emitter.on("updateAsideLink", (currTab: HTMLElement): void => {
+      this.activeAsideTab = currTab;
+    });
+    Emitter.on(
+      "changeAdressFromAside",
+      (changeVersion: number, changeAddresses: Address[]) => {
+        this.version = changeVersion;
+        this.addresses = changeAddresses;
+      },
+    );
+    Emitter.on(
+      "removeAddress",
+      (
+        changeVersion: number,
+        changeAddresses: Address[],
+        changeBillingAddressIds: string[],
+        changeShippingAddressIds: string[],
+        changeDefaultBillingAddressId: string | undefined,
+        changeDefaultShippingAddressId: string | undefined,
+      ) => {
+        this.version = changeVersion;
+        this.addresses = changeAddresses;
+        this.billingAddressIds = changeBillingAddressIds;
+        this.shippingAddressIds = changeShippingAddressIds;
+        this.defaultBillingAddressId = changeDefaultBillingAddressId;
+        this.defaultShippingAddressId = changeDefaultShippingAddressId;
+      },
+    );
+  }
 
-    public createAccount(): HTMLDivElement {
-        const wrapper: HTMLDivElement = document.createElement("div");
-        wrapper.className = "profile__addresses-wrapper";
-        wrapper.innerHTML = `
+  public createAccount(): HTMLDivElement {
+    const wrapper: HTMLDivElement = document.createElement("div");
+    wrapper.className = "profile__addresses-wrapper";
+    wrapper.innerHTML = `
         <div class="profile__adresses-header-wrapper">
             <h2 class="subtitle profile__subtitle">Address book</h2>
             <button class="add-btn profile__add-btn" id="add_address_btn" type="button"></button>
@@ -76,215 +95,221 @@ export default class AddressElem {
             <div class="profile__billing-addresses"></div>
         </div>
         `;
-        wrapper.addEventListener("click", (e: Event) => {
-            const { target } = e;
-            if ((target as HTMLElement).tagName === "BUTTON") {
-                if ((target as HTMLElement).id === "add_address_btn") {
-                    e.preventDefault();
-                    this.addNewAddress();
-                }
-                // else if ((target as HTMLElement).id === "password_save_btn") {
-                //     this.changePassword()
-                // }
-            }
-        });
-        this.updateAddresses();
-        return wrapper;
-    }
+    wrapper.addEventListener("click", (e: Event) => {
+      const { target } = e;
+      if ((target as HTMLElement).tagName === "BUTTON") {
+        if ((target as HTMLElement).id === "add_address_btn") {
+          e.preventDefault();
+          this.addNewAddress();
+        }
+        // else if ((target as HTMLElement).id === "password_save_btn") {
+        //     this.changePassword()
+        // }
+      }
+    });
+    this.updateAddresses();
+    return wrapper;
+  }
 
-    private addNewAddress(): void {
-        Aside.openAside(this.createNewAddressTemplate());
-        const asideElem: HTMLElement | null = document.querySelector(".aside");
-        if (asideElem) {
-          const asideTabs: NodeListOf<HTMLElement> =
-            asideElem.querySelectorAll(".aside__link");
-          const asidePanels: NodeListOf<HTMLElement> =
-            asideElem.querySelectorAll(".aside__panel");
-          this.activeAsideTab = asideElem.querySelector(
-            ".aside__item > [aria-selected]",
-          );
-          if (asideTabs) {
-            Array.prototype.forEach.call(asideTabs, (asideTab) => {
-              asideTab.addEventListener("click", (e: Event) => {
-                e.preventDefault();
-                randomKeyGenerator();
-                const activeTab: HTMLElement | null = this.activeAsideTab;
-                if (e.target !== activeTab) {
-                  if (activeTab) {
-                    switchTab(
-                      e.target as HTMLElement,
-                      activeTab,
-                      asideTabs,
-                      asidePanels,
-                      "aside__link--active",
-                      this.activeAsideTab
-                    );
-                  }
-                }
-              });
-            });
-          }
-          asideElem.addEventListener("click", (e: Event): void => {
+  private addNewAddress(): void {
+    Aside.openAside(this.createNewAddressTemplate());
+    const asideElem: HTMLElement | null = document.querySelector(".aside");
+    if (asideElem) {
+      const asideTabs: NodeListOf<HTMLElement> =
+        asideElem.querySelectorAll(".aside__link");
+      const asidePanels: NodeListOf<HTMLElement> =
+        asideElem.querySelectorAll(".aside__panel");
+      this.activeAsideTab = asideElem.querySelector(
+        ".aside__item > [aria-selected]",
+      );
+      if (asideTabs) {
+        Array.prototype.forEach.call(asideTabs, (asideTab) => {
+          asideTab.addEventListener("click", (e: Event) => {
             e.preventDefault();
-            e.stopPropagation();
-            if ((e.target as HTMLElement).tagName === "BUTTON") {
-              if (
-                (e.target as HTMLElement).dataset.action === "saveshippingaddress"
-              ) {
-                this.addAddressAction("shipping");
-              } else if (
-                (e.target as HTMLElement).dataset.action === "savebillingaddress"
-              ) {
-                this.addAddressAction("billing");
+            randomKeyGenerator();
+            const activeTab: HTMLElement | null = this.activeAsideTab;
+            if (e.target !== activeTab) {
+              if (activeTab) {
+                switchTab(
+                  e.target as HTMLElement,
+                  activeTab,
+                  asideTabs,
+                  asidePanels,
+                  "aside__link--active",
+                  this.activeAsideTab,
+                );
               }
             }
           });
+        });
+      }
+      asideElem.addEventListener("click", (e: Event): void => {
+        e.preventDefault();
+        e.stopPropagation();
+        if ((e.target as HTMLElement).tagName === "BUTTON") {
+          if (
+            (e.target as HTMLElement).dataset.action === "saveshippingaddress"
+          ) {
+            this.addAddressAction("shipping");
+          } else if (
+            (e.target as HTMLElement).dataset.action === "savebillingaddress"
+          ) {
+            this.addAddressAction("billing");
+          }
         }
+      });
     }
+  }
 
-    private async addAddressAction(addressType: string): Promise<void> {
-        if (this.activeAsideTab) {
-          const activeAsidePage: HTMLElement | null = document.querySelector(
-            `.aside__content > [aria-labelledby = ${this.activeAsideTab.id}]`,
+  private async addAddressAction(addressType: string): Promise<void> {
+    if (this.activeAsideTab) {
+      const activeAsidePage: HTMLElement | null = document.querySelector(
+        `.aside__content > [aria-labelledby = ${this.activeAsideTab.id}]`,
+      );
+      if (activeAsidePage) {
+        const form: HTMLFormElement | null =
+          activeAsidePage.querySelector(".aside__form");
+        const addressData: Obj = {};
+        if (form) {
+          const fields: NodeListOf<Element> = form.querySelectorAll(
+            ".form__field[required]",
           );
-          if (activeAsidePage) {
-            const form: HTMLFormElement | null =
-              activeAsidePage.querySelector(".aside__form");
-            const addressData: Obj = {};
-            if (form) {
-              const fields: NodeListOf<Element> = form.querySelectorAll(
-                ".form__field[required]",
-              );
-              if (fields) {
-                const fieldsArr: Element[] = Array.from(fields);
-                if (
-                  fieldsArr.every((elem): boolean =>
-                    elem.classList.contains("valid"),
-                  )
-                ) {
-                  const data = new FormData(form);
-                  for (const val of data.entries()) {
-                    const key: string = val[0];
-                    const newVal: string = val[1] as string;
-                    addressData[`${key}`] = newVal;
-                  }
-                  const {
-                    countryCode,
+          if (fields) {
+            const fieldsArr: Element[] = Array.from(fields);
+            if (
+              fieldsArr.every((elem): boolean =>
+                elem.classList.contains("valid"),
+              )
+            ) {
+              const data = new FormData(form);
+              for (const val of data.entries()) {
+                const key: string = val[0];
+                const newVal: string = val[1] as string;
+                addressData[`${key}`] = newVal;
+              }
+              const {
+                countryCode,
+                streetName,
+                building,
+                apartment,
+                city,
+                postalCode,
+              } = addressData;
+              const newKey: string = randomKeyGenerator();
+              const newAddressObj: Tuple = [
+                {
+                  action: Actions.addaddress,
+                  address: {
+                    key: newKey,
+                    country: countryCode,
+                    city,
+                    postalCode,
                     streetName,
                     building,
                     apartment,
-                    city,
-                    postalCode,
-                  } = addressData;
-                  const newKey: string = randomKeyGenerator();
-                  const newAddressObj: Tuple = [
-                    {
-                      action: Actions.addaddress,
-                      address: {
-                        key: newKey,
-                        country: countryCode,
-                        city,
-                        postalCode,
-                        streetName,
-                        building,
-                        apartment,
-                      },
-                    },
-                    addressType === "shipping"
-                      ? { action: Actions.addshippingaddress, addressKey: newKey }
-                      : { action: Actions.addbillingaddress, addressKey: newKey },
-                  ];
-                  try {
-                    const res = await addAddress(
+                  },
+                },
+                addressType === "shipping"
+                  ? { action: Actions.addshippingaddress, addressKey: newKey }
+                  : { action: Actions.addbillingaddress, addressKey: newKey },
+              ];
+              try {
+                const res = await addAddress(
+                  this.version,
+                  this.id,
+                  newAddressObj,
+                );
+                if (res.statusCode !== 400) {
+                  Aside.closeAside();
+                  Alert.showAlert(false, "New address successfully added");
+                  const {
+                    addresses,
+                    shippingAddressIds,
+                    billingAddressIds,
+                    version,
+                  } = res.body;
+                  if (addresses && shippingAddressIds && billingAddressIds) {
+                    this.version = version;
+                    this.addresses = addresses;
+                    this.shippingAddressIds = shippingAddressIds;
+                    this.billingAddressIds = billingAddressIds;
+                    Emitter.emit(
+                      "updateAddressData",
                       this.version,
-                      this.id,
-                      newAddressObj,
+                      this.addresses,
+                      this.shippingAddressIds,
+                      this.billingAddressIds,
                     );
-                    if (res.statusCode !== 400) {
-                      Aside.closeAside();
-                      Alert.showAlert(false, "New address successfully added");
-                      const {
-                        addresses,
-                        shippingAddressIds,
-                        billingAddressIds,
-                        version,
-                      } = res.body;
-                      if (addresses && shippingAddressIds && billingAddressIds) {
-                        this.version = version;
-                        this.addresses = addresses;
-                        this.shippingAddressIds = shippingAddressIds;
-                        this.billingAddressIds = billingAddressIds;
-                        Emitter.emit("updateAddressData", this.version, this.addresses, this.shippingAddressIds, this.billingAddressIds);
-                        this.updateAddresses();
-                      }
-                    } else {
-                      Alert.showAlert(true, "New address not added");
-                      throw new Error("Something is wrong");
-                    }
-                  } catch (err) {
-                    console.log(err);
+                    this.updateAddresses();
                   }
                 } else {
-                //   fieldsArr
-                //     .filter((elem) => !elem.classList.contains("valid"))
-                //     .forEach((elem) => {
-                //     //   this.validationForm(
-                //     //     (elem as HTMLInputElement) || (elem as HTMLSelectElement),
-                //     //   );
-                //     });
+                  Alert.showAlert(true, "New address not added");
+                  throw new Error("Something is wrong");
                 }
+              } catch (err) {
+                console.log(err);
               }
+            } else {
+              //   fieldsArr
+              //     .filter((elem) => !elem.classList.contains("valid"))
+              //     .forEach((elem) => {
+              //     //   this.validationForm(
+              //     //     (elem as HTMLInputElement) || (elem as HTMLSelectElement),
+              //     //   );
+              //     });
             }
           }
         }
+      }
     }
+  }
 
-    public updateAddresses(): void {
-        const shippingAddressesBlock: HTMLDivElement | null =
-          document.querySelector(".profile__shipping-addresses");
-        const billingAddressesBlock: HTMLDivElement | null = document.querySelector(
-          ".profile__billing-addresses",
+  public updateAddresses(): void {
+    const shippingAddressesBlock: HTMLDivElement | null =
+      document.querySelector(".profile__shipping-addresses");
+    const billingAddressesBlock: HTMLDivElement | null = document.querySelector(
+      ".profile__billing-addresses",
+    );
+    if (shippingAddressesBlock && billingAddressesBlock) {
+      shippingAddressesBlock.innerHTML = "";
+      billingAddressesBlock.innerHTML = "";
+      this.addresses.forEach((address, idx) => {
+        const elemID = idx;
+        const newAddress = new NewAddress(
+          this.version,
+          this.id,
+          address,
+          elemID,
+          this.shippingAddressIds,
+          this.billingAddressIds,
+          this.defaultShippingAddressId
+            ? this.defaultShippingAddressId
+            : undefined,
+          this.defaultBillingAddressId
+            ? this.defaultBillingAddressId
+            : undefined,
         );
-        if (shippingAddressesBlock && billingAddressesBlock) {
-          shippingAddressesBlock.innerHTML = "";
-          billingAddressesBlock.innerHTML = "";
-          this.addresses.forEach((address, idx) => {
-            const elemID = idx;
-            const newAddress = new NewAddress(
-              this.version,
-              this.id,
-              address,
-              elemID,
-              this.shippingAddressIds,
-              this.billingAddressIds,
-              this.defaultShippingAddressId
-                ? this.defaultShippingAddressId
-                : undefined,
-              this.defaultBillingAddressId
-                ? this.defaultBillingAddressId
-                : undefined,
-            );
-            if (address.id) {
-              if (this.shippingAddressIds.indexOf(address.id) !== -1) {
-                if (address.id === this.defaultShippingAddressId) {
-                  shippingAddressesBlock.prepend(newAddress.createAddress());
-                } else {
-                  shippingAddressesBlock.append(newAddress.createAddress());
-                }
-              } else if (this.billingAddressIds.indexOf(address.id) !== -1) {
-                if (address.id === this.defaultBillingAddressId) {
-                  billingAddressesBlock.prepend(newAddress.createAddress());
-                } else {
-                  billingAddressesBlock.append(newAddress.createAddress());
-                }
-              }
+        if (address.id) {
+          if (this.shippingAddressIds.indexOf(address.id) !== -1) {
+            if (address.id === this.defaultShippingAddressId) {
+              shippingAddressesBlock.prepend(newAddress.createAddress());
+            } else {
+              shippingAddressesBlock.append(newAddress.createAddress());
             }
-          });
+          } else if (this.billingAddressIds.indexOf(address.id) !== -1) {
+            if (address.id === this.defaultBillingAddressId) {
+              billingAddressesBlock.prepend(newAddress.createAddress());
+            } else {
+              billingAddressesBlock.append(newAddress.createAddress());
+            }
+          }
         }
+      });
     }
+  }
 
-    private createNewAddressTemplate(): string {
-        return `
+  private createNewAddressTemplate(): string {
+    return `
         <nav class="aside__nav">
           <ul role="tablist" class="aside__list">
               <li role="presentation" class="aside__item">
@@ -304,5 +329,5 @@ export default class AddressElem {
           "savebillingaddress",
         )}</section>
         `;
-      }
+  }
 }
