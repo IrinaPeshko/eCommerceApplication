@@ -8,17 +8,9 @@
   <div class="product_page__wrapper">
 
     <div class="product_page__imgs product_description_img">
-      <div class="swiper">
-        <!-- Additional required wrapper -->
-        <div class="swiper-wrapper product_page__slider">
-          <!-- Slides -->
-          <div class="swiper-slide"><div class="swiper-slide__content"><img class="product_page__img" src="./assets/img/main_dress_1.jpeg" alt="slide"></img></div></div>
-          <div class="swiper-slide"><div class="swiper-slide__content"><img class="product_page__img" src="./assets/img/dresses/dress_2.jpg" alt="slide"></img></div></div>
-          <div class="swiper-slide"><div class="swiper-slide__content"><img class="product_page__img" src="./assets/img/dresses/dress_1.jpg" alt="slide"></img></div></div>
-        </div>
-        <!-- If we need pagination -->
+      <div class="swiper product_page__swiper-main">
+        <div class="swiper-wrapper product_page__slider product_page__slider-main"></div>
         <div class="swiper-pagination"></div>
-        <!-- If we need navigation buttons -->
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div>
         <div class="swiper-scrollbar"></div>
@@ -30,35 +22,30 @@
       <h1 class="product_page__name">Women Black Checked Fit and Flare Dress</h1>
       <div class="product_page__color">
         <div class="product_item__title">Color:</div>
-        <div class="product_item__value">black</div>
+        <div class="product_item__value"></div>
       </div>
       <div class="product_page__sizes">
         <div class="product_page__title">Sizes:</div>
-        <ul class="product_page__items sizes">
-          <li class="sizes__item active">Small</li>
-          <li class="sizes__item">Medium</li>
-          <li class="sizes__item">Large</li>
-        </ul>
+        <ul class="product_page__items sizes"></ul>
       </div>
       <div class="product_page__control_wrap">
         <div class="product_page__quantity">
           <div class="product_page__title">Quantity:</div>
           <div class="product_quantity">
-            <div class="product_quantity__minus">-</div>
-            <div class="product_quantity__num">1</div>
-            <div class="product_quantity__plus">+</div>
+            <button class="product_quantity__minus" type="button" onclick="this.nextElementSibling.stepDown();">-</button>
+            <input type="number" class="product_quantity__num" value="0" min="0" readonly>
+            <button class="product_quantity__plus" type="button" onclick="this.previousElementSibling.stepUp();">+</button>
           </div>
         </div>
         <div class="product_page__prise">
-          <div class="product_page__title">Prise</div>
+          <div class="product_page__title">Prise:</div>
           <ul class="product_page__items sizes">
-            <!-- .sizes__item product_page__prise.sale  -->
-            <li class="sizes__item product_page__prise sale">10.55 USD</li>
-            <li class="sizes__item product_page__sale_prise">9.55 USD</li>
+            <li class="sizes__item product_page__prise sale"></li>
+            <li class="sizes__item product_page__sale_prise"></li>
           </ul>
         </div>
       </div>
-      <button class="btn product_page__btn add" bagAction="add"></button>
+      <button class="btn product_page__btn bag"></button>
     </div>
 
     <div class="product_description__addition">

@@ -1,9 +1,12 @@
-import "swiper/css/bundle";
-import Swiper from "swiper";
-import { Navigation, Pagination, Scrollbar } from "swiper/modules";
+import {
+  Manipulation,
+  Navigation,
+  Pagination,
+  Scrollbar,
+} from "swiper/modules";
 
-export const swiper = new Swiper(".swiper", {
-  modules: [Navigation, Pagination, Scrollbar],
+export const productPageSwiperMainSetting = {
+  modules: [Navigation, Pagination, Scrollbar, Manipulation],
   spaceBetween: 30,
   centeredSlides: true,
   observer: true,
@@ -35,4 +38,63 @@ export const swiper = new Swiper(".swiper", {
     el: ".swiper-scrollbar",
     draggable: true,
   },
-});
+};
+
+export const productPageSwiperPopapSetting = {
+  modules: [Navigation, Pagination, Scrollbar, Manipulation],
+  spaceBetween: 30,
+  centeredSlides: true,
+  observer: true,
+  observeParents: true,
+  observeSlideChildren: true,
+  slidesPerView: 1,
+  grabCursor: true,
+  watchOverflow: true,
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+    dynamicBullets: true,
+  },
+  navigation: {
+    nextEl: ".swiper-button-next",
+    prevEl: ".swiper-button-prev",
+  },
+  scrollbar: {
+    el: ".swiper-scrollbar",
+    draggable: true,
+  },
+};
+
+// export const productPageSwiperPopap = new Swiper(".swiper", {
+//   modules: [Navigation, Pagination, Scrollbar, Manipulation],
+//   spaceBetween: 30,
+//   centeredSlides: true,
+//   observer: true,
+//   observeParents: true,
+//   observeSlideChildren: true,
+//   slidesPerView: 1,
+//   // breakpoints: {
+//   //   320: {
+//   //     width: 320,
+//   //   },
+//   //   500: {
+//   //     width: 420,
+//   //   }
+//   // }
+//   width: 400,
+//   grabCursor: true,
+//   watchOverflow: true,
+//   pagination: {
+//     el: ".swiper-pagination",
+//     clickable: true,
+//     dynamicBullets: true,
+//   },
+//   navigation: {
+//     nextEl: ".swiper-button-next",
+//     prevEl: ".swiper-button-prev",
+//   },
+//   scrollbar: {
+//     el: ".swiper-scrollbar",
+//     draggable: true,
+//   },
+// });
