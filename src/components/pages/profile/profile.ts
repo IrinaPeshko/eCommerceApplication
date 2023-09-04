@@ -203,8 +203,15 @@ export default class Profile {
           "click",
           (e: MouseEvent): void => {
             e.preventDefault();
-            if (!(btn as HTMLButtonElement).classList.contains("address__edit-btn")) {
-              if ((btn as HTMLButtonElement).dataset.btntype === "email" || (btn as HTMLButtonElement).dataset.btntype === "password") {
+            if (
+              !(btn as HTMLButtonElement).classList.contains(
+                "address__edit-btn",
+              )
+            ) {
+              if (
+                (btn as HTMLButtonElement).dataset.btntype === "email" ||
+                (btn as HTMLButtonElement).dataset.btntype === "password"
+              ) {
                 this.editMode(e.target as HTMLButtonElement);
               } else {
                 this.editMode();
@@ -227,7 +234,7 @@ export default class Profile {
           this.changeEmail(e.target as HTMLButtonElement);
         },
       );
-      if (passwordSaveBtn)
+    if (passwordSaveBtn)
       (passwordSaveBtn as HTMLButtonElement).addEventListener(
         "click",
         (e: MouseEvent): void => {
@@ -276,11 +283,14 @@ export default class Profile {
         }]`,
       );
       if (activePage) {
-      if (target) {
-        const formElem: HTMLFormElement | null = target.closest(".profile__form");
+        if (target) {
+          const formElem: HTMLFormElement | null =
+            target.closest(".profile__form");
           if (formElem) {
-            const fieldsArr: NodeListOf<Element> = formElem.querySelectorAll(".form__field");
-            const saveBtn: HTMLButtonElement | null = formElem.querySelector(".profile__save-btn");
+            const fieldsArr: NodeListOf<Element> =
+              formElem.querySelectorAll(".form__field");
+            const saveBtn: HTMLButtonElement | null =
+              formElem.querySelector(".profile__save-btn");
             fieldsArr.forEach((elem) => {
               if ((elem as HTMLInputElement).readOnly === true) {
                 (elem as HTMLInputElement).readOnly = false;
@@ -294,27 +304,27 @@ export default class Profile {
               else saveBtn.classList.add("profile__save-btn--hidden");
             }
           }
-      } else {
-        const fieldsArr: NodeListOf<Element> =
-          activePage.querySelectorAll(".form__field");
-        const saveBtn: HTMLButtonElement | null =
-          activePage.querySelector(".profile__save-btn");
-        fieldsArr.forEach((elem) => {
-          if ((elem as HTMLInputElement).readOnly === true) {
-            (elem as HTMLInputElement).readOnly = false;
-          } else {
-            (elem as HTMLInputElement).readOnly = true;
+        } else {
+          const fieldsArr: NodeListOf<Element> =
+            activePage.querySelectorAll(".form__field");
+          const saveBtn: HTMLButtonElement | null =
+            activePage.querySelector(".profile__save-btn");
+          fieldsArr.forEach((elem) => {
+            if ((elem as HTMLInputElement).readOnly === true) {
+              (elem as HTMLInputElement).readOnly = false;
+            } else {
+              (elem as HTMLInputElement).readOnly = true;
+            }
+          });
+          if (saveBtn) {
+            if (saveBtn.classList.contains("profile__save-btn--hidden"))
+              saveBtn.classList.remove("profile__save-btn--hidden");
+            else saveBtn.classList.add("profile__save-btn--hidden");
           }
-        });
-        if (saveBtn) {
-          if (saveBtn.classList.contains("profile__save-btn--hidden"))
-            saveBtn.classList.remove("profile__save-btn--hidden");
-          else saveBtn.classList.add("profile__save-btn--hidden");
         }
       }
     }
   }
-}
 
   public async savePersonalData(): Promise<void> {
     const firstNameField: HTMLElement | null =
@@ -544,7 +554,9 @@ export default class Profile {
               Emitter.emit("updateVersion", this.version);
               this.email = email;
               this.editMode(target);
-              if ((emailField as HTMLInputElement).classList.contains("valid")) {
+              if (
+                (emailField as HTMLInputElement).classList.contains("valid")
+              ) {
                 (emailField as HTMLInputElement).classList.remove("valid");
               }
             } else {
@@ -583,7 +595,9 @@ export default class Profile {
           this.version = version;
           Emitter.emit("updateVersion", this.version);
           this.editMode(target);
-          if ((currentPassword as HTMLInputElement).classList.contains("valid")) {
+          if (
+            (currentPassword as HTMLInputElement).classList.contains("valid")
+          ) {
             (currentPassword as HTMLInputElement).classList.remove("valid");
           }
           if ((newPassword as HTMLInputElement).classList.contains("valid")) {

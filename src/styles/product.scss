@@ -1,5 +1,5 @@
 .product_page {
-  margin: 0 auto;
+  margin: 10px auto;
 }
 
 .product_page__wrapper {
@@ -14,6 +14,13 @@
     & > * {
       flex: 0 1 100%;
     }
+  }
+}
+
+.product_page__breadcrumbs {
+  margin: 10px auto;
+  & .breadcrumbs__item--active {
+    text-transform: lowercase;
   }
 }
 
