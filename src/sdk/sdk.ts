@@ -252,7 +252,7 @@ export function getProducts() {
 export async function getProduct(id: string) {
   const res = apiRoot
     .withProjectKey({ projectKey })
-    .products()
+    .productProjections()
     .withId({ ID: id })
     .get()
     .execute();

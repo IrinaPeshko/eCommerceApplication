@@ -16,11 +16,14 @@ export default class Popap extends View {
     this.popap = this.getHTMLElement();
   }
 
-  public static open(inner: string) {
+  public static open(inner: string, el?: HTMLElement) {
     const popapBox = document.querySelector(".popap");
     if (popapBox) popapBox.classList.add("active");
     const innerBox = document.querySelector(".popap__content");
     if (innerBox instanceof HTMLElement && innerBox) innerBox.innerHTML = inner;
+    if (el) {
+      innerBox?.append(el);
+    }
     document.body.classList.add("lock");
     Popap.close();
   }
