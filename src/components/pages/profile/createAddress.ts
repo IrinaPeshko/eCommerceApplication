@@ -234,7 +234,7 @@ export default class NewAddress {
                 Alert.showAlert(false, "Address succesfully updated");
                 const { addresses, version } = updateData.body;
                 this.version = version;
-                Emitter.emit("updateVersionFromAside", this.version);
+                Emitter.emit("changeAdressFromAside", this.version, addresses);
                 if (addresses) {
                   if (
                     addresses.some(
@@ -298,10 +298,19 @@ export default class NewAddress {
           removedAddressObj,
         );
         if (removeCurrentAddress.statusCode !== 400) {
+          // если дефолт
           Alert.showAlert(false, "Address successfully removed");
-          const { version } = removeCurrentAddress.body;
+          const { version, addresses, billingAddressIds, shippingAddressIds, defaultBillingAddressId, defaultShippingAddressId } = removeCurrentAddress.body;
           this.version = version;
-          Emitter.emit("updateVersionFromAside", this.version);
+          if (billingAddressIds) {
+            this.billingAddressIds = billingAddressIds;
+          }
+          if (shippingAddressIds) {
+            this.shippingAddressIds = shippingAddressIds;
+          }
+          this.defaultBillingAddressId = defaultBillingAddressId;
+          this.defaultShippingAddressId = defaultShippingAddressId;
+          Emitter.emit("removeAddress", this.version, addresses, this.billingAddressIds, this.shippingAddressIds, this.defaultBillingAddressId, this.defaultShippingAddressId);
           if (currentAddressElem) currentAddressElem.remove();
         } else {
           Alert.showAlert(true, "Address not removed");
