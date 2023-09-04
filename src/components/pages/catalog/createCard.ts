@@ -13,6 +13,10 @@ export function creatCard(
   const card = document.createElement("div");
   card.className = "catalog__card";
   card.setAttribute("products", id);
+  card.addEventListener("click", (e) => {
+    const { callback } = product[0];
+    routeToNotAnchor(e, "/product", callback.bind(null, `${id}`));
+  });
   if (discount) {
     card.innerHTML = `<div class="card__img-block">
           <img  class="card__img" src="${img}" alt="">
@@ -35,12 +39,5 @@ export function creatCard(
           <p class="product__description">${description}</p>
           <p class="product__price">${price}$</p>
         </div>`;
-
-  card.addEventListener("click", (e) => {
-    // const cardID = card.getAttribute("products");
-    const { callback } = product[0];
-    routeToNotAnchor(e, "/product", callback.bind(null, `${id}`));
-  });
-
   return card;
 }
