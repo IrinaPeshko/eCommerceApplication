@@ -32,9 +32,9 @@ export default class Profile {
     this.defaultBillingAddressId = defaultBillingAddressId;
     this.shippingAddressIds = shippingAddressIds;
     this.billingAddressIds = billingAddressIds;
-    Emitter.on("updateVersionFromAside", (versionFromAside: number): void => {
-      this.version = versionFromAside;
-    });
+    // Emitter.on("updateVersionFromAside", (versionFromAside: number): void => {
+    //   this.version = versionFromAside;
+    // });
     Emitter.on(
       "updatePersonalData",
       (
@@ -73,20 +73,28 @@ export default class Profile {
         this.billingAddressIds = addressBillingAddressIds;
       },
     );
-    Emitter.on(
-      "updateAllAddressesShipping",
-      (shippingIds: string[], defaultShippingId: string): void => {
-        this.shippingAddressIds = shippingIds;
-        this.defaultShippingAddressId = defaultShippingId;
-      },
-    );
-    Emitter.on(
-      "updateAllAddressesBilling",
-      (billingIds: string[], defaultBillingId: string): void => {
-        this.billingAddressIds = billingIds;
-        this.defaultShippingAddressId = defaultBillingId;
-      },
-    );
+    // Emitter.on(
+    //   "updateAllAddressesShipping",
+    //   (shippingVersion: number, updAddresses: Address[], shippingIds: string[], defaultShippingId: string, billingIds: string[], defaultBillingId: string): void => {
+    //     this.version = shippingVersion;
+    //     this.addresses = updAddresses;
+    //     this.shippingAddressIds = shippingIds;
+    //     this.defaultShippingAddressId = defaultShippingId;
+    //     this.billingAddressIds = billingIds;
+    //     this.defaultBillingAddressId = defaultBillingId;
+    //   },
+    // );
+    // Emitter.on(
+    //   "updateAllAddressesBilling",
+    //   (billingVersion: number, updAddresses: Address[], billingIds: string[], defaultBillingId: string, shippingIds: string[], defaultShippingId: string): void => {
+    //     this.version = billingVersion;
+    //     this.addresses = updAddresses;
+    //     this.billingAddressIds = billingIds;
+    //     this.defaultShippingAddressId = defaultBillingId;
+    //     this.shippingAddressIds = shippingIds;
+    //     this.defaultShippingAddressId = defaultShippingId;
+    //   },
+    // );
     Emitter.on(
       "changeAdressFromAside",
       (changeVersion: number, changeAddresses: Address[]) => {
@@ -190,6 +198,7 @@ export default class Profile {
       Array.prototype.forEach.call(tabs, (tab) => {
         tab.addEventListener("click", (e: Event) => {
           e.preventDefault();
+          e.stopPropagation();
           const activeTab: HTMLElement | null = document.querySelector(
             ".profile__item > [aria-selected]",
           );
@@ -258,6 +267,7 @@ export default class Profile {
 
   private loadCurrPage(currpage: HTMLElement): void {
     currpage.innerHTML = "";
+    console.log("GGGGGG");
     const currPageAttr: string | null =
       currpage.getAttribute("aria-labelledby");
     if (currPageAttr) {
@@ -292,17 +302,7 @@ export default class Profile {
           );
           Emitter.emit("addressLoad");
           break;
-        default:
-          currpage.append(
-            new Personal(
-              this.firstName,
-              this.lastName,
-              this.dateOfBirth,
-              this.id,
-              this.version,
-            ).createPersonal(),
-          );
-          break;
+        default: break;
       }
     }
   }

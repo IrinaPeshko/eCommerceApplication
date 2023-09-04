@@ -31,7 +31,8 @@ export default class AddressElem {
     this.activeAsideTab = null;
     Emitter.on(
       "updateAllAddressesShipping",
-      (shippingIds: string[], defaultShippingId: string): void => {
+      (shippingVersion: number, shippingIds: string[], defaultShippingId: string): void => {
+        this.version = shippingVersion;
         this.shippingAddressIds = shippingIds;
         this.defaultShippingAddressId = defaultShippingId;
         this.updateAddresses();
@@ -39,7 +40,8 @@ export default class AddressElem {
     );
     Emitter.on(
       "updateAllAddressesBilling",
-      (billingIds: string[], defaultBillingId: string): void => {
+      (billingVersion: number, billingIds: string[], defaultBillingId: string): void => {
+        this.version = billingVersion;
         this.billingAddressIds = billingIds;
         this.defaultShippingAddressId = defaultBillingId;
         this.updateAddresses();
@@ -74,6 +76,7 @@ export default class AddressElem {
         this.shippingAddressIds = changeShippingAddressIds;
         this.defaultBillingAddressId = changeDefaultBillingAddressId;
         this.defaultShippingAddressId = changeDefaultShippingAddressId;
+        this.updateAddresses();
       },
     );
   }
@@ -102,9 +105,6 @@ export default class AddressElem {
           e.preventDefault();
           this.addNewAddress();
         }
-        // else if ((target as HTMLElement).id === "password_save_btn") {
-        //     this.changePassword()
-        // }
       }
     });
     this.updateAddresses();
@@ -282,12 +282,8 @@ export default class AddressElem {
           elemID,
           this.shippingAddressIds,
           this.billingAddressIds,
-          this.defaultShippingAddressId
-            ? this.defaultShippingAddressId
-            : undefined,
+          this.defaultShippingAddressId,
           this.defaultBillingAddressId
-            ? this.defaultBillingAddressId
-            : undefined,
         );
         if (address.id) {
           if (this.shippingAddressIds.indexOf(address.id) !== -1) {
@@ -296,7 +292,8 @@ export default class AddressElem {
             } else {
               shippingAddressesBlock.append(newAddress.createAddress());
             }
-          } else if (this.billingAddressIds.indexOf(address.id) !== -1) {
+          }
+          if (this.billingAddressIds.indexOf(address.id) !== -1) {
             if (address.id === this.defaultBillingAddressId) {
               billingAddressesBlock.prepend(newAddress.createAddress());
             } else {

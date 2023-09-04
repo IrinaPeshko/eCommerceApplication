@@ -112,8 +112,7 @@ export default class Personal {
                   "updatePersonalData",
                   this.version,
                   this.firstName,
-                  this,
-                  lastName,
+                  this.lastName,
                   this.dateOfBirth,
                 );
               }

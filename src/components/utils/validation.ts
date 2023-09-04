@@ -11,7 +11,7 @@ export default class Validate {
   public validateText(): void {
     if (
       (!this.target.value || this.target.value === "") &&
-      (!this.target.id.includes("building") ||
+      (!this.target.id.includes("building") &&
         !this.target.id.includes("apartment"))
     ) {
       this.error("This is a required field.");

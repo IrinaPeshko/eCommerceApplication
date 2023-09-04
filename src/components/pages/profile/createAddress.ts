@@ -38,6 +38,7 @@ export default class NewAddress {
     this.billingAddressIds = billingAddressIds;
     this.defaultShippingAddressId = defaultShippingAddressId;
     this.defaultBillingAddressId = defaultBillingAddressId;
+    console.log(this.defaultShippingAddressId, this.defaultBillingAddressId);
     Emitter.on("updateVersion", (versionFromProfile: number): void => {
       this.version = versionFromProfile;
     });
@@ -92,7 +93,8 @@ export default class NewAddress {
           e.preventDefault();
           this.addAsDefaultAddress("shipping");
         });
-      } else if (this.billingAddressIds.indexOf(this.address.id) !== -1) {
+      }
+      if (this.billingAddressIds.indexOf(this.address.id) !== -1) {
         if (this.defaultBillingAddressId !== undefined) {
           if (this.address.id === this.defaultBillingAddressId) {
             addressBtnsWrapper.append(defautMark);
@@ -315,6 +317,12 @@ export default class NewAddress {
           if (shippingAddressIds) {
             this.shippingAddressIds = shippingAddressIds;
           }
+          const a = addresses.find(
+            (address) => address.id === this.address.id,
+          );
+          if (a) {
+            this.address = a;
+          }
           this.defaultBillingAddressId = defaultBillingAddressId;
           this.defaultShippingAddressId = defaultShippingAddressId;
           Emitter.emit(
@@ -338,6 +346,7 @@ export default class NewAddress {
   }
 
   private async addAsDefaultAddress(addressType: string): Promise<void> {
+    console.log(addressType);
     if (this.address.key && this.id && this.version) {
       const addDefaultAddressObj: SetDefaultShipping[] | SetDefaultBilling[] =
         addressType === "shipping"
@@ -378,19 +387,21 @@ export default class NewAddress {
           }
           this.defaultBillingAddressId = defaultBillingAddressId;
           this.defaultShippingAddressId = defaultShippingAddressId;
-          Emitter.emit("updateVersionFromAside", this.version);
           if (addressType === "shipping") {
             if (this.defaultShippingAddressId) {
               Emitter.emit(
                 "updateAllAddressesShipping",
+                this.version,
                 this.shippingAddressIds,
                 this.defaultShippingAddressId,
               );
             }
           } else if (addressType === "billing") {
             if (this.defaultBillingAddressId) {
+              console.log(this.billingAddressIds, this.defaultBillingAddressId);
               Emitter.emit(
                 "updateAllAddressesBilling",
+                this.version,
                 this.billingAddressIds,
                 this.defaultBillingAddressId,
               );
