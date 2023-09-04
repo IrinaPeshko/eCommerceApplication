@@ -418,6 +418,7 @@ input:read-only,
   list-style-type: none;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
   max-width: 100%;
   & .breadcrumbs__item {
