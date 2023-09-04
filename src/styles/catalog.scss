@@ -1,4 +1,5 @@
 .catalog__container {
+  margin: 20px auto;
   display: flex;
   justify-content: space-between;
   .catalog__aside {
@@ -166,6 +167,7 @@
   & .catalog__card {
     max-width: 300px;
     margin-top: 40px;
+    padding: 5px;
     & .card__img-block {
       & {
         .card__img {
@@ -189,6 +191,11 @@
         color: #868686;
         font-size: 14px;
         height: 90px;
+        color: #000;
+        font-family: Oswald;
+        font-style: normal;
+        font-weight: 300;
+        line-height: normal;
       }
       & .product__price {
         color: #000;
@@ -223,6 +230,8 @@
 
 .catalog__sorting {
   margin-bottom: 20px;
+  text-align: end;
+  margin-right: 10px;
 
   label {
     font-weight: bold;

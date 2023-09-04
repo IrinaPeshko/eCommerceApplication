@@ -7,6 +7,7 @@ import {
   product,
   profileLinksOut,
 } from "./components/header/data/linkArrays";
+import "swiper/css/bundle";
 
 function initializeApp(): void {
   App.createView();
