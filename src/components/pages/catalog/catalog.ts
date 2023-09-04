@@ -51,18 +51,24 @@ export function visualeCards() {
         let discount: string | undefined = "";
         const { key } = el;
         if (pricesArr) {
-          const disc = pricesArr[0].discounted?.value.centAmount;
-          if (disc) {
-            discount = `${disc}`.split("").slice(0, -2).join("");
+          const discountData = pricesArr[0].discounted?.value;
+          if (discountData) {
+            discount = `${(
+              discountData.centAmount /
+              10 ** discountData.fractionDigits
+            ).toFixed(2)}`;
           }
         }
 
         let url = "";
-        let price = 0;
+        let price = "0";
         if (imagesArr && pricesArr && pricesArr?.length !== 0) {
           url = imagesArr[0].url;
-          price = pricesArr[0].value.centAmount;
-          price = +`${price}`.split("").slice(0, -2).join("");
+          const dataPrice = pricesArr[0].value;
+          price = `${(
+            dataPrice.centAmount /
+            10 ** dataPrice.fractionDigits
+          ).toFixed(2)}`;
         }
         if (description) {
           // console.log(discount);

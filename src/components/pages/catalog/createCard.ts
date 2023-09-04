@@ -6,7 +6,7 @@ export function creatCard(
   name: string,
   description: string,
   img: string,
-  price: number,
+  price: string,
   key: string | undefined,
   discount?: string,
 ) {
