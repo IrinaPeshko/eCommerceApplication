@@ -20,6 +20,7 @@ import { getUserById, getCategories } from "../../../sdk/sdk";
 import { Address } from "../../../types/types";
 import { Category } from "../../../types/catalog/catalogTypes";
 import { Product } from "../../pages/product/product";
+import productKeys from "../../pages/product/productsKey";
 
 const namePage = {
   MAIN: "MAIN",
@@ -465,12 +466,14 @@ export const pages: link[] = [
   },
 ];
 
-export const product: link[] = [
-  {
-    name: namePage.PRODUCT,
-    href: "/product",
-    callback: (id?: string): void => {
-      Product.init(`${id}`);
-    },
+export const product: link[] = productKeys.map((data) => ({
+  name: namePage.PRODUCT,
+  href: `/product__${data}`,
+  callback: (key?: string): void => {
+    if (key) {
+      Product.init(`${key}`);
+    } else {
+      Product.init("");
+    }
   },
-];
+}));

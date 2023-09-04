@@ -249,11 +249,11 @@ export function getProducts() {
   return apiRoot.withProjectKey({ projectKey }).products().get().execute();
 }
 
-export async function getProduct(id: string) {
+export async function getProduct(key: string) {
   const res = apiRoot
     .withProjectKey({ projectKey })
     .productProjections()
-    .withId({ ID: id })
+    .withKey({ key })
     .get()
     .execute();
   return res;

@@ -9,9 +9,14 @@ import {
 import { productPopap } from "./productPopap";
 
 export class Product {
-  public static async init(id = "") {
-    const resp = (await getProduct(id)).body;
-    console.log(resp);
+  public static async init(keyData = "") {
+    let key = keyData;
+    if (key === "") {
+      key = Product.checkURL();
+    }
+    // console.log(key)
+    const resp = (await getProduct(key)).body;
+    // console.log(resp);
 
     const DOM = {
       imgs: document.querySelector(".product_page__slider-main"),
@@ -105,7 +110,14 @@ export class Product {
     Product.showContent(DOM.description, data.description);
     Product.showContent(DOM.sku, data.sku);
     Product.clickAddBagBtn(DOM.addBagBtn, DOM.quantityNum);
-    console.log(id);
+  }
+
+  private static checkURL() {
+    const value = window.location.href.split("/").slice(-1).join("");
+    if (value.startsWith("product__")) {
+      return value.replace("product__", "");
+    }
+    return "";
   }
 
   private static createSlide(url: string, className: string) {

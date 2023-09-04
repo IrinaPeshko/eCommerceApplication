@@ -49,7 +49,7 @@ export function visualeCards() {
         const imagesArr = el.masterVariant.images;
         const pricesArr = el.masterVariant.prices;
         let discount: string | undefined = "";
-        const { id } = el;
+        const { key } = el;
         if (pricesArr) {
           const disc = pricesArr[0].discounted?.value.centAmount;
           if (disc) {
@@ -65,12 +65,19 @@ export function visualeCards() {
           price = +`${price}`.split("").slice(0, -2).join("");
         }
         if (description) {
-          console.log(discount);
+          // console.log(discount);
           if (discount) {
-            const card = creatCard(name, description, url, price, id, discount);
+            const card = creatCard(
+              name,
+              description,
+              url,
+              price,
+              key,
+              discount,
+            );
             container?.appendChild(card);
           } else {
-            const card = creatCard(name, description, url, price, id);
+            const card = creatCard(name, description, url, price, key);
             container?.appendChild(card);
           }
         }

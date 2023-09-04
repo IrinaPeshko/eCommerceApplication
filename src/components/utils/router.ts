@@ -10,18 +10,22 @@ import Popap from "../popap/popap";
 import Aside from "../aside/aside";
 import Alert from "../alerts/alert";
 import showPassword from "./showPassword";
+import productKeys from "../pages/product/productsKey";
 
 export const routers: Irouters = {
   "/": "pages/main.html",
   "/catalog": "pages/catalog.html",
-  "/aboutt": "pages/about.html",
+  "/about": "pages/about.html",
   "/login": "pages/login.html",
   "/createaccount": "pages/createaccount.html",
   "/baskett": "pages/basket.html",
   "/404": "pages/404.html",
   "/profile": "pages/profile.html",
-  "/product": "pages/product.html",
 };
+
+productKeys.forEach((key) => {
+  routers[`/product__${key}`] = "pages/product.html";
+});
 
 export async function getNotFoundPage() {
   return fetch(routers["/404"])
@@ -58,6 +62,7 @@ export async function handleLocation(callback?: () => void): Promise<void> {
       if (asideElem) main.append(asideElem);
       if (alertElem) main.append(alertElem);
       showPassword();
+      window.scrollTo(0, 0);
     }
 
     if (callback) {
@@ -141,5 +146,4 @@ export const routeToNotAnchor = (
   } else {
     handleLocation();
   }
-  window.scrollTo(0,0);
 };
