@@ -1,4 +1,5 @@
 import { getSerchingProducts } from "../../../sdk/sdk";
+// eslint-disable-next-line import/no-cycle
 import { creatCard } from "./createCard";
 
 export function visualeFilterCards(params: string[]) {

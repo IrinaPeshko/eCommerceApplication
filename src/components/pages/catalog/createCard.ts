@@ -1,3 +1,7 @@
+// eslint-disable-next-line import/no-cycle
+import { routeToNotAnchor } from "../../utils/router";
+import { product } from "../../header/data/linkArrays";
+
 export function creatCard(
   name: string,
   description: string,
@@ -31,5 +35,12 @@ export function creatCard(
           <p class="product__description">${description}</p>
           <p class="product__price">${price}$</p>
         </div>`;
+
+  card.addEventListener("click", (e) => {
+    // const cardID = card.getAttribute("products");
+    const { callback } = product[0];
+    routeToNotAnchor(e, "/product", callback.bind(null, `${id}`));
+  });
+
   return card;
 }
