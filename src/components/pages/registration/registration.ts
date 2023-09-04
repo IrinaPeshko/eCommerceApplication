@@ -132,7 +132,9 @@ export default class Registration {
               const apiRoot: ApiRoot = createApiBuilderFromCtpClient(client);
               const respGetUser = await getUser(email, password, apiRoot);
               if (respGetUser.statusCode !== 400) {
+                const { id } = resp.body.customer;
                 const { token } = tokenCache.get();
+                localStorage.setItem("id", id);
                 localStorage.setItem("token", token);
               } else {
                 throw new Error("User not found!");

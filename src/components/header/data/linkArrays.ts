@@ -258,6 +258,7 @@ m1653 -377 c75 -32 122 -103 122 -185 0 -138 -132 -233 -261 -188 -55 19 -88
     href: "/",
     callback: (): void => {
       localStorage.removeItem("token");
+      localStorage.removeItem("id");
       const newHeader = new HeaderView();
       const headerElement = newHeader.getHTMLElement();
       const header = document.querySelector("header");
@@ -317,8 +318,11 @@ fill="#ffffff" stroke="none">
 </svg>`,
     href: "/profile",
     callback: async (): Promise<void> => {
-      console.log(document.querySelector(".form__subtitle"));
+      console.log(
+        document.querySelector(".profile__link.profile__link--active"),
+      );
       const id: string | null = localStorage.getItem("id");
+      console.log(id);
       if (id) {
         const getUserData = await getUserById(id)
           .then((res) => {

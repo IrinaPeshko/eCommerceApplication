@@ -53,8 +53,10 @@ export default class Login {
           try {
             const resp = await getUser(email, password, apiRoot);
             if (resp.statusCode !== 400) {
+              const { id } = resp.body.customer;
               const { token } = tokenCache.get();
               localStorage.setItem("token", token);
+              localStorage.setItem("id", id);
               const popapContent = document.querySelector(".popap__content");
               if (popapContent) {
                 const innerText = "Log in is successful";
