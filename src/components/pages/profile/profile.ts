@@ -75,7 +75,11 @@ export default class Profile {
     );
     Emitter.on(
       "updateAllAddressesShipping",
-      (shippingVersion: number, shippingIds: string[], defaultShippingId: string): void => {
+      (
+        shippingVersion: number,
+        shippingIds: string[],
+        defaultShippingId: string,
+      ): void => {
         this.version = shippingVersion;
         this.shippingAddressIds = shippingIds;
         this.defaultShippingAddressId = defaultShippingId;
@@ -83,7 +87,11 @@ export default class Profile {
     );
     Emitter.on(
       "updateAllAddressesBilling",
-      (billingVersion: number, billingIds: string[], defaultBillingId: string): void => {
+      (
+        billingVersion: number,
+        billingIds: string[],
+        defaultBillingId: string,
+      ): void => {
         this.version = billingVersion;
         this.billingAddressIds = billingIds;
         this.defaultBillingAddressId = defaultBillingId;
@@ -295,7 +303,8 @@ export default class Profile {
           );
           Emitter.emit("addressLoad");
           break;
-        default: break;
+        default:
+          break;
       }
     }
   }

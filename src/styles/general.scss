@@ -554,7 +554,7 @@ input:read-only,
   .form__field {
     max-width: 100%;
   }
-  .form__wrapper {
+  .form__wrapper:not(.aside__form-wrapper) {
     max-width: 100%;
     width: 80vw;
     & * {

@@ -316,9 +316,7 @@ export default class NewAddress {
           if (shippingAddressIds) {
             this.shippingAddressIds = shippingAddressIds;
           }
-          const a = addresses.find(
-            (address) => address.id === this.address.id,
-          );
+          const a = addresses.find((address) => address.id === this.address.id);
           if (a) {
             this.address = a;
           }

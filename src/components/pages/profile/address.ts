@@ -31,7 +31,11 @@ export default class AddressElem {
     this.activeAsideTab = null;
     Emitter.on(
       "updateAllAddressesShipping",
-      (shippingVersion: number, shippingIds: string[], defaultShippingId: string): void => {
+      (
+        shippingVersion: number,
+        shippingIds: string[],
+        defaultShippingId: string,
+      ): void => {
         this.version = shippingVersion;
         this.shippingAddressIds = shippingIds;
         this.defaultShippingAddressId = defaultShippingId;
@@ -42,7 +46,11 @@ export default class AddressElem {
     );
     Emitter.on(
       "updateAllAddressesBilling",
-      (billingVersion: number, billingIds: string[], defaultBillingId: string): void => {
+      (
+        billingVersion: number,
+        billingIds: string[],
+        defaultBillingId: string,
+      ): void => {
         this.version = billingVersion;
         this.billingAddressIds = billingIds;
         this.defaultBillingAddressId = defaultBillingId;
@@ -287,21 +295,21 @@ export default class AddressElem {
           this.shippingAddressIds,
           this.billingAddressIds,
           this.defaultShippingAddressId,
-          this.defaultBillingAddressId
+          this.defaultBillingAddressId,
         );
         if (address.id) {
           if (this.shippingAddressIds.indexOf(address.id) !== -1) {
-              if (address.id === this.defaultShippingAddressId) {
-                shippingAddressesBlock.prepend(newAddress.createAddress());
-              } else {
-                shippingAddressesBlock.append(newAddress.createAddress());
-              }
+            if (address.id === this.defaultShippingAddressId) {
+              shippingAddressesBlock.prepend(newAddress.createAddress());
+            } else {
+              shippingAddressesBlock.append(newAddress.createAddress());
+            }
           } else if (this.billingAddressIds.indexOf(address.id) !== -1) {
-              if (address.id === this.defaultBillingAddressId) {
+            if (address.id === this.defaultBillingAddressId) {
               billingAddressesBlock.prepend(newAddress.createAddress());
-              } else {
-                billingAddressesBlock.append(newAddress.createAddress());
-              }
+            } else {
+              billingAddressesBlock.append(newAddress.createAddress());
+            }
           }
         }
       });
