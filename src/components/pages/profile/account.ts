@@ -2,6 +2,7 @@ import { UpdateEmail, Actions } from "../../../types/types";
 import Alert from "../../alerts/alert";
 import { updateCustomerEmail, changeCustomerPassword } from "../../../sdk/sdk";
 import { Emitter } from "../../utils/eventEmitter";
+import validationForm from "./validationForm";
 
 export default class Account {
   constructor(
@@ -85,37 +86,41 @@ export default class Account {
     const updateEmail: UpdateEmail[] = [];
     if (emailField) {
       if ((emailField as HTMLInputElement).value !== this.email) {
-        updateEmail.push({
-          action: Actions.email,
-          email: `${(emailField as HTMLInputElement).value}`,
-        });
-        const updateToNewEmail = await updateCustomerEmail(
-          this.id,
-          updateEmail,
-          this.version,
-        )
-          .then((res) => {
-            if (res.statusCode !== 400) {
-              Alert.showAlert(false, "Email successfully updated");
-              const { email, version } = res.body;
-              this.email = email;
-              this.version = version;
-              Emitter.emit("updateEmail", this.email, this.version);
-              this.editEmailData();
-              if (
-                (emailField as HTMLInputElement).classList.contains("valid")
-              ) {
-                (emailField as HTMLInputElement).classList.remove("valid");
-              }
-            } else {
-              throw new Error("Email not be added");
-            }
-          })
-          .catch((err) => {
-            Alert.showAlert(true, "Email not updated");
-            console.log(err);
+        if ((emailField as HTMLInputElement).classList.contains("valid")) {
+          updateEmail.push({
+            action: Actions.email,
+            email: `${(emailField as HTMLInputElement).value}`,
           });
-        console.log(updateToNewEmail);
+          const updateToNewEmail = await updateCustomerEmail(
+            this.id,
+            updateEmail,
+            this.version,
+          )
+            .then((res) => {
+              if (res.statusCode !== 400) {
+                Alert.showAlert(false, "Email successfully updated");
+                const { email, version } = res.body;
+                this.email = email;
+                this.version = version;
+                Emitter.emit("updateEmail", this.email, this.version);
+                this.editEmailData();
+                if (
+                  (emailField as HTMLInputElement).classList.contains("valid")
+                ) {
+                  (emailField as HTMLInputElement).classList.remove("valid");
+                }
+              } else {
+                throw new Error("Email not be added");
+              }
+            })
+            .catch((err) => {
+              Alert.showAlert(true, "Email not updated");
+              console.log(err);
+            });
+          console.log(updateToNewEmail);
+        } else {
+          validationForm((emailField as HTMLInputElement));
+        }
       } else {
         this.editEmailData();
       }
@@ -132,38 +137,56 @@ export default class Account {
     const currentPasswordVal: string = (currentPassword as HTMLInputElement)
       .value;
     const newPasswordVal: string = (newPassword as HTMLInputElement).value;
-    const updateToNewPassword = await changeCustomerPassword(
-      this.id,
-      currentPasswordVal,
-      newPasswordVal,
-      this.version,
-    )
-      .then((res) => {
-        if (res.statusCode !== 400) {
-          Alert.showAlert(false, "Password succesfully changed");
-          (currentPassword as HTMLInputElement).value = "";
-          (newPassword as HTMLInputElement).value = "";
-          const { version } = res.body;
-          this.version = version;
-          Emitter.emit("updateVersion", this.version);
-          this.editPasswordData();
-          if (
-            (currentPassword as HTMLInputElement).classList.contains("valid")
-          ) {
-            (currentPassword as HTMLInputElement).classList.remove("valid");
+    if ((currentPassword as HTMLInputElement).classList.contains("valid") && (newPassword as HTMLInputElement).classList.contains("valid")) {
+      const updateToNewPassword = await changeCustomerPassword(
+        this.id,
+        currentPasswordVal,
+        newPasswordVal,
+        this.version,
+      )
+        .then((res) => {
+          if (res.statusCode !== 400) {
+            Alert.showAlert(false, "Password succesfully changed");
+            (currentPassword as HTMLInputElement).value = "";
+            (newPassword as HTMLInputElement).value = "";
+            const { version } = res.body;
+            this.version = version;
+            Emitter.emit("updateVersion", this.version);
+            this.editPasswordData();
+            if (
+              (currentPassword as HTMLInputElement).classList.contains("valid")
+            ) {
+              (currentPassword as HTMLInputElement).classList.remove("valid");
+            }
+            if ((newPassword as HTMLInputElement).classList.contains("valid")) {
+              (newPassword as HTMLInputElement).classList.remove("valid");
+            }
+          } else {
+            throw new Error("Password not changed");
           }
-          if ((newPassword as HTMLInputElement).classList.contains("valid")) {
-            (newPassword as HTMLInputElement).classList.remove("valid");
-          }
-        } else {
-          throw new Error("Password not changed");
+        })
+        .catch((err) => {
+          Alert.showAlert(true, "Password not changed");
+          console.log(err);
+        });
+      console.log(updateToNewPassword);
+    } else {
+      const currentForm: HTMLFormElement | null = document.querySelector(
+        ".profile__password-form",
+      );
+      if (currentForm) {
+        const currentFields: NodeListOf<Element> =
+          currentForm.querySelectorAll(".form__field");
+        if (currentFields) {
+          const fieldsArr: Element[] = Array.from(currentFields);
+          fieldsArr
+            .filter((elem) => !elem.classList.contains("valid"))
+            .forEach((elem) => {
+              validationForm(elem as HTMLInputElement);
+            });
         }
-      })
-      .catch((err) => {
-        Alert.showAlert(true, "Password not changed");
-        console.log(err);
-      });
-    console.log(updateToNewPassword);
+      }
+    }
   }
 
   private editEmailData(): void {

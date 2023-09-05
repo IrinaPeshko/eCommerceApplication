@@ -1,12 +1,11 @@
 import { Address } from "@commercetools/platform-sdk";
-import { FieldTypes } from "../../../types/types";
-import Validate from "../../utils/validation";
 import { Emitter } from "../../utils/eventEmitter";
 import Personal from "./personal";
 import Account from "./account";
 import AddressElem from "./address";
 import switchTab from "../../utils/switchTab";
 import showPassword from "../../utils/showPassword";
+import validationForm from "./validationForm";
 
 export default class Profile {
   constructor(
@@ -33,9 +32,6 @@ export default class Profile {
     this.defaultBillingAddressId = defaultBillingAddressId;
     this.shippingAddressIds = shippingAddressIds;
     this.billingAddressIds = billingAddressIds;
-    // Emitter.on("updateVersionFromAside", (versionFromAside: number): void => {
-    //   this.version = versionFromAside;
-    // });
     Emitter.on(
       "updatePersonalData",
       (
@@ -125,33 +121,6 @@ export default class Profile {
     );
   }
 
-  public validationForm(target: HTMLInputElement): void {
-    const forms: NodeListOf<HTMLFormElement> =
-      document.querySelectorAll(".profile__form");
-    const validate = new Validate(target);
-    forms.forEach((form) => {
-      if (form) {
-        form.noValidate = true;
-        if (target.tagName === "INPUT") {
-          if (target.type === FieldTypes.Password) {
-            validate.validatePassword();
-          } else if (
-            target.type === FieldTypes.Text &&
-            target.id.includes("password")
-          ) {
-            validate.validatePassword();
-          } else if (target.type === FieldTypes.Text) {
-            validate.validateText();
-          } else if (target.type === FieldTypes.Email) {
-            validate.validateEmail();
-          } else if (target.type === FieldTypes.Date) {
-            validate.validateAge();
-          }
-        }
-      }
-    });
-  }
-
   public init(): void {
     const tabs: NodeListOf<HTMLElement> =
       document.querySelectorAll(".profile__link");
@@ -170,14 +139,14 @@ export default class Profile {
       e.preventDefault();
       const { target } = e;
       if (target) {
-        this.validationForm(target as HTMLInputElement);
+        validationForm(target as HTMLInputElement);
       }
     });
     document.addEventListener("change", (e: Event): void => {
       e.stopPropagation();
       const { target } = e;
       if (target) {
-        this.validationForm(target as HTMLInputElement);
+        validationForm(target as HTMLInputElement);
       }
     });
     if (tabs) {
@@ -255,5 +224,3 @@ export default class Profile {
     }
   }
 }
-// TODO:
-// скрывать при изменении email\пароль и сбрасывать классы и чекбоксы;

@@ -18,6 +18,7 @@ import {
 import { createaAddressTemplate } from "./templates";
 import Alert from "../../alerts/alert";
 import { Emitter } from "../../utils/eventEmitter";
+import validationForm from "./validationForm";
 
 export default class NewAddress {
   constructor(
@@ -276,6 +277,12 @@ export default class NewAddress {
               console.log(error);
             }
           }
+        } else {
+          fieldsArr
+            .filter((elem) => !elem.classList.contains("valid"))
+            .forEach((elem) => {
+              validationForm(elem as HTMLInputElement);
+            });
         }
       }
     }
