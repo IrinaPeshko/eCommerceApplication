@@ -73,28 +73,22 @@ export default class Profile {
         this.billingAddressIds = addressBillingAddressIds;
       },
     );
-    // Emitter.on(
-    //   "updateAllAddressesShipping",
-    //   (shippingVersion: number, updAddresses: Address[], shippingIds: string[], defaultShippingId: string, billingIds: string[], defaultBillingId: string): void => {
-    //     this.version = shippingVersion;
-    //     this.addresses = updAddresses;
-    //     this.shippingAddressIds = shippingIds;
-    //     this.defaultShippingAddressId = defaultShippingId;
-    //     this.billingAddressIds = billingIds;
-    //     this.defaultBillingAddressId = defaultBillingId;
-    //   },
-    // );
-    // Emitter.on(
-    //   "updateAllAddressesBilling",
-    //   (billingVersion: number, updAddresses: Address[], billingIds: string[], defaultBillingId: string, shippingIds: string[], defaultShippingId: string): void => {
-    //     this.version = billingVersion;
-    //     this.addresses = updAddresses;
-    //     this.billingAddressIds = billingIds;
-    //     this.defaultShippingAddressId = defaultBillingId;
-    //     this.shippingAddressIds = shippingIds;
-    //     this.defaultShippingAddressId = defaultShippingId;
-    //   },
-    // );
+    Emitter.on(
+      "updateAllAddressesShipping",
+      (shippingVersion: number, shippingIds: string[], defaultShippingId: string): void => {
+        this.version = shippingVersion;
+        this.shippingAddressIds = shippingIds;
+        this.defaultShippingAddressId = defaultShippingId;
+      },
+    );
+    Emitter.on(
+      "updateAllAddressesBilling",
+      (billingVersion: number, billingIds: string[], defaultBillingId: string): void => {
+        this.version = billingVersion;
+        this.billingAddressIds = billingIds;
+        this.defaultBillingAddressId = defaultBillingId;
+      },
+    );
     Emitter.on(
       "changeAdressFromAside",
       (changeVersion: number, changeAddresses: Address[]) => {
@@ -267,7 +261,6 @@ export default class Profile {
 
   private loadCurrPage(currpage: HTMLElement): void {
     currpage.innerHTML = "";
-    console.log("GGGGGG");
     const currPageAttr: string | null =
       currpage.getAttribute("aria-labelledby");
     if (currPageAttr) {

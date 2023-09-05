@@ -38,7 +38,6 @@ export default class NewAddress {
     this.billingAddressIds = billingAddressIds;
     this.defaultShippingAddressId = defaultShippingAddressId;
     this.defaultBillingAddressId = defaultBillingAddressId;
-    console.log(this.defaultShippingAddressId, this.defaultBillingAddressId);
     Emitter.on("updateVersion", (versionFromProfile: number): void => {
       this.version = versionFromProfile;
     });

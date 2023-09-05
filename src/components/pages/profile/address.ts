@@ -35,6 +35,8 @@ export default class AddressElem {
         this.version = shippingVersion;
         this.shippingAddressIds = shippingIds;
         this.defaultShippingAddressId = defaultShippingId;
+        console.log(this.shippingAddressIds);
+        console.log(this.defaultShippingAddressId);
         this.updateAddresses();
       },
     );
@@ -43,7 +45,9 @@ export default class AddressElem {
       (billingVersion: number, billingIds: string[], defaultBillingId: string): void => {
         this.version = billingVersion;
         this.billingAddressIds = billingIds;
-        this.defaultShippingAddressId = defaultBillingId;
+        this.defaultBillingAddressId = defaultBillingId;
+        console.log(this.billingAddressIds);
+        console.log(this.defaultShippingAddressId);
         this.updateAddresses();
       },
     );
@@ -287,18 +291,17 @@ export default class AddressElem {
         );
         if (address.id) {
           if (this.shippingAddressIds.indexOf(address.id) !== -1) {
-            if (address.id === this.defaultShippingAddressId) {
-              shippingAddressesBlock.prepend(newAddress.createAddress());
-            } else {
-              shippingAddressesBlock.append(newAddress.createAddress());
-            }
-          }
-          if (this.billingAddressIds.indexOf(address.id) !== -1) {
-            if (address.id === this.defaultBillingAddressId) {
+              if (address.id === this.defaultShippingAddressId) {
+                shippingAddressesBlock.prepend(newAddress.createAddress());
+              } else {
+                shippingAddressesBlock.append(newAddress.createAddress());
+              }
+          } else if (this.billingAddressIds.indexOf(address.id) !== -1) {
+              if (address.id === this.defaultBillingAddressId) {
               billingAddressesBlock.prepend(newAddress.createAddress());
-            } else {
-              billingAddressesBlock.append(newAddress.createAddress());
-            }
+              } else {
+                billingAddressesBlock.append(newAddress.createAddress());
+              }
           }
         }
       });
