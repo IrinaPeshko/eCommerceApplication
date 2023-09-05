@@ -143,10 +143,13 @@ export default class Profile {
       }
     });
     document.addEventListener("change", (e: Event): void => {
-      e.stopPropagation();
       const { target } = e;
       if (target) {
-        validationForm(target as HTMLInputElement);
+        if ((target as HTMLElement).tagName === "INPUT") {
+          if ((target as HTMLElement).id === "profile_birthdate") {
+            validationForm(target as HTMLInputElement);
+          }
+        }
       }
     });
     if (tabs) {

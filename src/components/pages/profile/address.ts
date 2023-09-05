@@ -259,13 +259,13 @@ export default class AddressElem {
                 console.log(err);
               }
             } else {
-                fieldsArr
-                  .filter((elem) => !elem.classList.contains("valid"))
-                  .forEach((elem) => {
-                    validationForm(
-                      (elem as HTMLInputElement) || (elem as HTMLSelectElement),
-                    );
-                  });
+              fieldsArr
+                .filter((elem) => !elem.classList.contains("valid"))
+                .forEach((elem) => {
+                  validationForm(
+                    (elem as HTMLInputElement) || (elem as HTMLSelectElement),
+                  );
+                });
             }
           }
         }

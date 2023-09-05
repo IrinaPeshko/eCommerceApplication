@@ -281,7 +281,9 @@ export default class NewAddress {
           fieldsArr
             .filter((elem) => !elem.classList.contains("valid"))
             .forEach((elem) => {
-              validationForm(elem as HTMLInputElement || (elem as HTMLSelectElement));
+              validationForm(
+                (elem as HTMLInputElement) || (elem as HTMLSelectElement),
+              );
             });
         }
       }
