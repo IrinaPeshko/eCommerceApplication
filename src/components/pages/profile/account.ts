@@ -139,7 +139,6 @@ export default class Account {
       this.version,
     )
       .then((res) => {
-
         if (res.statusCode !== 400) {
           Alert.showAlert(false, "Password succesfully changed");
           (currentPassword as HTMLInputElement).value = "";
@@ -162,7 +161,7 @@ export default class Account {
       })
       .catch((err) => {
         Alert.showAlert(true, "Password not changed");
-        console.log(err)
+        console.log(err);
       });
     console.log(updateToNewPassword);
   }

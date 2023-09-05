@@ -6,6 +6,7 @@ import Personal from "./personal";
 import Account from "./account";
 import AddressElem from "./address";
 import switchTab from "../../utils/switchTab";
+import showPassword from "../../utils/showPassword";
 
 export default class Profile {
   constructor(
@@ -288,6 +289,7 @@ export default class Profile {
           currpage.append(
             new Account(this.email, this.id, this.version).createAccount(),
           );
+          showPassword();
           break;
         case "tab3":
           currpage.append(
