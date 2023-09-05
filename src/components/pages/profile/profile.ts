@@ -133,15 +133,15 @@ export default class Profile {
       if (form) {
         form.noValidate = true;
         if (target.tagName === "INPUT") {
-          if (target.id === "password") {
+          if (target.type === FieldTypes.Password) {
+            validate.validatePassword();
+          } else if (
+            target.type === FieldTypes.Text &&
+            target.id.includes("password")
+          ) {
             validate.validatePassword();
           } else if (target.type === FieldTypes.Text) {
             validate.validateText();
-          } else if (
-            target.type === FieldTypes.Password ||
-            target.name === "password"
-          ) {
-            validate.validatePassword();
           } else if (target.type === FieldTypes.Email) {
             validate.validateEmail();
           } else if (target.type === FieldTypes.Date) {
@@ -153,7 +153,6 @@ export default class Profile {
   }
 
   public init(): void {
-    const editBtn: NodeListOf<Element> = document.querySelectorAll(".edit-btn");
     const tabs: NodeListOf<HTMLElement> =
       document.querySelectorAll(".profile__link");
     const panels: NodeListOf<HTMLElement> =
@@ -175,28 +174,12 @@ export default class Profile {
       }
     });
     document.addEventListener("change", (e: Event): void => {
+      e.stopPropagation();
       const { target } = e;
       if (target) {
         this.validationForm(target as HTMLInputElement);
       }
     });
-    if (editBtn) {
-      editBtn.forEach((btn) => {
-        (btn as HTMLButtonElement).addEventListener(
-          "click",
-          (e: MouseEvent): void => {
-            e.preventDefault();
-            if (
-              !(btn as HTMLButtonElement).classList.contains(
-                "address__edit-btn",
-              )
-            ) {
-              this.editMode(e.target as HTMLButtonElement);
-            }
-          },
-        );
-      });
-    }
     if (tabs) {
       Array.prototype.forEach.call(tabs, (tab) => {
         tab.addEventListener("click", (e: Event) => {
@@ -226,45 +209,6 @@ export default class Profile {
           }
         });
       });
-    }
-  }
-
-  private editMode(target: HTMLButtonElement): void {
-    const activeLink: Element | null = document.querySelector(
-      ".profile__item > [aria-selected]",
-    );
-    if (activeLink) {
-      const activePage: HTMLElement | null = document.querySelector(
-        `.profile__border-wrapper > [aria-labelledby = ${
-          (activeLink as HTMLElement).id
-        }]`,
-      );
-      if (activePage) {
-        if (target) {
-          const formElem: HTMLFormElement | null =
-            target.closest(".profile__form");
-          if (formElem) {
-            const fieldsArr: NodeListOf<Element> =
-              formElem.querySelectorAll(".form__field");
-            const saveBtn: HTMLButtonElement | null =
-              formElem.querySelector(".profile__save-btn");
-            fieldsArr.forEach((elem) => {
-              if ((elem as HTMLInputElement).readOnly === true) {
-                (elem as HTMLInputElement).readOnly = false;
-              } else {
-                (elem as HTMLInputElement).readOnly = true;
-                (elem as HTMLInputElement).classList.remove("valid");
-                (elem as HTMLInputElement).classList.remove("invalid");
-              }
-            });
-            if (saveBtn) {
-              if (saveBtn.classList.contains("profile__save-btn--hidden"))
-                saveBtn.classList.remove("profile__save-btn--hidden");
-              else saveBtn.classList.add("profile__save-btn--hidden");
-            }
-          }
-        }
-      }
     }
   }
 

@@ -2,6 +2,7 @@ import { UpdateData, Actions } from "../../../types/types";
 import Alert from "../../alerts/alert";
 import { updateCustomer } from "../../../sdk/sdk";
 import { Emitter } from "../../utils/eventEmitter";
+import validationForm from "./validationForm";
 
 export default class Personal {
   constructor(
@@ -80,55 +81,67 @@ export default class Personal {
         (birthdateField as HTMLInputElement).value === this.dateOfBirth
       ) {
         this.editPersonalData();
-      } else {
-        if ((firstNameField as HTMLInputElement).value !== this.firstName) {
-          updateArr.push({
-            action: Actions.firstname,
-            firstName: `${(firstNameField as HTMLInputElement).value}`,
-          });
-        }
-        if ((lastNameField as HTMLInputElement).value !== this.lastName) {
-          updateArr.push({
-            action: Actions.lastname,
-            lastName: `${(lastNameField as HTMLInputElement).value}`,
-          });
-        }
-        if ((birthdateField as HTMLInputElement).value !== this.dateOfBirth) {
-          updateArr.push({
-            action: Actions.dateofbirth,
-            dateOfBirth: `${(birthdateField as HTMLInputElement).value}`,
-          });
-        }
-        const update = await updateCustomer(this.id, updateArr, this.version)
-          .then((res) => {
-            if (res.statusCode !== 400) {
-              const { firstName, lastName, dateOfBirth, version } = res.body;
-              if (firstName && lastName && dateOfBirth) {
-                this.version = version;
-                this.firstName = firstName;
-                this.lastName = lastName;
-                this.dateOfBirth = dateOfBirth;
-                Emitter.emit(
-                  "updatePersonalData",
-                  this.version,
-                  this.firstName,
-                  this.lastName,
-                  this.dateOfBirth,
-                );
+      } else if (firstNameField.classList.contains("valid") && lastNameField.classList.contains("valid") && birthdateField.classList.contains("valid")) {
+          if ((firstNameField as HTMLInputElement).value !== this.firstName) {
+            updateArr.push({
+              action: Actions.firstname,
+              firstName: `${(firstNameField as HTMLInputElement).value}`,
+            });
+          }
+          if ((lastNameField as HTMLInputElement).value !== this.lastName) {
+            updateArr.push({
+              action: Actions.lastname,
+              lastName: `${(lastNameField as HTMLInputElement).value}`,
+            });
+          }
+          if ((birthdateField as HTMLInputElement).value !== this.dateOfBirth) {
+            updateArr.push({
+              action: Actions.dateofbirth,
+              dateOfBirth: `${(birthdateField as HTMLInputElement).value}`,
+            });
+          }
+          const update = await updateCustomer(this.id, updateArr, this.version)
+            .then((res) => {
+              if (res.statusCode !== 400) {
+                const { firstName, lastName, dateOfBirth, version } = res.body;
+                if (firstName && lastName && dateOfBirth) {
+                  this.version = version;
+                  this.firstName = firstName;
+                  this.lastName = lastName;
+                  this.dateOfBirth = dateOfBirth;
+                  Emitter.emit(
+                    "updatePersonalData",
+                    this.version,
+                    this.firstName,
+                    this.lastName,
+                    this.dateOfBirth,
+                  );
+                }
+                Alert.showAlert(false, "Personal data successfully updated");
+                this.updateUserData();
+                this.editPersonalData();
+              } else {
+                throw new Error("Personal data not changed");
               }
-              Alert.showAlert(false, "Personal data successfully updated");
-              this.updateUserData();
-              this.editPersonalData();
-            } else {
-              throw new Error("Personal data not changed");
+            })
+            .catch((err) => {
+              Alert.showAlert(true, "Personal data not updated");
+              console.log(err);
+            });
+          console.log(update);
+        } else {
+          const currentForm: HTMLFormElement | null = document.querySelector(".profile__personal-form");
+          if (currentForm) {
+            const currentFields: NodeListOf<Element> = currentForm.querySelectorAll(".form__field");
+            if (currentFields) {
+            const fieldsArr : Element[] = Array.from(currentFields);
+            fieldsArr.filter((elem) => !elem.classList.contains("valid"))
+            .forEach((elem) => {
+              validationForm(elem as HTMLInputElement);
+            });
             }
-          })
-          .catch((err) => {
-            Alert.showAlert(true, "Personal data not updated");
-            console.log(err);
-          });
-        console.log(update);
-      }
+          }
+        }
     }
   }
 
