@@ -8,6 +8,7 @@ import randomKeyGenerator from "../../utils/randomKeyGenerator";
 import { createaAddressTemplate } from "./templates";
 import NewAddress from "./createAddress";
 import switchTab from "../../utils/switchTab";
+import validationForm from "./validationForm";
 
 export default class AddressElem {
   private activeAsideTab: HTMLElement | null;
@@ -258,13 +259,13 @@ export default class AddressElem {
                 console.log(err);
               }
             } else {
-              //   fieldsArr
-              //     .filter((elem) => !elem.classList.contains("valid"))
-              //     .forEach((elem) => {
-              //     //   this.validationForm(
-              //     //     (elem as HTMLInputElement) || (elem as HTMLSelectElement),
-              //     //   );
-              //     });
+                fieldsArr
+                  .filter((elem) => !elem.classList.contains("valid"))
+                  .forEach((elem) => {
+                    validationForm(
+                      (elem as HTMLInputElement) || (elem as HTMLSelectElement),
+                    );
+                  });
             }
           }
         }

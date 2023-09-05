@@ -214,6 +214,9 @@ body.lock {
     border: 1px solid #c4c4c4;
     font: inherit;
     line-height: 125%;
+    & + .form__message {
+      display: none;
+    }
     &:read-only {
       & + .form__message {
         display: none;
@@ -240,9 +243,48 @@ body.lock {
       border: 2px solid #eb5757;
       padding: 11px 16px;
       & + .form__message {
+        display: block;
+        max-width: 100%;
+        padding: 0;
         &.form__message--invalid {
           padding: 8px 0;
           color: #eb5757;
+        }
+        &.form__message--empty {
+          padding: 8px 24px;
+          background-color: #f0f2f2;
+        }
+        &.form__message--short {
+          padding: 8px 24px;
+          position: relative;
+          background-color: #ffe3e3;
+          &::after {
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translate(0, -50%);
+            content: "";
+            background-image: url("./assets/icons/short-password.svg");
+            background-repeat: no-repeat;
+          }
+        }
+        &.form__message--strong {
+          padding: 8px 24px;
+          position: relative;
+          background-color: #e3ffe9;
+          &::after {
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translate(0, -50%);
+            content: "";
+            background-image: url("./assets/icons/strong-password.svg");
+            background-repeat: no-repeat;
+          }
         }
       }
     }
@@ -250,44 +292,45 @@ body.lock {
       background-color: #ffffff;
       border: 1px solid #27ae60;
       padding: 12px 16px;
-    }
-    & + .form__message {
-      max-width: 100%;
-      padding: 0;
-      &.form__message--empty {
-        padding: 8px 24px;
-        background-color: #f0f2f2;
-      }
-      &.form__message--short {
-        padding: 8px 24px;
-        position: relative;
-        background-color: #ffe3e3;
-        &::after {
-          width: 10px;
-          height: 10px;
-          position: absolute;
-          right: 13px;
-          top: 50%;
-          transform: translate(0, -50%);
-          content: "";
-          background-image: url("./assets/icons/short-password.svg");
-          background-repeat: no-repeat;
+      & + .form__message {
+        display: block;
+        max-width: 100%;
+        padding: 0;
+        &.form__message--empty {
+          padding: 8px 24px;
+          background-color: #f0f2f2;
         }
-      }
-      &.form__message--strong {
-        padding: 8px 24px;
-        position: relative;
-        background-color: #e3ffe9;
-        &::after {
-          width: 10px;
-          height: 10px;
-          position: absolute;
-          right: 13px;
-          top: 50%;
-          transform: translate(0, -50%);
-          content: "";
-          background-image: url("./assets/icons/strong-password.svg");
-          background-repeat: no-repeat;
+        &.form__message--short {
+          padding: 8px 24px;
+          position: relative;
+          background-color: #ffe3e3;
+          &::after {
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translate(0, -50%);
+            content: "";
+            background-image: url("./assets/icons/short-password.svg");
+            background-repeat: no-repeat;
+          }
+        }
+        &.form__message--strong {
+          padding: 8px 24px;
+          position: relative;
+          background-color: #e3ffe9;
+          &::after {
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translate(0, -50%);
+            content: "";
+            background-image: url("./assets/icons/strong-password.svg");
+            background-repeat: no-repeat;
+          }
         }
       }
     }

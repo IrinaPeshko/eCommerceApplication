@@ -119,7 +119,7 @@ export default class Account {
             });
           console.log(updateToNewEmail);
         } else {
-          validationForm((emailField as HTMLInputElement));
+          validationForm(emailField as HTMLInputElement);
         }
       } else {
         this.editEmailData();
@@ -137,7 +137,10 @@ export default class Account {
     const currentPasswordVal: string = (currentPassword as HTMLInputElement)
       .value;
     const newPasswordVal: string = (newPassword as HTMLInputElement).value;
-    if ((currentPassword as HTMLInputElement).classList.contains("valid") && (newPassword as HTMLInputElement).classList.contains("valid")) {
+    if (
+      (currentPassword as HTMLInputElement).classList.contains("valid") &&
+      (newPassword as HTMLInputElement).classList.contains("valid")
+    ) {
       const updateToNewPassword = await changeCustomerPassword(
         this.id,
         currentPasswordVal,
@@ -166,7 +169,7 @@ export default class Account {
           }
         })
         .catch((err) => {
-          Alert.showAlert(true, "Password not changed");
+          Alert.showAlert(true, "Password not valid or not match with current");
           console.log(err);
         });
       console.log(updateToNewPassword);
