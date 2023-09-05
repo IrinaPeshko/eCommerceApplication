@@ -39,8 +39,6 @@ export default class AddressElem {
         this.version = shippingVersion;
         this.shippingAddressIds = shippingIds;
         this.defaultShippingAddressId = defaultShippingId;
-        console.log(this.shippingAddressIds);
-        console.log(this.defaultShippingAddressId);
         this.updateAddresses();
       },
     );
@@ -54,8 +52,6 @@ export default class AddressElem {
         this.version = billingVersion;
         this.billingAddressIds = billingIds;
         this.defaultBillingAddressId = defaultBillingId;
-        console.log(this.billingAddressIds);
-        console.log(this.defaultShippingAddressId);
         this.updateAddresses();
       },
     );
@@ -255,10 +251,10 @@ export default class AddressElem {
                     this.updateAddresses();
                   }
                 } else {
-                  Alert.showAlert(true, "New address not added");
                   throw new Error("Something is wrong");
                 }
               } catch (err) {
+                Alert.showAlert(true, "New address not added");
                 console.log(err);
               }
             } else {

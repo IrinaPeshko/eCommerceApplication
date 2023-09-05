@@ -108,11 +108,13 @@ export default class Account {
                 (emailField as HTMLInputElement).classList.remove("valid");
               }
             } else {
-              Alert.showAlert(true, "Email not updated");
               throw new Error("Email not be added");
             }
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            Alert.showAlert(true, "Email not updated");
+            console.log(err);
+          });
         console.log(updateToNewEmail);
       } else {
         this.editEmailData();
@@ -137,6 +139,7 @@ export default class Account {
       this.version,
     )
       .then((res) => {
+
         if (res.statusCode !== 400) {
           Alert.showAlert(false, "Password succesfully changed");
           (currentPassword as HTMLInputElement).value = "";
@@ -154,11 +157,13 @@ export default class Account {
             (newPassword as HTMLInputElement).classList.remove("valid");
           }
         } else {
-          Alert.showAlert(true, "Password not changed");
           throw new Error("Password not changed");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        Alert.showAlert(true, "Password not changed");
+        console.log(err)
+      });
     console.log(updateToNewPassword);
   }
 

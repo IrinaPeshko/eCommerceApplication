@@ -120,11 +120,13 @@ export default class Personal {
               this.updateUserData();
               this.editPersonalData();
             } else {
-              Alert.showAlert(true, "Personal data not updated");
               throw new Error("Personal data not changed");
             }
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            Alert.showAlert(true, "Personal data not updated");
+            console.log(err);
+          });
         console.log(update);
       }
     }

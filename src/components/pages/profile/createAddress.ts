@@ -269,10 +269,10 @@ export default class NewAddress {
                   Aside.closeAside();
                 }
               } else {
-                Alert.showAlert(true, "Address not updated");
                 throw new Error("Something is wrong");
               }
             } catch (error) {
+              Alert.showAlert(true, "Address not updated");
               console.log(error);
             }
           }
@@ -299,7 +299,6 @@ export default class NewAddress {
           removedAddressObj,
         );
         if (removeCurrentAddress.statusCode !== 400) {
-          // если дефолт
           Alert.showAlert(false, "Address successfully removed");
           const {
             version,
@@ -333,10 +332,10 @@ export default class NewAddress {
           );
           if (currentAddressElem) currentAddressElem.remove();
         } else {
-          Alert.showAlert(true, "Address not removed");
           throw new Error("Something is wrong");
         }
       } catch (err) {
+        Alert.showAlert(true, "Address not removed");
         console.log(err);
       }
     }
@@ -405,10 +404,10 @@ export default class NewAddress {
             }
           }
         } else {
-          Alert.showAlert(true, "Address was not set as default");
           throw new Error("Something is wrong");
         }
       } catch (err) {
+        Alert.showAlert(true, "Address was not set as default");
         console.log(err);
       }
     }
