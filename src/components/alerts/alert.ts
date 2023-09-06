@@ -17,7 +17,6 @@ export default class Alert extends View {
   }
 
   public static showAlert(error: boolean, message: string): void {
-    console.log(error, message);
     const alertBlock: HTMLDivElement | null = document.querySelector(".alert");
     const alertText: HTMLParagraphElement | null =
       document.querySelector(".alert__message");

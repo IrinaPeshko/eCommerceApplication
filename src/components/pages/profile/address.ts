@@ -8,6 +8,7 @@ import randomKeyGenerator from "../../utils/randomKeyGenerator";
 import { createaAddressTemplate } from "./templates";
 import NewAddress from "./createAddress";
 import switchTab from "../../utils/switchTab";
+import validationForm from "./validationForm";
 
 export default class AddressElem {
   private activeAsideTab: HTMLElement | null;
@@ -31,7 +32,12 @@ export default class AddressElem {
     this.activeAsideTab = null;
     Emitter.on(
       "updateAllAddressesShipping",
-      (shippingIds: string[], defaultShippingId: string): void => {
+      (
+        shippingVersion: number,
+        shippingIds: string[],
+        defaultShippingId: string,
+      ): void => {
+        this.version = shippingVersion;
         this.shippingAddressIds = shippingIds;
         this.defaultShippingAddressId = defaultShippingId;
         this.updateAddresses();
@@ -39,9 +45,14 @@ export default class AddressElem {
     );
     Emitter.on(
       "updateAllAddressesBilling",
-      (billingIds: string[], defaultBillingId: string): void => {
+      (
+        billingVersion: number,
+        billingIds: string[],
+        defaultBillingId: string,
+      ): void => {
+        this.version = billingVersion;
         this.billingAddressIds = billingIds;
-        this.defaultShippingAddressId = defaultBillingId;
+        this.defaultBillingAddressId = defaultBillingId;
         this.updateAddresses();
       },
     );
@@ -74,6 +85,7 @@ export default class AddressElem {
         this.shippingAddressIds = changeShippingAddressIds;
         this.defaultBillingAddressId = changeDefaultBillingAddressId;
         this.defaultShippingAddressId = changeDefaultShippingAddressId;
+        this.updateAddresses();
       },
     );
   }
@@ -102,9 +114,6 @@ export default class AddressElem {
           e.preventDefault();
           this.addNewAddress();
         }
-        // else if ((target as HTMLElement).id === "password_save_btn") {
-        //     this.changePassword()
-        // }
       }
     });
     this.updateAddresses();
@@ -243,20 +252,20 @@ export default class AddressElem {
                     this.updateAddresses();
                   }
                 } else {
-                  Alert.showAlert(true, "New address not added");
                   throw new Error("Something is wrong");
                 }
               } catch (err) {
+                Alert.showAlert(true, "New address not added");
                 console.log(err);
               }
             } else {
-              //   fieldsArr
-              //     .filter((elem) => !elem.classList.contains("valid"))
-              //     .forEach((elem) => {
-              //     //   this.validationForm(
-              //     //     (elem as HTMLInputElement) || (elem as HTMLSelectElement),
-              //     //   );
-              //     });
+              fieldsArr
+                .filter((elem) => !elem.classList.contains("valid"))
+                .forEach((elem) => {
+                  validationForm(
+                    (elem as HTMLInputElement) || (elem as HTMLSelectElement),
+                  );
+                });
             }
           }
         }
@@ -282,12 +291,8 @@ export default class AddressElem {
           elemID,
           this.shippingAddressIds,
           this.billingAddressIds,
-          this.defaultShippingAddressId
-            ? this.defaultShippingAddressId
-            : undefined,
-          this.defaultBillingAddressId
-            ? this.defaultBillingAddressId
-            : undefined,
+          this.defaultShippingAddressId,
+          this.defaultBillingAddressId,
         );
         if (address.id) {
           if (this.shippingAddressIds.indexOf(address.id) !== -1) {

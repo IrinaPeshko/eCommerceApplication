@@ -18,6 +18,7 @@ import {
 import { createaAddressTemplate } from "./templates";
 import Alert from "../../alerts/alert";
 import { Emitter } from "../../utils/eventEmitter";
+import validationForm from "./validationForm";
 
 export default class NewAddress {
   constructor(
@@ -92,7 +93,8 @@ export default class NewAddress {
           e.preventDefault();
           this.addAsDefaultAddress("shipping");
         });
-      } else if (this.billingAddressIds.indexOf(this.address.id) !== -1) {
+      }
+      if (this.billingAddressIds.indexOf(this.address.id) !== -1) {
         if (this.defaultBillingAddressId !== undefined) {
           if (this.address.id === this.defaultBillingAddressId) {
             addressBtnsWrapper.append(defautMark);
@@ -268,13 +270,21 @@ export default class NewAddress {
                   Aside.closeAside();
                 }
               } else {
-                Alert.showAlert(true, "Address not updated");
                 throw new Error("Something is wrong");
               }
             } catch (error) {
+              Alert.showAlert(true, "Address not updated");
               console.log(error);
             }
           }
+        } else {
+          fieldsArr
+            .filter((elem) => !elem.classList.contains("valid"))
+            .forEach((elem) => {
+              validationForm(
+                (elem as HTMLInputElement) || (elem as HTMLSelectElement),
+              );
+            });
         }
       }
     }
@@ -298,7 +308,6 @@ export default class NewAddress {
           removedAddressObj,
         );
         if (removeCurrentAddress.statusCode !== 400) {
-          // если дефолт
           Alert.showAlert(false, "Address successfully removed");
           const {
             version,
@@ -315,6 +324,10 @@ export default class NewAddress {
           if (shippingAddressIds) {
             this.shippingAddressIds = shippingAddressIds;
           }
+          const a = addresses.find((address) => address.id === this.address.id);
+          if (a) {
+            this.address = a;
+          }
           this.defaultBillingAddressId = defaultBillingAddressId;
           this.defaultShippingAddressId = defaultShippingAddressId;
           Emitter.emit(
@@ -328,16 +341,17 @@ export default class NewAddress {
           );
           if (currentAddressElem) currentAddressElem.remove();
         } else {
-          Alert.showAlert(true, "Address not removed");
           throw new Error("Something is wrong");
         }
       } catch (err) {
+        Alert.showAlert(true, "Address not removed");
         console.log(err);
       }
     }
   }
 
   private async addAsDefaultAddress(addressType: string): Promise<void> {
+    console.log(addressType);
     if (this.address.key && this.id && this.version) {
       const addDefaultAddressObj: SetDefaultShipping[] | SetDefaultBilling[] =
         addressType === "shipping"
@@ -378,29 +392,31 @@ export default class NewAddress {
           }
           this.defaultBillingAddressId = defaultBillingAddressId;
           this.defaultShippingAddressId = defaultShippingAddressId;
-          Emitter.emit("updateVersionFromAside", this.version);
           if (addressType === "shipping") {
             if (this.defaultShippingAddressId) {
               Emitter.emit(
                 "updateAllAddressesShipping",
+                this.version,
                 this.shippingAddressIds,
                 this.defaultShippingAddressId,
               );
             }
           } else if (addressType === "billing") {
             if (this.defaultBillingAddressId) {
+              console.log(this.billingAddressIds, this.defaultBillingAddressId);
               Emitter.emit(
                 "updateAllAddressesBilling",
+                this.version,
                 this.billingAddressIds,
                 this.defaultBillingAddressId,
               );
             }
           }
         } else {
-          Alert.showAlert(true, "Address was not set as default");
           throw new Error("Something is wrong");
         }
       } catch (err) {
+        Alert.showAlert(true, "Address was not set as default");
         console.log(err);
       }
     }
