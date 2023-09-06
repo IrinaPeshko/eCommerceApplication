@@ -45,7 +45,7 @@ export default class Personal {
             <p class="form__wrapper">
                 <label class="form__label" for="profile_birthdate">Date of Birth</label>
                 <span class="form__input-wrapper profile__input-wrapper">
-                <input class="form__field" id="profile_birthdate" name="dateOfBirth" value="${this.dateOfBirth}" type="date" readonly>
+                <input class="form__field form__date" id="profile_birthdate" name="dateOfBirth" value="${this.dateOfBirth}" type="date" readonly>
                 <span class="form__message" aria-live="polite"></span>
                 </span>
             </p>

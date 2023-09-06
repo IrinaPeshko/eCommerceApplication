@@ -28,6 +28,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    overflow-y: scroll;
   }
   & .form {
     width: 100%;
@@ -82,6 +83,7 @@
   }
   & .aside__panel {
     width: 100%;
+    overflow-y: scroll;
   }
   & .aside__btn {
     width: 140px;
