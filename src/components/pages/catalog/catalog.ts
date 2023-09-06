@@ -51,12 +51,14 @@ export function visualeCards() {
         let discount: string | undefined = "";
         const { key } = el;
         if (pricesArr) {
-          const discountData = pricesArr[0].discounted?.value;
-          if (discountData) {
-            discount = `${(
-              discountData.centAmount /
-              10 ** discountData.fractionDigits
-            ).toFixed(2)}`;
+          if (pricesArr[0]) {
+            const discountData = pricesArr[0].discounted?.value;
+            if (discountData) {
+              discount = `${(
+                discountData.centAmount /
+                10 ** discountData.fractionDigits
+              ).toFixed(2)}`;
+            }
           }
         }
 

@@ -14,9 +14,7 @@ export class Product {
     if (key === "") {
       key = Product.checkURL();
     }
-    // console.log(key)
     const resp = (await getProduct(key)).body;
-    // console.log(resp);
 
     const DOM = {
       imgs: document.querySelector(".product_page__slider-main"),
