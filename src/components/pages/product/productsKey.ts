@@ -6,6 +6,12 @@ const productKeys = [
   "ELEG-BLK-2023",
   "343T06A4505_X5858",
   "GLAM-RED-MER-2023",
+  "DIST-BLK-SKNJ-001",
+  "CLAS-BLU-SKNJ-001",
+  "STYL-WL-REDT-001",
+  "ELEG-WL-BLKJ-001",
+  "SUNNY-YLW-MDRESS-001",
+  "CLS-BLK-LSTEE-001",
 ];
 
 export default productKeys;

@@ -23,6 +23,8 @@ export default function validationForm(target: HTMLInputElement): void {
         } else if (target.type === FieldTypes.Date) {
           validate.validateAge();
         }
+      } else if (target.tagName === "SELECT") {
+        validate.validateSelect();
       }
     }
   });
