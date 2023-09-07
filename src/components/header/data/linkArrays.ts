@@ -21,6 +21,7 @@ import { Address } from "../../../types/types";
 import { Category } from "../../../types/catalog/catalogTypes";
 import { Product } from "../../pages/product/product";
 import productKeys from "../../pages/product/productsKey";
+import { onSearchBtnCkick } from "../../pages/catalog/onSearchBtnCkick";
 
 const namePage = {
   MAIN: "MAIN",
@@ -405,6 +406,10 @@ export const pages: link[] = [
       filterBtn?.addEventListener("click", onFilterBtnClick);
       const resetBtn = document.getElementById("resetBtn");
       resetBtn?.addEventListener("click", visualeCards);
+      const searchKeywordsBtn = document.getElementById("search-button");
+      searchKeywordsBtn?.addEventListener("click", () => {
+        onSearchBtnCkick();
+      });
       const categoriesContainer = document.querySelector(
         ".catalog__catigories",
       );

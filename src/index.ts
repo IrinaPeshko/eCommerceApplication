@@ -34,6 +34,3 @@ declare global {
 }
 
 window.route = route;
-
-// getSortingProducts(["masterData.current.name.en%20asc"]).then((res)=>{console.log(res)})
-// `variants.categories.id:"${key}"`;

@@ -128,6 +128,17 @@ export default class HeaderView extends View {
         this.header?.classList.toggle("open");
         this.burger?.classList.toggle("open");
       });
+      document.body.addEventListener("click", (e) => {
+        if (
+          this.burger?.classList.contains("open") &&
+          e.target instanceof HTMLElement &&
+          e.target.classList.contains("pages__item")
+        ) {
+          document.body.classList.remove("lock");
+          this.header?.classList.remove("open");
+          this.burger?.classList.remove("open");
+        }
+      });
     }
   }
 }

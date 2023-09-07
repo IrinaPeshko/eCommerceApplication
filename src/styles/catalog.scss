@@ -7,6 +7,33 @@
   }
   .catalog__content {
     flex: 100%;
+    .search-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 50%;
+      margin-top: 10px;
+      #search {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+      #search-button {
+        padding: 10px 20px;
+        background-color: #000000;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.2s;
+        &:hover {
+          background-color: #eb5757;
+        }
+      }
+    }
     .catalog__products {
       max-width: 1350px;
     }
