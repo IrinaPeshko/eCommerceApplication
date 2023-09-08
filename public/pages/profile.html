@@ -18,103 +18,14 @@
                             <a role="tab" href="#account" id="tab2" class="profile__link" tabindex="-1">Account information</a>
                         </li>
                         <li role="presentation" class="profile__item">
-                            <a role="tab" href="#adresses" id="tab2" class="profile__link" tabindex="-1">Address book</a>
+                            <a role="tab" href="#adresses" id="tab3" class="profile__link" tabindex="-1">Address book</a>
                         </li>
                     </ul>
                 </nav>
             </aside>
-            <div class="profile__data" id="personal" role="tabpanel" aria-labelledby="tab1">
-                <form class="form profile__form">
-                    <fieldset class="form__section profile__form-section">
-                        <div class="form__form-header-wrapper">
-                            <legend class="form__subtitle profile__subtitle">Personal information</legend>
-                            <button class="edit-btn"></button>
-                        </div>
-                        <p class="form__wrapper">
-                            <label class="form__label" for="profile_name">First name</label>
-                            <span class="form__input-wrapper profile__input-wrapper">
-                                <input class="form__field" id="profile_name" name="firstName" type="text" data-type="names" readonly>
-                                <span class="form__message" aria-live="polite"></span>
-                            </span>
-                        </p>
-                        <p class="form__wrapper">
-                            <label class="form__label" for="profile_last-name">Last name</label>
-                            <span class="form__input-wrapper profile__input-wrapper">
-                                <input class="form__field" id="profile_last-name" name="lastName" type="text" data-type="names" readonly>
-                                <span class="form__message" aria-live="polite"></span>
-                            </span>
-                        </p>
-                        <p class="form__wrapper">
-                            <label class="form__label" for="profile_birthdate">Date of Birth</label>
-                            <span class="form__input-wrapper profile__input-wrapper">
-                            <input class="form__field" id="profile_birthdate" name="dateOfBirth" type="date" readonly>
-                            <span class="form__message" aria-live="polite"></span>
-                            </span>
-                        </p>
-                    </fieldset>
-                    <button class="btn profile__save-btn profile__save-btn--hidden" id="personal_btn" type="submit">Save</button>
-                </form>
-            </div>
-            <div class="profile__data" id="account" role="tabpanel" aria-labelledby="tab2" hidden>
-                <form class="form profile__form">
-                    <fieldset class="form__section profile__form-section">
-                        <div class="form__form-header-wrapper">
-                            <legend class="form__subtitle profile__subtitle">Email</legend>
-                            <button class="edit-btn" data-btntype="email"></button>
-                        </div>
-                        <p class="form__wrapper">
-                            <label class="form__label" for="email">Email</label>
-                            <span class="form__input-wrapper profile__input-wrapper">
-                                <input class="form__field" id="profile_email" type="email" name="email" placeholder="daisy.watson@example.com" readonly>
-                                <span class="form__message" aria-live="polite"></span>
-                            </span>
-                        </p>
-                    </fieldset>
-                    <button class="btn profile__save-btn profile__save-btn--hidden" id="email_save_btn" type="submit">Save</button>
-                </form>
-                <hr class="profile__line">
-                <form class="form profile__form">
-                    <fieldset class="form__section profile__form-section">
-                        <div class="form__form-header-wrapper">
-                            <legend class="form__subtitle profile__subtitle">Password</legend>
-                            <button class="edit-btn" data-btntype="password"></button>
-                        </div>
-                        <p class="form__wrapper">
-                            <label class="form__label" for="curr-password">Current Password</label>
-                            <span class="form__input-wrapper profile__input-wrapper password">
-                                <input class="form__field password__input" id="profile_curr_password" name="currentPassword" type="password" readonly>
-                                <span class="form__message form__message--empty" aria-live="polite">Password Strength: No Password</span>
-                                <span class="password__btn"><img src="../assets/icons/211739_eye_icon.svg" alt="eye"></span>
-                            </span>
-                        </p>
-                        <p class="form__wrapper">
-                            <label class="form__label" for="new-password">New Password</label>
-                            <span class="form__input-wrapper profile__input-wrapper password">
-                                <input class="form__field password__input" id="profile_new_password" name="newPassword" type="password" readonly>
-                                <span class="form__message form__message--empty" aria-live="polite">Password Strength: No Password</span>
-                                <span class="password__btn"><img src="../assets/icons/211739_eye_icon.svg" alt="eye"></span>
-                            </span>
-                        </p>
-                    </fieldset>
-                    <button class="btn profile__save-btn profile__save-btn--hidden" id="password_save_btn" type="submit">Save</button>
-                </form>
-            </div>
-            <div class="profile__data" id="addresses" role="tabpanel" aria-labelledby="tab3" hidden>
-                <div class="profile__addresses-wrapper">
-                    <div class="profile__adresses-header-wrapper">
-                        <h2 class="subtitle profile__subtitle">Address book</h2>
-                        <button class="add-btn profile__add-btn" type="button"></button>
-                    </div>
-                    <div class="profile__address-section">
-                        <h3 class="subtitle subtitle--second-level profile__subtitle--second-level">Shipping Addresses</h3>
-                        <div class="profile__shipping-addresses"></div>
-                    </div>
-                    <div class="profile__address-section">
-                        <h3 class="subtitle subtitle--second-level profile__subtitle--second-level">Billing Addresses</h3>
-                        <div class="profile__billing-addresses"></div>
-                    </div>
-                </div>
-            </div>
+            <div class="profile__data" id="personal" role="tabpanel" aria-labelledby="tab1"></div>
+            <div class="profile__data" id="account" role="tabpanel" aria-labelledby="tab2" hidden></div>
+            <div class="profile__data" id="addresses" role="tabpanel" aria-labelledby="tab3" hidden></div>
         </div>
     </div>
 </section>

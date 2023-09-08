@@ -68,6 +68,7 @@ button.popap__x {
 }
 
 .popap__content {
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   gap: 9px;
@@ -81,10 +82,12 @@ button.popap__x {
   color: #000000;
   padding: 20px;
   min-height: 100px;
+  max-width: 60vw;
 }
 @media (max-width: 968px) {
   .popap__content {
     font-size: 13px;
     gap: 0px;
+    padding: 10px;
   }
 }

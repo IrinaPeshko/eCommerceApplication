@@ -28,6 +28,9 @@
   }
   & .profile__form {
     width: 528px;
+    & .form__date::-webkit-calendar-picker-indicator {
+      opacity: 0;
+    }
   }
   & .profile__input-wrapper {
     max-width: 392px;
@@ -100,5 +103,20 @@
   & .profile__line {
     margin-top: 20px;
     margin-bottom: 20px;
+  }
+  @media screen and (max-width: 1000px) {
+    & .profile__border-wrapper {
+      flex-direction: column;
+      row-gap: 52px;
+      align-items: center;
+    }
+    & .profile__form {
+      width: 100%;
+    }
+  }
+  @media screen and (max-width: 610px) {
+    & .profile__addresses-wrapper {
+      width: 100%;
+    }
   }
 }

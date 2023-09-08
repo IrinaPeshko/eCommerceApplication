@@ -1,15 +1,13 @@
 import { getCategories, getSerchingProducts } from "../../../sdk/sdk";
-/* eslint-disable import/no-cycle */
-import { routeToNotAnchor } from "../../utils/router";
 import {
   createBrendFilterStr,
   createColorFilterStr,
   createPriceFilterStr,
   createSizeFilterStr,
 } from "./createAttributeParams";
+// eslint-disable-next-line import/no-cycle
 import { creatCard } from "./createCard";
 import { visualeFilterCards } from "./ilterBtnClick";
-import { product } from "../../header/data/linkArrays";
 import { createSubCategory } from "./createSubCategory";
 
 export function visualeCards() {
@@ -51,39 +49,46 @@ export function visualeCards() {
         const imagesArr = el.masterVariant.images;
         const pricesArr = el.masterVariant.prices;
         let discount: string | undefined = "";
-        const { id } = el;
+        const { key } = el;
         if (pricesArr) {
-          const disc = pricesArr[0].discounted?.value.centAmount;
-          if (disc) {
-            discount = `${disc}`.split("").slice(0, -2).join("");
+          if (pricesArr[0]) {
+            const discountData = pricesArr[0].discounted?.value;
+            if (discountData) {
+              discount = `${(
+                discountData.centAmount /
+                10 ** discountData.fractionDigits
+              ).toFixed(2)}`;
+            }
           }
         }
 
         let url = "";
-        let price = 0;
+        let price = "0";
         if (imagesArr && pricesArr && pricesArr?.length !== 0) {
           url = imagesArr[0].url;
-          price = pricesArr[0].value.centAmount;
-          price = +`${price}`.split("").slice(0, -2).join("");
+          const dataPrice = pricesArr[0].value;
+          price = `${(
+            dataPrice.centAmount /
+            10 ** dataPrice.fractionDigits
+          ).toFixed(2)}`;
         }
         if (description) {
-          console.log(discount);
+          // console.log(discount);
           if (discount) {
-            const card = creatCard(name, description, url, price, id, discount);
+            const card = creatCard(
+              name,
+              description,
+              url,
+              price,
+              key,
+              discount,
+            );
             container?.appendChild(card);
           } else {
-            const card = creatCard(name, description, url, price, id);
+            const card = creatCard(name, description, url, price, key);
             container?.appendChild(card);
           }
         }
-      });
-      const cards = document.querySelectorAll(".catalog__card");
-      cards.forEach((el) => {
-        el.addEventListener("click", (ev) => {
-          const id = el.getAttribute("products");
-          const { callback } = product[0];
-          routeToNotAnchor(ev, "/product", callback.bind(null, `${id}`));
-        });
       });
     });
   } catch (error) {

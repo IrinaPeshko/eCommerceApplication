@@ -12,3 +12,12 @@ export interface Category {
   name: string;
   parentId: string | null;
 }
+
+export interface SuggestionResult {
+  body: {
+    searchKeywords: {
+      en: string[];
+    };
+  };
+  statusCode: number;
+}

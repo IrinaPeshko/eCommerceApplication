@@ -1,13 +1,20 @@
-import { getSerchingProducts } from "../../../sdk/sdk";
-// eslint-disable-next-line import/no-cycle
+import { searchByKeyWords } from "../../../sdk/sdk";
+/* eslint-disable import/no-cycle */
 import { creatCard } from "./createCard";
 
-export function visualeFilterCards(params: string[]) {
+export function onSearchBtnCkick() {
+  const searchInput = document.getElementById("search");
   const container = document.querySelector(".catalog__products");
   const sortSelect = document.getElementById("sort-select");
   if (container) {
     container.innerHTML = "";
   }
+  const checkboxArray = document.querySelectorAll(".form__checkbox");
+  checkboxArray.forEach((checkbox) => {
+    if (checkbox instanceof HTMLInputElement) {
+      checkbox.checked = false;
+    }
+  });
   let sortParam = "";
   if (sortSelect instanceof HTMLSelectElement) {
     if (sortSelect.value === "name-asc") {
@@ -20,8 +27,9 @@ export function visualeFilterCards(params: string[]) {
       sortParam = "price asc";
     }
   }
-  try {
-    getSerchingProducts(params, sortParam).then((res) => {
+  if (searchInput instanceof HTMLInputElement) {
+    const keyWord = searchInput.value.toLowerCase();
+    searchByKeyWords(keyWord, sortParam).then((res) => {
       const arrProducts = res.body.results;
       arrProducts.forEach((el) => {
         const name = el.name.en;
@@ -75,7 +83,5 @@ export function visualeFilterCards(params: string[]) {
         }
       });
     });
-  } catch (error) {
-    console.error(`You have an error ${error}`);
   }
 }

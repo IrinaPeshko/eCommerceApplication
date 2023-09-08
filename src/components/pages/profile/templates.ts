@@ -9,7 +9,7 @@ export function createaAddressTemplate(
     <form class="form aside__form">
       <fieldset class="form__section">
         <legend class="form__subtitle">${legend}</legend>
-        <p class="form__wrapper">
+        <p class="form__wrapper aside__form-wrapper">
           <label class="form__label" for="country">Country <span class="form__asterisk">*</span></label>
           <span class="form__input-wrapper">
           <select value="${
@@ -24,7 +24,7 @@ export function createaAddressTemplate(
           <span class="form__message" aria-live="polite"></span>
           </span>
         </p>
-        <p class="form__wrapper">
+        <p class="form__wrapper aside__form-wrapper">
           <label class="form__label" for="street">Street <span class="form__asterisk">*</span></label>
           <span class="form__input-wrapper">
             <input class="form__field" id="street" type="text" name="streetName" value="${
@@ -33,7 +33,7 @@ export function createaAddressTemplate(
             <span class="form__message" aria-live="polite"></span>
           </span>
         </p>
-        <p class="form__wrapper">
+        <p class="form__wrapper aside__form-wrapper">
           <label class="form__label" for="building">Building</label>
           <span class="form__input-wrapper">
             <input class="form__field" id="building" type="text" name="building" value="${
@@ -42,7 +42,7 @@ export function createaAddressTemplate(
             <span class="form__message" aria-live="polite"></span>
           </span>
         </p>
-        <p class="form__wrapper">
+        <p class="form__wrapper aside__form-wrapper">
             <label class="form__label" for="apartment">Apartment / Suite</span></label>
             <span class="form__input-wrapper">
               <input class="form__field" id="apartment" type="text" name="apartment" value="${
@@ -51,7 +51,7 @@ export function createaAddressTemplate(
               <span class="form__message" aria-live="polite"></span>
             </span>
         </p>
-        <p class="form__wrapper">
+        <p class="form__wrapper aside__form-wrapper">
           <label class="form__label" for="city">City <span class="form__asterisk">*</span></label>
           <span class="form__input-wrapper">
             <input class="form__field" id="city" type="text" name="city" value="${
@@ -60,7 +60,7 @@ export function createaAddressTemplate(
             <span class="form__message" aria-live="polite"></span>
           </span>
         </p>
-        <p class="form__wrapper">
+        <p class="form__wrapper aside__form-wrapper">
             <label class="form__label" for="postal_code">Postal Code <span class="form__asterisk">*</span></label>
             <span class="form__input-wrapper">
               <input class="form__field" id="postal_code" type="text" name="postalCode" value="${

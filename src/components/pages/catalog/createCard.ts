@@ -6,16 +6,20 @@ export function creatCard(
   name: string,
   description: string,
   img: string,
-  price: number,
-  id: string,
+  price: string,
+  key: string | undefined,
   discount?: string,
 ) {
   const card = document.createElement("div");
   card.className = "catalog__card";
-  card.setAttribute("products", id);
+  card.setAttribute("products", `${key}`);
+  card.addEventListener("click", (e) => {
+    const { callback } = product[0];
+    routeToNotAnchor(e, `/product__${key}`, callback.bind(null, `${key}`));
+  });
   if (discount) {
     card.innerHTML = `<div class="card__img-block">
-          <img  class="card__img" src="${img}" alt="">
+          <img class="card__img" src="${img}" alt="">
         </div>
         <div class="card__caption">
           <h3 class="product__name">${name}</h3>
@@ -35,12 +39,5 @@ export function creatCard(
           <p class="product__description">${description}</p>
           <p class="product__price">${price}$</p>
         </div>`;
-
-  card.addEventListener("click", (e) => {
-    // const cardID = card.getAttribute("products");
-    const { callback } = product[0];
-    routeToNotAnchor(e, "/product", callback.bind(null, `${id}`));
-  });
-
   return card;
 }

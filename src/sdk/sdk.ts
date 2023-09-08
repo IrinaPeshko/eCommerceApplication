@@ -239,7 +239,6 @@ export async function getSerchingProducts(
       queryArgs: {
         filter: filterParams,
         sort: sortParam,
-        // sort: "name.en asc",
       },
     })
     .execute();
@@ -249,11 +248,19 @@ export function getProducts() {
   return apiRoot.withProjectKey({ projectKey }).products().get().execute();
 }
 
-export async function getProduct(id: string) {
+export function getProductsProdections() {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .productProjections()
+    .search()
+    .get()
+    .execute();
+}
+export async function getProduct(key: string) {
   const res = apiRoot
     .withProjectKey({ projectKey })
     .productProjections()
-    .withId({ ID: id })
+    .withKey({ key })
     .get()
     .execute();
   return res;
@@ -262,3 +269,20 @@ export async function getProduct(id: string) {
 export async function getCategories() {
   return apiRoot.withProjectKey({ projectKey }).categories().get().execute();
 }
+
+export function searchByKeyWords(word: string, sortParam: string) {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .productProjections()
+    .search()
+    .get({
+      queryArgs: {
+        fuzzy: true,
+        "text.en": word,
+        sort: sortParam,
+      },
+    })
+    .execute();
+}
+
+// export function getProductByKewWord()
