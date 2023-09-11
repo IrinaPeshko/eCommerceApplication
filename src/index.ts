@@ -8,6 +8,7 @@ import {
   profileLinksOut,
 } from "./components/header/data/linkArrays";
 import "swiper/css/bundle";
+// import { getAllCarts, getCarts } from "./sdk/sdk";
 
 function initializeApp(): void {
   App.createView();
@@ -34,3 +35,5 @@ declare global {
 }
 
 window.route = route;
+// getCarts().then((res)=>console.log(res))
+// getAllCarts().then((res)=>console.log(res))

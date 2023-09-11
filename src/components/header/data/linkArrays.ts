@@ -7,7 +7,7 @@ import setShippingDefault from "../../pages/registration/select default address 
 /* eslint-disable import/no-cycle */
 import Login from "../../pages/login/login";
 import Profile from "../../pages/profile/profile";
-import { routeforOtherLink } from "../../utils/router";
+import { handleLocation, routeforOtherLink } from "../../utils/router";
 import HeaderView from "../header";
 import {
   createCategories,
@@ -215,6 +215,7 @@ export const profileLinksOut: link[] = [
     classList: ["account__item", "sigh-out"],
     innerHTML: `<svg 
               class="sigh-out"
+              id="sighOutSVG"
               width="40px" height ="40px" version="1.0" xmlns="http://www.w3.org/2000/svg"
  width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
  preserveAspectRatio="xMidYMid meet">
@@ -262,10 +263,12 @@ m1653 -377 c75 -32 122 -103 122 -185 0 -138 -132 -233 -261 -188 -55 19 -88
 </g>
 </svg>
 `,
-    href: "/",
+    href: "/signout",
     callback: (): void => {
       localStorage.removeItem("token");
       localStorage.removeItem("id");
+      window.history.replaceState({}, "", "/");
+      handleLocation();
       const newHeader = new HeaderView();
       const headerElement = newHeader.getHTMLElement();
       const header = document.querySelector("header");
