@@ -22,6 +22,12 @@ import { Category } from "../../../types/catalog/catalogTypes";
 import { Product } from "../../pages/product/product";
 import productKeys from "../../pages/product/productsKey";
 import { onSearchBtnCkick } from "../../pages/catalog/onSearchBtnCkick";
+import {
+  createBrendFilterStr,
+  createColorFilterStr,
+  createPriceFilterStr,
+  createSizeFilterStr,
+} from "../../pages/catalog/createAttributeParams";
 
 const namePage = {
   MAIN: "MAIN",
@@ -410,6 +416,30 @@ export const pages: link[] = [
       searchKeywordsBtn?.addEventListener("click", () => {
         onSearchBtnCkick();
       });
+      const nextBtn = document.getElementById("next");
+      const prevBtn = document.getElementById("prev");
+      nextBtn?.addEventListener("click", () => {
+        if (nextBtn.classList.contains("catalog__button_active")) {
+          prevBtn?.classList.add("catalog__button_active");
+          prevBtn?.classList.remove("catalog__button_inactive");
+          const page = document.getElementById("number-page");
+          if (page) {
+            page.innerText = `${+page.innerText + 1}`;
+          }
+          onFilterBtnClick();
+        }
+      });
+      prevBtn?.addEventListener("click", () => {
+        if (prevBtn.classList.contains("catalog__button_active")) {
+          nextBtn?.classList.add("catalog__button_active");
+          nextBtn?.classList.remove("catalog__button_inactive");
+          const page = document.getElementById("number-page");
+          if (page) {
+            page.innerText = `${+page.innerText - 1}`;
+          }
+          onFilterBtnClick();
+        }
+      });
       const categoriesContainer = document.querySelector(
         ".catalog__catigories",
       );
@@ -462,12 +492,33 @@ export const pages: link[] = [
       const sortSelect = document.getElementById("sort-select");
       if (sortSelect instanceof HTMLSelectElement) {
         sortSelect?.addEventListener("change", () => {
+          const params: string[] = [];
           const selected = document.querySelector(".selected");
           if (selected) {
             const categoryKey = selected.getAttribute("key");
-            visualeFilterCards([`variants.categories.id:"${categoryKey}"`]);
-          } else {
-            visualeFilterCards([]);
+            params.push(`variants.categories.id:"${categoryKey}"`);
+          }
+          const colorParams = createColorFilterStr();
+          const brendParams = createBrendFilterStr();
+          const sizeParams = createSizeFilterStr();
+          const priceParams = createPriceFilterStr();
+          const container = document.querySelector(".catalog__products");
+
+          if (colorParams) {
+            params.push(colorParams);
+          }
+          if (brendParams) {
+            params.push(brendParams);
+          }
+          if (sizeParams) {
+            params.push(sizeParams);
+          }
+          if (priceParams) {
+            params.push(priceParams);
+          }
+          if (container) {
+            container.innerHTML = "";
+            visualeFilterCards(params);
           }
         });
       }

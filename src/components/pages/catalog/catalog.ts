@@ -41,7 +41,14 @@ export function visualeCards() {
       const key = selectedEl.getAttribute("key");
       params.push(`variants.categories.id:"${key}"`);
     }
-    getSerchingProducts(params, sortParam).then((res) => {
+    const page = document.getElementById("number-page")?.innerText;
+    let offset = 0;
+    if (page) {
+      if (page) {
+        offset = (+page - 1) * 4;
+      }
+    }
+    getSerchingProducts(params, sortParam, offset).then((res) => {
       const arrProducts = res.body.results;
       arrProducts.forEach((el) => {
         const name = el.name.en;
@@ -96,7 +103,7 @@ export function visualeCards() {
   }
 }
 
-export function onFilterBtnClick() {
+export async function onFilterBtnClick() {
   const params: string[] = [];
   const colorParams = createColorFilterStr();
   const brendParams = createBrendFilterStr();

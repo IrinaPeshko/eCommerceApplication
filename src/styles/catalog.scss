@@ -61,6 +61,36 @@
         }
       }
     }
+    .catalog__pagination {
+      .catalog__buttons {
+        margin-top: 58px;
+        display: flex;
+        justify-content: center;
+        .catalog__button {
+          border-radius: 100px;
+          width: 52px;
+          height: 52px;
+          margin: 0 10px 0;
+        }
+        .catalog__button_inactive {
+          border: 2px solid #cdcdcd;
+        }
+        .catalog__button_actual {
+          background-color: #000000;
+          color: #ffffff;
+        }
+        .catalog__button_active {
+          background-color: #ffffff;
+          &:hover {
+            background-color: #000000;
+            color: white;
+            border: 0px solid transparent;
+            transition: 1s;
+            cursor: pointer;
+          }
+        }
+      }
+    }
   }
 }
 

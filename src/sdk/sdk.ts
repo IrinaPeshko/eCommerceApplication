@@ -230,6 +230,7 @@ export function setDefaultAddress(
 export async function getSerchingProducts(
   filterParams: string[],
   sortParam: string,
+  page: number,
 ) {
   return apiRoot
     .withProjectKey({ projectKey })
@@ -239,6 +240,8 @@ export async function getSerchingProducts(
       queryArgs: {
         filter: filterParams,
         sort: sortParam,
+        limit: 4,
+        offset: page,
       },
     })
     .execute();
