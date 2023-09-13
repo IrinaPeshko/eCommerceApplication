@@ -8,14 +8,26 @@ export function creatCard(
   img: string,
   price: string,
   key: string | undefined,
+  sku: string,
   discount?: string,
 ) {
   const card = document.createElement("div");
   card.className = "catalog__card";
   card.setAttribute("products", `${key}`);
+  card.setAttribute("sku", `${sku}`);
   card.addEventListener("click", (e) => {
-    const { callback } = product[0];
-    routeToNotAnchor(e, `/product__${key}`, callback.bind(null, `${key}`));
+    const event = e.target;
+    console.log(event);
+    if (event instanceof HTMLElement) {
+      if (event.id === "catalog__product_minus") {
+        console.log("delete product");
+      } else if (event.id === "catalog__product_plus") {
+        console.log("add product");
+      } else {
+        const { callback } = product[0];
+        routeToNotAnchor(e, `/product__${key}`, callback.bind(null, `${key}`));
+      }
+    }
   });
   if (discount) {
     card.innerHTML = `<div class="card__img-block">
@@ -30,9 +42,9 @@ export function creatCard(
           </div>
             <p>Add to bag</p>
           <div class="product_quantity">
-            <button class="product_quantity__minus" type="button" onclick="this.nextElementSibling.stepDown();">-</button>
+             <button class="product_quantity__minus" id="catalog__product_minus" type="button" onclick="this.nextElementSibling.stepDown();">-</button>
             <input type="number" class="product_quantity__num" value="0" min="0" readonly>
-            <button class="product_quantity__plus" type="button" onclick="this.previousElementSibling.stepUp();">+</button>
+            <button class="product_quantity__plus" id="catalog__product_plus" type="button" onclick="this.previousElementSibling.stepUp();">+</button>
           </div>
         </div>`;
     return card;
@@ -48,9 +60,9 @@ export function creatCard(
           </div>
           <p>Add to bag</p>
           <div class="product_quantity">
-            <button class="product_quantity__minus" type="button" onclick="this.nextElementSibling.stepDown();">-</button>
+            <button class="product_quantity__minus" id="catalog__product_minus" type="button" onclick="this.nextElementSibling.stepDown();">-</button>
             <input type="number" class="product_quantity__num" value="0" min="0" readonly>
-            <button class="product_quantity__plus" type="button" onclick="this.previousElementSibling.stepUp();">+</button>
+            <button class="product_quantity__plus" id="catalog__product_plus" type="button" onclick="this.previousElementSibling.stepUp();">+</button>
           </div>
         </div>`;
   return card;
