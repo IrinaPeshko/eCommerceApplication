@@ -28,6 +28,7 @@ import {
   createPriceFilterStr,
   createSizeFilterStr,
 } from "../../pages/catalog/createAttributeParams";
+import { createCartTable } from "../../pages/basket/basket";
 
 const namePage = {
   MAIN: "MAIN",
@@ -390,7 +391,9 @@ fill="#ffffff" stroke="none">
               <img src="${imgBascket}" alt="cart" />
             </div>`,
     href: "basket",
-    callback: (): void => {},
+    callback: (): void => {
+      createCartTable();
+    },
   },
 ];
 

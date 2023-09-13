@@ -53,6 +53,8 @@ export enum Actions {
   addbillingaddress = "addBillingAddressId",
   setdefaultbilling = "setDefaultBillingAddress",
   setdefaultshipping = "setDefaultShippingAddress",
+  removeline = "removeLineItem",
+  // changequantity = "changeLineItemQuantity"
 }
 export enum Countries {
   BY = "Belarus",
@@ -93,6 +95,15 @@ export interface SetDefaultShipping {
   action: Actions.setdefaultshipping;
   addressKey: string;
 }
+export interface RemoveLineFromCart {
+  action: Actions.removeline;
+  lineItemId: string;
+}
+// export interface ChangeQuantity {
+//   action: Actions.removeline,
+//   lineItemId: string,
+//   quantity: number
+// }
 export type Tuple = [AddAddress, AddShippingAddress | AddBillingAddress];
 export type ShippingAddress = string;
 export type BillingAddress = string;

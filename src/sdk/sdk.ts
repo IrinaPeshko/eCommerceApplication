@@ -9,6 +9,8 @@ import {
   Tuple,
   SetDefaultBilling,
   SetDefaultShipping,
+  RemoveLineFromCart,
+  // ChangeQuantity
 } from "../types/types";
 
 export function getProjectDetails() {
@@ -323,3 +325,30 @@ export async function getAllCarts() {
   const res = apiRoot.withProjectKey({ projectKey }).carts().get().execute();
   return res;
 }
+
+export async function removeLine(
+  id: string,
+  version: number,
+  actionObj: RemoveLineFromCart,
+) {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .me()
+    .carts()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version,
+        actions: [actionObj],
+      },
+    })
+    .execute();
+}
+// export async function changeLineQuantity(id: string, version: number, actionObj: ChangeQuantity) {
+//   return apiRoot.withProjectKey({ projectKey }).me().carts().withId({ ID: id }).post({
+//     body: {
+//       version,
+//       actions: [actionObj]
+//     }
+//   }).execute();
+// }

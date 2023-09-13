@@ -1,11 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <h1>basket</h1>
-</body>
-</html>
+<section class="cart">
+  <div class="container cart__container">
+    <ul class="breadcrumbs cart__breadcrumbs">
+        <li class="breadcrumbs__item">
+            <a class="breadcrumbs__link" href="/">Main</a>
+        </li>
+        <li class="breadcrumbs__item breadcrumbs__item--active">Shopping Cart</li>
+    </ul>
+    <h1 class="title cart__title">Shopping Cart</h1>
+    <div class="cart__wrapper">
+      <div class="cart__table-block">
+        <div class="cart__table">
+          <div class="cart__table-head">
+            <div class="cart__table-product-col">Product</div>
+            <div class="cart__table-price-col">Price</div>
+            <div class="cart__table-size-col">Size</div>
+            <div class="cart__table-quantity-col">Quantity</div>
+            <div class="cart__table-total-col">Total</div>
+            <div class="cart__table-btns-col"></div>
+          </div>
+          <div class="cart__table-body">
+            <!-- <div class="cart__table-row">
+              <div class="cart__table-product-col">Product
+                <img src="" alt="">
+              </div>
+              <div class="cart__table-price-col">
+                <span class="cart__table-text">$ 120</span>
+              </div>
+              <div class="cart__table-size-col">
+                <span class="cart__table-text">W32</span>
+              </div>
+              <div class="cart__table-quantity-col">
+                <div class="counter">
+                  <button class="counter__decrement-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <rect y="5" width="12" height="2" fill="#C4C4C4"/>
+                    </svg>
+                  </button>
+                  <input class="counter__field" min="1" name="quantity" value="1" type="number" maxlength ="10">
+                  <button class="counter__increment-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <rect y="5" width="12" height="2" fill="#C4C4C4"/>
+                      <rect x="7" width="12" height="2" transform="rotate(90 7 0)" fill="#C4C4C4"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="cart__table-total-col">
+                <span class="cart__table-text">$ 120</span>
+              </div>
+              <div class="cart__table-btns-col">
+                <button class="edit-btn"></button>
+                <button class="delete-btn"></button>
+              </div>
+            </div> -->
+          </div>
+        </div>
+        <div class="cart__btns-wrapper">
+          <a class="grey-btn cart__continue-btn">Continue Shopping</a>
+          <button class="grey-btn cart__clear-cart-btn">Clear Shopping Cart</button>
+        </div>
+      </div>
+      <div class="cart__options-block">
+        <div class="cart__option cart__option--apply-code">
+          <h2 class="subtitle cart__option-subtitle">Apply Discount Code</h2>
+          <label for="discount_code" class="cart__code-field-wrapper">
+            <input id="discount_code" type="text" class="cart__code-field" placeholder="Enter discount code">
+            <button class="cart__apply-code-btn">Apply Discount</button>
+          </label>
+        </div>
+        <div class="cart__option cart__total">
+          <p class="cart__subtotal">
+            <span class="cart__subtotal-text">Subtotal</span>
+            <span class="cart__subtotal-price">$ 0</span>
+          </p>
+          <p class="cart__total-order">
+            <span class="subtitle cart__total-text">Order Total</span>
+            <span class="subtitle cart__total-price">$ 0</span>
+          </p>
+          <button class="btn cart__checkout-btn">Proceed to checkout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

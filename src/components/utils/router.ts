@@ -18,7 +18,7 @@ export const routers: Irouters = {
   "/about": "pages/about.html",
   "/login": "pages/login.html",
   "/createaccount": "pages/createaccount.html",
-  "/baskett": "pages/basket.html",
+  "/basket": "pages/basket.html",
   "/404": "pages/404.html",
   "/profile": "pages/profile.html",
 };

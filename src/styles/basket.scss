@@ -1,0 +1,153 @@
+.cart {
+  padding-top: 13px;
+  padding-bottom: 116px;
+  & .cart__container {
+    max-width: 1496px;
+    box-sizing: border-box;
+  }
+  & .cart__wrapper {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 71px;
+  }
+  & .cart__breadcrumbs {
+    margin-bottom: 13px;
+  }
+  & .cart__title {
+    margin-bottom: 55px;
+  }
+  & .cart__table-head {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #c4c4c4;
+    & > div {
+      font: {
+        family: "Oswald", Arial, sans-serif;
+        size: 18px;
+        weight: 500;
+      }
+      text-transform: uppercase;
+      color: #828282;
+      margin-bottom: 18px;
+    }
+  }
+  & .cart__table-body {
+    margin-bottom: 24px;
+    padding: 24px 0;
+    border-bottom: 1px solid #c4c4c4;
+  }
+  & .cart__table-product-col {
+    width: 322px;
+  }
+  & .cart__table-price-col {
+    width: 118px;
+  }
+  & .cart__table-size-col {
+    width: 77px;
+  }
+  & .cart__table-quantity-col {
+    width: 159px;
+  }
+  & .cart__table-total-col {
+    width: 114px;
+  }
+  & .cart__table-btns-col {
+    width: 92px;
+  }
+  & .cart__table-btns-col {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+  }
+  & .cart__table-text {
+    font: {
+      family: "Roboto-Regular", Arial, sans-serif;
+      size: 14px;
+      weight: 600;
+    }
+    color: #000000;
+  }
+  & .cart__btns-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  & .cart__table-row {
+    display: flex;
+    align-items: center;
+  }
+  & .cart__options-block {
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 24px;
+  }
+  & .cart__option {
+    background-color: #f0f2f2;
+    border: 2px solid #c4c4c4;
+  }
+  & .cart__option--apply-code {
+    padding: 36px 24px 21px 32px;
+  }
+  & .cart__option-subtitle {
+    margin-bottom: 22px;
+  }
+  & .cart__code-field-wrapper {
+    width: 100%;
+    position: relative;
+  }
+  & .cart__code-field {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 115px 13px 16px;
+    border: 1px solid #c4c4c4;
+    font: {
+      family: "Roboto-Regular", Arial, sans-serif;
+      size: 15px;
+      weight: 400;
+    }
+    color: #c4c4c4;
+  }
+  & .cart__apply-code-btn {
+    position: absolute;
+    right: 15px;
+    top: 0;
+    border: none;
+    background-color: transparent;
+    font: {
+      family: "Oswald", Arial, sans-serif;
+      size: 14px;
+      weight: 500;
+    }
+    text-transform: uppercase;
+    color: #3f3f3f;
+  }
+  & .cart__total {
+    padding-top: 34px;
+  }
+  & .cart__subtotal,
+  & .cart__total-order {
+    margin: 0;
+    padding: 0 33px 0 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  & .cart__subtotal {
+    margin-bottom: 37px;
+  }
+  & .cart__total-order {
+    margin-bottom: 30px;
+  }
+  & .cart__subtotal-text,
+  & .cart__subtotal-price {
+    font: {
+      family: "Oswald", Arial, sans-serif;
+      size: 18px;
+      weight: 500;
+    }
+  }
+  & .cart__checkout-btn {
+    width: 100%;
+  }
+}

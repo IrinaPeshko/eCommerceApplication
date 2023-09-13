@@ -140,9 +140,9 @@ body.lock {
   margin: 0;
   padding: 0;
   font: {
-    family: "Oswald-Medium", Arial, sans-serif;
+    family: "Oswald", Arial, sans-serif;
     size: 24px;
-    weight: 600;
+    weight: 400;
   }
   line-height: 1.15;
   &.subtitle--second-level {
@@ -537,6 +537,80 @@ input:read-only,
     cursor: pointer;
     & svg path {
       stroke: #828282;
+    }
+  }
+}
+.grey-btn {
+  padding: 8px 41px;
+  background-color: #f0f2f2;
+  border: 2px solid #c4c4c4;
+  font: {
+    family: "Oswald", Arial, sans-serif;
+    size: 14px;
+    weight: 500;
+  }
+  text-transform: uppercase;
+  color: #828282;
+  transition: all 0.3s ease-in;
+  &:hover {
+    cursor: pointer;
+    border-color: #828282;
+  }
+}
+.counter {
+  width: 123px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #c4c4c4;
+  box-sizing: border-box;
+  & .counter__decrement-btn {
+    flex-shrink: 1;
+    position: relative;
+    border: none;
+    background-color: transparent;
+    padding: 16px 16px;
+    box-sizing: border-box;
+    &:hover {
+      cursor: pointer;
+      background-color: #f0f2f2;
+      & svg rect {
+        fill: #828282;
+      }
+    }
+  }
+  & .counter__increment-btn {
+    flex-shrink: 1;
+    border: none;
+    background-color: transparent;
+    padding: 16px 16px;
+    box-sizing: border-box;
+    &:hover {
+      cursor: pointer;
+      background-color: #f0f2f2;
+      & svg rect {
+        fill: #828282;
+      }
+    }
+  }
+  & .counter__field {
+    width: 30px;
+    padding: 0;
+    flex-shrink: 0;
+    border: none;
+    font: {
+      family: "Oswald", Arial, sans-serif;
+      size: 16px;
+      weight: 400;
+    }
+    color: #000;
+    text-align: center;
+    line-height: normal;
+    text-transform: uppercase;
+    -moz-appearance: textfield;
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
     }
   }
 }
