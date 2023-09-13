@@ -38,4 +38,3 @@ window.route = route;
 
 CartAPI.getMyCarts().then((res) => console.log(res.body.results));
 // CartAPI.addProduct("343T06A4505_X5858-m", 4)
-CartAPI.checkMyCart().then((res) => console.log(res));

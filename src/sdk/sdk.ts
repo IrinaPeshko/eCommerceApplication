@@ -287,3 +287,34 @@ export function searchByKeyWords(word: string, sortParam: string) {
     })
     .execute();
 }
+
+export async function createCartWithToken() {
+  const res = apiRoot
+    .withProjectKey({ projectKey })
+    .me()
+    .carts()
+    .post({
+      body: {
+        currency: "USD",
+      },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .execute();
+  return res;
+}
+
+export async function createAnonimusCart(anonimusApiRoot: ApiRoot) {
+  const res = anonimusApiRoot
+    .withProjectKey({ projectKey })
+    .me()
+    .carts()
+    .post({
+      body: {
+        currency: "USD",
+      },
+    })
+    .execute();
+  return res;
+}

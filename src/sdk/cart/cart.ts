@@ -5,25 +5,54 @@ import {
   Price,
   Image,
   LocalizedString,
+  createApiBuilderFromCtpClient,
+  ApiRoot,
 } from "@commercetools/platform-sdk";
 import { apiRoot, projectKey } from "../commercetoolsApiRoot";
+import { createAnonimusCart, createCartWithToken } from "../sdk";
+import { MyTokenCache } from "../token/TokenCache";
+import {
+  createAnonimusClient,
+  createAnonimusFlow,
+} from "../createPasswordClient";
 
 class CartAPI {
+  // возвращает корзину или создает и возвращает корзину.
+  public static async getOrCreateMyCart() {
+    const myCart = await this.getMyCarts().then(async (myCartData) => {
+      // если моя корзина создана, то возвращаем корзину
+      if (myCartData.body.count > 0) {
+        return myCartData.body.results[0];
+      }
+      // иначе создаем новую корзину и возвращаем ее
+      const newCart = await this.createCart().then(
+        (newCartData) => newCartData?.body,
+      );
+      return newCart;
+    });
+    return myCart;
+  }
+
   public static async createCart() {
-    const res = apiRoot
-      .withProjectKey({ projectKey })
-      .me()
-      .carts()
-      .post({
-        body: {
-          currency: "USD",
-        },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .execute();
-    return res;
+    let res;
+
+    if (localStorage.getItem("token") || localStorage.getItem("anonimToken")) {
+      res = await createCartWithToken();
+    } else {
+      const tokenCache = new MyTokenCache();
+      const anonimClientAPI = createAnonimusFlow(tokenCache);
+      const anonimClient = createAnonimusClient(anonimClientAPI);
+      const anonimApiRoot: ApiRoot =
+        createApiBuilderFromCtpClient(anonimClient);
+      res = await createAnonimusCart(anonimApiRoot);
+
+      if (res.statusCode !== 400) {
+        const { token } = tokenCache.get();
+        localStorage.setItem("anonimToken", token);
+      }
+    }
+
+    return res; // Возвращает значение из обеих ветвей условия
   }
 
   public static async deleteCart(id: string, version: number) {
@@ -66,25 +95,12 @@ class CartAPI {
     return res;
   }
 
-  // возвращает корзину или создает и возвращает корзину.
-  public static async getOrCreateMyCart() {
-    const myCart = await this.getMyCarts().then(async (myCartData) => {
-      // если моя корзина создана, то возвращаем корзину
-      if (myCartData.body.count > 0) {
-        return myCartData.body.results[0];
-      }
-      // иначе создаем новую корзину и возвращаем ее
-      const newCart = await this.createCart().then(
-        (newCartData) => newCartData.body,
-      );
-      return newCart;
-    });
-    return myCart;
-  }
-
   public static async addProduct(sku: string, quantity: number) {
     if (quantity < 0) return undefined;
     const myCart = await this.getOrCreateMyCart();
+    if (!myCart) {
+      return undefined;
+    }
     const version = myCart?.version;
     const ID = myCart?.id;
     const addProduct = await apiRoot
@@ -130,6 +146,9 @@ class CartAPI {
     let version;
     if (IDData === undefined || versionData === undefined) {
       const myCart = await this.getOrCreateMyCart();
+      if (!myCart) {
+        return undefined;
+      }
       ID = myCart?.id;
       version = myCart?.version;
     } else {

@@ -6,7 +6,10 @@ import {
 import { projectKey, httpMiddlewareOptions } from "./commercetoolsApiRoot";
 import { MyTokenCache } from "./token/TokenCache";
 
-import { IpasswordAuthMiddlewareOptions } from "../types/APIClient/APIClient";
+import {
+  IAnonimeOptions,
+  IpasswordAuthMiddlewareOptions,
+} from "../types/APIClient/APIClient";
 
 export function createPasswordClient(
   email: string,
@@ -40,4 +43,25 @@ export function createClient(
     .withUserAgentMiddleware()
     .build();
   return client;
+}
+
+export function createAnonimusFlow(tokenCache: MyTokenCache) {
+  return {
+    host: "https://auth.europe-west1.gcp.commercetools.com",
+    projectKey: "ecommerceapplication",
+    credentials: {
+      clientId: "xWGHs96wClja2WK4pTe4sHuL",
+      clientSecret: "ygIfusxYt5nEp1dB-K4Y-rcCMEReoCFG",
+    },
+    scopes: [`manage_project:${projectKey}`],
+    tokenCache,
+    fetch,
+  };
+}
+export function createAnonimusClient(anonimeOptions: IAnonimeOptions) {
+  const anonimusClient = new ClientBuilder()
+    .withAnonymousSessionFlow(anonimeOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .build();
+  return anonimusClient;
 }

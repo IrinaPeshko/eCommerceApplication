@@ -51,10 +51,12 @@ export function visualeCards() {
     getSerchingProducts(params, sortParam, offset).then((res) => {
       const arrProducts = res.body.results;
       arrProducts.forEach((el) => {
+        console.log(el);
         const name = el.name.en;
         const description = el.description?.en;
         const imagesArr = el.masterVariant.images;
         const pricesArr = el.masterVariant.prices;
+        const { sku } = el.masterVariant;
         let discount: string | undefined = "";
         const { key } = el;
         if (pricesArr) {
@@ -82,17 +84,20 @@ export function visualeCards() {
         if (description) {
           // console.log(discount);
           if (discount) {
-            const card = creatCard(
-              name,
-              description,
-              url,
-              price,
-              key,
-              discount,
-            );
-            container?.appendChild(card);
-          } else {
-            const card = creatCard(name, description, url, price, key);
+            if (sku) {
+              const card = creatCard(
+                name,
+                description,
+                url,
+                price,
+                key,
+                sku,
+                discount,
+              );
+              container?.appendChild(card);
+            }
+          } else if (sku) {
+            const card = creatCard(name, description, url, price, key, sku);
             container?.appendChild(card);
           }
         }
