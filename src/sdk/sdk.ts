@@ -287,39 +287,3 @@ export function searchByKeyWords(word: string, sortParam: string) {
     })
     .execute();
 }
-
-export async function getCarts() {
-  const res = apiRoot
-    .withProjectKey({ projectKey })
-    .me()
-    .carts()
-    .get({
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .execute();
-  return res;
-}
-
-export async function createCart() {
-  const res = apiRoot
-    .withProjectKey({ projectKey })
-    .me()
-    .carts()
-    .post({
-      body: {
-        currency: "USD",
-      },
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .execute();
-  return res;
-}
-
-export async function getAllCarts() {
-  const res = apiRoot.withProjectKey({ projectKey }).carts().get().execute();
-  return res;
-}

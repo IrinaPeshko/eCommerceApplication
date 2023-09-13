@@ -8,7 +8,7 @@ import {
   profileLinksOut,
 } from "./components/header/data/linkArrays";
 import "swiper/css/bundle";
-// import { getAllCarts, getCarts } from "./sdk/sdk";
+import CartAPI from "./sdk/cart/cart";
 
 function initializeApp(): void {
   App.createView();
@@ -35,5 +35,7 @@ declare global {
 }
 
 window.route = route;
-// getCarts().then((res)=>console.log(res))
-// getAllCarts().then((res)=>console.log(res))
+
+CartAPI.getMyCarts().then((res) => console.log(res.body.results));
+// CartAPI.addProduct("343T06A4505_X5858-m", 4)
+CartAPI.checkMyCart().then((res) => console.log(res));

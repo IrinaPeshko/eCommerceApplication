@@ -7,6 +7,7 @@ import {
   productPageSwiperPopapSetting,
 } from "../../slider/swiper";
 import { productPopap } from "./productPopap";
+import CartAPI from "../../../sdk/cart/cart";
 
 export class Product {
   public static async init(keyData = "") {
@@ -15,7 +16,7 @@ export class Product {
       key = Product.checkURL();
     }
     const resp = (await getProduct(key)).body;
-
+    console.log(resp);
     const DOM = {
       imgs: document.querySelector(".product_page__slider-main"),
       sliderMain: document.querySelector(".product_page__slider-main"),
@@ -76,9 +77,8 @@ export class Product {
         return Product.getPrise(value);
       },
       description: resp.description?.en,
-      sku: resp.masterVariant.sku,
+      sku: [resp.masterVariant.sku, ...resp.variants.map((el) => el.sku)],
     };
-
     const productPageSwiperMain = new Swiper(
       ".product_page__swiper-main",
       productPageSwiperMainSetting,
@@ -100,14 +100,20 @@ export class Product {
     ) {
       DOM.colorBox.style.display = "none";
     }
-    Product.createSizes(DOM.sizes, data.mainAttrubutes, data.variantAttrubutes);
-    Product.clickSizes(DOM.sizes);
+    Product.createSizes(
+      DOM.sizes,
+      data.mainAttrubutes,
+      data.variantAttrubutes,
+      data.sku,
+    );
+    Product.clickSizes(DOM.sizes, DOM.sku);
     Product.showContent(DOM.startPrise, data.getStartPrise());
     Product.showContent(DOM.salePrise, data.getSalePrise());
     Product.checkPrice(DOM.startPrise, DOM.salePrise);
     Product.showContent(DOM.description, data.description);
-    Product.showContent(DOM.sku, data.sku);
+    Product.showContent(DOM.sku, data.sku[0]);
     Product.clickAddBagBtn(DOM.addBagBtn, DOM.quantityNum);
+    Product.showQuantity(DOM.quantityNum, Product.getElemText(DOM.sku));
   }
 
   private static checkURL() {
@@ -211,6 +217,7 @@ export class Product {
     box: Element | null,
     main: { color: string; size: string; brend: string; prise: string },
     variant: { color: string; size: string; brend: string; prise: string }[],
+    skuArr: (string | undefined)[],
   ) {
     if (!box) return;
     const elements = [main, ...variant];
@@ -219,6 +226,9 @@ export class Product {
     }
     elements.forEach((attributes, index) => {
       const el = document.createElement("li");
+      if (skuArr[index] !== undefined) {
+        el.setAttribute("sku", `${skuArr[index]}`);
+      }
       el.classList.add("sizes__item");
       if (index === 0) {
         el.classList.add("active");
@@ -243,7 +253,7 @@ export class Product {
     }
   }
 
-  private static clickSizes(box: Element | null) {
+  private static clickSizes(box: Element | null, skuBox: Element | null) {
     if (!(box instanceof HTMLElement)) return;
     box.addEventListener("click", (e) => {
       if (
@@ -258,6 +268,10 @@ export class Product {
       });
       if (!e.target.classList.contains("active"))
         e.target.classList.add("active");
+      const skuValue = e.target.getAttribute("sku");
+      if (skuBox && skuValue) {
+        skuBox.textContent = skuValue;
+      }
     });
   }
 
@@ -272,5 +286,30 @@ export class Product {
       }
       btn.classList.toggle("remove");
     });
+  }
+
+  private static getElemText(box: Element | null) {
+    if (box) {
+      return box.textContent;
+    }
+    return "";
+  }
+
+  private static async showQuantity(
+    box: Element | HTMLInputElement | null,
+    skuBox: string | null,
+  ) {
+    if (!box || !skuBox || !(box instanceof HTMLInputElement)) return;
+    const cartData = await CartAPI.checkMyCart();
+    if (cartData === null || cartData.products === undefined || skuBox === "") {
+      box.value = "0";
+      return;
+    }
+    const num = await cartData.products.get(`${skuBox}`);
+    if (num === undefined) {
+      box.value = "0";
+    } else {
+      box.value = `${num.quantity}`;
+    }
   }
 }
