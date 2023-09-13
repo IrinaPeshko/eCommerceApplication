@@ -9,8 +9,6 @@ import {
   Tuple,
   SetDefaultBilling,
   SetDefaultShipping,
-  RemoveLineFromCart,
-  // ChangeQuantity
 } from "../types/types";
 
 export function getProjectDetails() {

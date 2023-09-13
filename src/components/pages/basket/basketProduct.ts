@@ -1,51 +1,65 @@
-import { removeLine } from "../../../sdk/sdk";
+// import { LineItem } from "@commercetools/platform-sdk";
+import { LineItem } from "@commercetools/platform-sdk";
+import CartAPI from "../../../sdk/cart/cart";
 import { RemoveLineFromCart, Actions } from "../../../types/types";
 import Alert from "../../alerts/alert";
 
 export default class Product {
   constructor(
+    private sku: string,
     private version: number,
     private cartId: string,
-    private lineItemId: string,
-    private productId: string,
+    private lineItemKey: string,
+    private productKey: string,
     private name: string,
-    private size: string,
     private color: string,
+    private size: string,
     private price: number,
     private image: string,
     private quantity: number,
+    private currencyCode: string,
+    private discountedPrice: number | undefined,
   ) {
+    this.sku = sku;
     this.version = version;
     this.cartId = cartId;
-    this.lineItemId = lineItemId;
-    this.productId = productId;
+    this.lineItemKey = lineItemKey;
+    this.productKey = productKey;
     this.name = name;
     this.size = size;
     this.color = color;
     this.price = price;
     this.image = image;
     this.quantity = quantity;
+    this.currencyCode = currencyCode;
+    this.discountedPrice = discountedPrice || undefined;
   }
 
   public createProduct(): HTMLDivElement {
     const product: HTMLDivElement = document.createElement("div");
     product.className = "cart__table-row";
-    product.innerText = `
+    product.innerHTML = `
     <div class="cart__table-product-col">
-      <img src="${this.image}">
+      <div class="cart__table-image-wrapper">
+        <img class="cart__table-product-image" src="${this.image}">
+      </div>
       <div class="cart__table-product-data-wrapper">
         <span class="cart__table-product-name">${this.name}</span>
-        <span class="cart__table-product-color"></span>
+        <div class="cart__table-product-color-wrapper">
+          <span class="cart__table-product-color" style="background-color: ${this.addColor()}"></span>
+        </div>
       </div>
     </div>
     <div class="cart__table-price-col">
-      <span class="cart__table-text">$ ${this.price}</span>
+      <span class="cart__table-text">${this.price} ${this.currencyCode} ${this.discountedPrice ?
+        `<span class='discount-price'>${  this.discountedPrice  } ${  this.currencyCode  }</span>`
+        : ""}</span>
     </div>
     <div class="cart__table-size-col">
       <span class="cart__table-text">${this.size}</span>
     </div>
     <div class="cart__table-quantity-col">
-      <div class="counter readonly">
+      <div class="counter read-only">
         <button class="counter__decrement-btn">
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
             <rect y="5" width="12" height="2" fill="#C4C4C4"/>
@@ -61,7 +75,7 @@ export default class Product {
       </div>
     </div>
     <div class="cart__table-total-col">
-      <span class="cart__table-text">$ 120</span>
+      <span class="cart__table-text cart__table-total">${(this.discountedPrice || this.price) * this.quantity} ${this.currencyCode}</span>
     </div>
     <div class="cart__table-btns-col">
       <button class="edit-btn"></button>
@@ -94,10 +108,10 @@ export default class Product {
     const currentLine: HTMLElement | null = target.closest(".cart__table-row");
     const removedObj: RemoveLineFromCart = {
       action: Actions.removeline,
-      lineItemId: this.lineItemId,
+      lineItemKey: this.lineItemKey,
     };
     try {
-      const removeCurrentLine = await removeLine(
+      const removeCurrentLine = await CartAPI.removeLine(
         this.cartId,
         this.version,
         removedObj,
@@ -129,12 +143,15 @@ export default class Product {
   }
 
   private decrementValue(target: HTMLElement): void {
-    const quantityInput: ChildNode | null = target.nextSibling;
+    const quantityInput: ChildNode | null = target.nextElementSibling;
     if (quantityInput) {
+      const incrementBtn: ChildNode | null = (quantityInput as HTMLElement).nextElementSibling;
       let quantityVal = Number((quantityInput as HTMLInputElement).value);
       if (quantityVal > 1) {
-        target.removeAttribute("disabled");
+        if (incrementBtn) (incrementBtn as HTMLElement).removeAttribute("disabled");
         quantityVal -= 1;
+        (quantityInput as HTMLInputElement).value = String(quantityVal);
+        this.updateQuantity(quantityVal, target);
       } else {
         target.setAttribute("disabled", "disabled");
       }
@@ -142,15 +159,65 @@ export default class Product {
   }
 
   private incrementValue(target: HTMLElement): void {
-    const quantityInput: ChildNode | null = target.previousSibling;
+    const quantityInput: ChildNode | null = target.previousElementSibling;
     if (quantityInput) {
+      const decrementBtn: ChildNode | null = (quantityInput as HTMLElement).previousElementSibling;
       let quantityVal = Number((quantityInput as HTMLInputElement).value);
       if (quantityVal < 10) {
-        target.removeAttribute("disabled");
+        if (decrementBtn) (decrementBtn as HTMLElement).removeAttribute("disabled");
         quantityVal += 1;
+        (quantityInput as HTMLInputElement).value = String(quantityVal);
+        this.updateQuantity(quantityVal, target);
       } else {
         target.setAttribute("disabled", "disabled");
       }
+    }
+  }
+
+  private async updateQuantity(quantityVal: number, target: HTMLElement): Promise<void> {
+    const parentBlock: HTMLElement | null = target.closest(".cart__table-row");
+    const totalPriceBlock: HTMLElement | null = document.querySelector(".cart__total-price");
+    try {
+      const addNewItem = await CartAPI.updateProduct(this.sku, quantityVal);
+      if (addNewItem) {
+        if (addNewItem.statusCode !== 400) {
+          const {lineItems, version, totalPrice: {centAmount: cartCentAmount, currencyCode: cartCurrencyCode, fractionDigits: cartFractionDigits} } = addNewItem.body;
+          this.version = version;
+          const currentItem: LineItem = lineItems.filter(elem => elem.productKey === this.productKey)[0];
+          const {quantity, totalPrice: { centAmount, fractionDigits }} = currentItem;
+          this.quantity = quantity;
+          if (parentBlock) {
+            const totalBlock: HTMLElement | null = parentBlock.querySelector(".cart__table-total");
+            if (totalBlock) {
+              const formattedProductTotal = Number((centAmount / 10 ** fractionDigits).toFixed(2));
+              totalBlock.innerText = `${formattedProductTotal} ${this.currencyCode}`;
+            }
+            if (totalPriceBlock) {
+              const formattedTotalPrice = Number((cartCentAmount / 10 ** cartFractionDigits).toFixed(2));
+              totalPriceBlock.innerText = `${formattedTotalPrice  } ${  cartCurrencyCode}`;
+            }
+          }
+        } else {
+          throw new Error("Something is wrong");
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  private addColor(): string {
+    switch(this.color) {
+      case "Yellow": return "#F2DA91";
+      break;
+      case "Red": return "#F28598";
+      break;
+      case "Blue": return "#4254A6";
+      break;
+      case "Black": return "#000";
+      break;
+      default: return "#C4C4C4";
+      break;
     }
   }
 }

@@ -7,6 +7,7 @@ import {
   LocalizedString,
 } from "@commercetools/platform-sdk";
 import { apiRoot, projectKey } from "../commercetoolsApiRoot";
+import { RemoveLineFromCart } from "../../types/types";
 
 class CartAPI {
   public static async createCart() {
@@ -179,6 +180,10 @@ class CartAPI {
           | Map<
               string,
               {
+                sku: string,
+                id: string,
+                version: number,
+                lineItemKey: string | undefined,
                 name: LocalizedString;
                 quantity: number;
                 productKey: string | undefined;
@@ -194,6 +199,10 @@ class CartAPI {
         const { sku } = item.variant;
         if (sku !== undefined && acc !== undefined) {
           acc.set(sku, {
+            sku,
+            id: myCart.id,
+            version: myCart.version,
+            lineItemKey: item.key,
             name: item.name,
             quantity: item.quantity,
             productKey: item.productKey,
@@ -212,6 +221,25 @@ class CartAPI {
       totalLineItemQuantity: myCart.totalLineItemQuantity,
     };
     return { products: lineItems, cart };
+  }
+
+  public static async removeLine(
+    id: string,
+    version: number,
+    actionObj: RemoveLineFromCart,
+  ) {
+    return apiRoot
+      .withProjectKey({ projectKey })
+      .me()
+      .carts()
+      .withId({ ID: id })
+      .post({
+        body: {
+          version,
+          actions: [actionObj],
+        },
+      })
+      .execute();
   }
 }
 

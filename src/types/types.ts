@@ -97,7 +97,7 @@ export interface SetDefaultShipping {
 }
 export interface RemoveLineFromCart {
   action: Actions.removeline;
-  lineItemId: string;
+  lineItemKey: string;
 }
 // export interface ChangeQuantity {
 //   action: Actions.removeline,

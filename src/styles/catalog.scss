@@ -184,20 +184,20 @@
 }
 
 .label__yellow span {
-  color: yellow;
-  background-color: yellow;
+  color: $color-yellow;
+  background-color: $color-yellow;
   border: solid 2px rgb(255, 230, 0);
 }
 
 .label__blue span {
-  color: blue;
-  background-color: blue;
+  color: $color-blue;
+  background-color: $color-blue;
   border: solid 2px rgb(0, 0, 103);
 }
 
 .label__red span {
-  color: red;
-  background-color: red;
+  color: $color-red;
+  background-color: $color-red;
   border: solid 2px rgb(108, 0, 0);
 }
 
