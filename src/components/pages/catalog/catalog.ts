@@ -51,7 +51,7 @@ export function visualeCards() {
     getSerchingProducts(params, sortParam, offset).then((res) => {
       const arrProducts = res.body.results;
       arrProducts.forEach((el) => {
-        console.log(el);
+        // console.log(el);
         const name = el.name.en;
         const description = el.description?.en;
         const imagesArr = el.masterVariant.images;

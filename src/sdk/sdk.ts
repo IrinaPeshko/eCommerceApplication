@@ -289,7 +289,7 @@ export function searchByKeyWords(word: string, sortParam: string) {
 }
 
 export async function createCartWithToken() {
-  const res = apiRoot
+  const res = await apiRoot
     .withProjectKey({ projectKey })
     .me()
     .carts()
@@ -306,7 +306,7 @@ export async function createCartWithToken() {
 }
 
 export async function createAnonimusCart(anonimusApiRoot: ApiRoot) {
-  const res = anonimusApiRoot
+  const res = await anonimusApiRoot
     .withProjectKey({ projectKey })
     .me()
     .carts()

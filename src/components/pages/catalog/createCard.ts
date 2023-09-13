@@ -17,7 +17,7 @@ export function creatCard(
   card.setAttribute("sku", `${sku}`);
   card.addEventListener("click", (e) => {
     const event = e.target;
-    console.log(event);
+    // console.log(event);
     if (event instanceof HTMLElement) {
       if (event.id === "catalog__product_minus") {
         console.log("delete product");
