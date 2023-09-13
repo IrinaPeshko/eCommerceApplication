@@ -131,9 +131,7 @@ export default class Product {
   private decrementValue(target: HTMLElement): void {
     const quantityInput: ChildNode | null = target.nextSibling;
     if (quantityInput) {
-      let quantityVal = Number(
-        (quantityInput as HTMLInputElement).value,
-      );
+      let quantityVal = Number((quantityInput as HTMLInputElement).value);
       if (quantityVal > 1) {
         target.removeAttribute("disabled");
         quantityVal -= 1;
@@ -146,9 +144,7 @@ export default class Product {
   private incrementValue(target: HTMLElement): void {
     const quantityInput: ChildNode | null = target.previousSibling;
     if (quantityInput) {
-      let quantityVal = Number(
-        (quantityInput as HTMLInputElement).value,
-      );
+      let quantityVal = Number((quantityInput as HTMLInputElement).value);
       if (quantityVal < 10) {
         target.removeAttribute("disabled");
         quantityVal += 1;
