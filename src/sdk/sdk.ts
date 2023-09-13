@@ -302,7 +302,7 @@ export async function getCarts() {
   return res;
 }
 
-export async function createCart() {
+export async function createCartWithToken() {
   const res = apiRoot
     .withProjectKey({ projectKey })
     .me()
@@ -313,6 +313,20 @@ export async function createCart() {
       },
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .execute();
+  return res;
+}
+
+export async function createAnonimusCart(anonimusApiRoot: ApiRoot) {
+  const res = anonimusApiRoot
+    .withProjectKey({ projectKey })
+    .me()
+    .carts()
+    .post({
+      body: {
+        currency: "USD",
       },
     })
     .execute();

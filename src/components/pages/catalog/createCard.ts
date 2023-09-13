@@ -28,6 +28,12 @@ export function creatCard(
             <p class="product__price not-discount">${price}$</p> 
             <p class="discount">${discount}$</p>
           </div>
+            <p>Add to bag</p>
+          <div class="product_quantity">
+            <button class="product_quantity__minus" type="button" onclick="this.nextElementSibling.stepDown();">-</button>
+            <input type="number" class="product_quantity__num" value="0" min="0" readonly>
+            <button class="product_quantity__plus" type="button" onclick="this.previousElementSibling.stepUp();">+</button>
+          </div>
         </div>`;
     return card;
   }
@@ -37,7 +43,15 @@ export function creatCard(
         <div class="card__caption">
           <h3 class="product__name">${name}</h3>
           <p class="product__description">${description}</p>
-          <p class="product__price">${price}$</p>
+          <div class="prices__block">
+            <p class="product__price">${price}$</p>
+          </div>
+          <p>Add to bag</p>
+          <div class="product_quantity">
+            <button class="product_quantity__minus" type="button" onclick="this.nextElementSibling.stepDown();">-</button>
+            <input type="number" class="product_quantity__num" value="0" min="0" readonly>
+            <button class="product_quantity__plus" type="button" onclick="this.previousElementSibling.stepUp();">+</button>
+          </div>
         </div>`;
   return card;
 }
