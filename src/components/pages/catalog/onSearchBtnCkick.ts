@@ -36,6 +36,7 @@ export function onSearchBtnCkick() {
         const description = el.description?.en;
         const imagesArr = el.masterVariant.images;
         const pricesArr = el.masterVariant.prices;
+        const { sku } = el.masterVariant;
         let discount: string | undefined = "";
         const { key } = el;
         if (pricesArr) {
@@ -65,7 +66,7 @@ export function onSearchBtnCkick() {
             10 ** dataPrice.fractionDigits
           ).toFixed(2)}`;
         }
-        if (description) {
+        if (description && sku) {
           if (discount) {
             const card = creatCard(
               name,
@@ -73,11 +74,12 @@ export function onSearchBtnCkick() {
               url,
               price,
               key,
+              sku,
               discount,
             );
             container?.appendChild(card);
           } else {
-            const card = creatCard(name, description, url, price, key);
+            const card = creatCard(name, description, url, price, key, sku);
             container?.appendChild(card);
           }
         }
