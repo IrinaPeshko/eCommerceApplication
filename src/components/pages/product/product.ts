@@ -11,16 +11,22 @@ import { ProductControl } from "./productControl";
 
 export class Product {
   private static DOM = {
-    get quantityMinus() { return document.querySelector(".product_quantity__minus") },
-    get quantityPlus() { return document.querySelector(".product_quantity__plus") },
-    get quantityNum() { return document.querySelector(".product_quantity__num") },
+    get quantityMinus() {
+      return document.querySelector(".product_quantity__minus");
+    },
+    get quantityPlus() {
+      return document.querySelector(".product_quantity__plus");
+    },
+    get quantityNum() {
+      return document.querySelector(".product_quantity__num");
+    },
     get sku() {
-      const skuBox = document.querySelector(".sku_value")
-      if (!skuBox) throw new Error('skuBox is not found')
-      const value =  skuBox.textContent
+      const skuBox = document.querySelector(".sku_value");
+      if (!skuBox) throw new Error("skuBox is not found");
+      const value = skuBox.textContent;
       return value;
-    }
-  }
+    },
+  };
 
   public static async init(keyData = "") {
     let key = keyData;
@@ -127,7 +133,12 @@ export class Product {
     Product.showContent(DOM.sku, data.sku[0]);
     Product.clickAddBagBtn(DOM.addBagBtn, DOM.quantityNum);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const productControl = new ProductControl(this.DOM.quantityPlus, this.DOM.quantityNum, this.DOM.quantityMinus, this.DOM.sku)
+    const productControl = new ProductControl(
+      this.DOM.quantityPlus,
+      this.DOM.quantityNum,
+      this.DOM.quantityMinus,
+      this.DOM.sku,
+    );
   }
 
   private static checkURL() {
