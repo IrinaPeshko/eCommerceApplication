@@ -57,6 +57,7 @@ export default class Login {
               const { token } = tokenCache.get();
               localStorage.setItem("token", token);
               localStorage.setItem("id", id);
+              localStorage.removeItem("anonimToken");
               const popapContent = document.querySelector(".popap__content");
               if (popapContent) {
                 const innerText = "Log in is successful";

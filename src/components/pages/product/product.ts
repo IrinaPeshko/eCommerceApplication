@@ -7,14 +7,33 @@ import {
   productPageSwiperPopapSetting,
 } from "../../slider/swiper";
 import { productPopap } from "./productPopap";
-import CartAPI from "../../../sdk/cart/cart";
+import { ProductControl } from "./productControl";
 
 export class Product {
+  private static DOM = {
+    get quantityMinus() {
+      return document.querySelector(".product_quantity__minus");
+    },
+    get quantityPlus() {
+      return document.querySelector(".product_quantity__plus");
+    },
+    get quantityNum() {
+      return document.querySelector(".product_quantity__num");
+    },
+    get sku() {
+      const skuBox = document.querySelector(".sku_value");
+      if (!skuBox) throw new Error("skuBox is not found");
+      const value = skuBox.textContent;
+      return value;
+    },
+  };
+
   public static async init(keyData = "") {
     let key = keyData;
     if (key === "") {
       key = Product.checkURL();
     }
+
     const resp = (await getProduct(key)).body;
     console.log(resp);
     const DOM = {
@@ -28,9 +47,9 @@ export class Product {
         ".product_page__color .product_item__value",
       ),
       sizes: document.querySelector(".product_page__items.sizes"),
-      quantityMinus: document.querySelector(".product_quantity__minus"),
+      // quantityMinus: document.querySelector(".product_quantity__minus"),
       quantityNum: document.querySelector(".product_quantity__num"),
-      quantityPlus: document.querySelector(".product_quantity__plus"),
+      // quantityPlus: document.querySelector(".product_quantity__plus"),
       startPrise: document.querySelector(".sizes__item.product_page__prise"),
       salePrise: document.querySelector(".product_page__sale_prise"),
       description: document.querySelector(".product_deail__description"),
@@ -113,7 +132,13 @@ export class Product {
     Product.showContent(DOM.description, data.description);
     Product.showContent(DOM.sku, data.sku[0]);
     Product.clickAddBagBtn(DOM.addBagBtn, DOM.quantityNum);
-    Product.showQuantity(DOM.quantityNum, Product.getElemText(DOM.sku));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const productControl = new ProductControl(
+      this.DOM.quantityPlus,
+      this.DOM.quantityNum,
+      this.DOM.quantityMinus,
+      this.DOM.sku,
+    );
   }
 
   private static checkURL() {
@@ -295,21 +320,21 @@ export class Product {
     return "";
   }
 
-  private static async showQuantity(
-    box: Element | HTMLInputElement | null,
-    skuBox: string | null,
-  ) {
-    if (!box || !skuBox || !(box instanceof HTMLInputElement)) return;
-    const cartData = await CartAPI.checkMyCart();
-    if (cartData === null || cartData.products === undefined || skuBox === "") {
-      box.value = "0";
-      return;
-    }
-    const num = await cartData.products.get(`${skuBox}`);
-    if (num === undefined) {
-      box.value = "0";
-    } else {
-      box.value = `${num.quantity}`;
-    }
-  }
+  // private static async showQuantity(
+  //   box: Element | HTMLInputElement | null,
+  //   skuBox: string | null,
+  // ) {
+  //   if (!box || !skuBox || !(box instanceof HTMLInputElement)) return;
+  //   const cartData = await CartAPI.checkMyCart();
+  //   if (cartData === null || cartData.products === undefined || skuBox === "") {
+  //     box.value = "0";
+  //     return;
+  //   }
+  //   const num = await cartData.products.get(`${skuBox}`);
+  //   if (num === undefined) {
+  //     box.value = "0";
+  //   } else {
+  //     box.value = `${num.quantity}`;
+  //   }
+  // }
 }

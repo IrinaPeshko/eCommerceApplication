@@ -32,4 +32,10 @@ const client = new ClientBuilder()
   .withUserAgentMiddleware()
   .build();
 
+const anonimusClient = new ClientBuilder()
+  .withAnonymousSessionFlow(authMiddlewareOptions)
+  .withHttpMiddleware(httpMiddlewareOptions)
+  .build();
 export const apiRoot: ApiRoot = createApiBuilderFromCtpClient(client);
+export const anonimusApiRoot: ApiRoot =
+  createApiBuilderFromCtpClient(anonimusClient);

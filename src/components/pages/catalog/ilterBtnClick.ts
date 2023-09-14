@@ -1,6 +1,6 @@
 import { getSerchingProducts } from "../../../sdk/sdk";
 // eslint-disable-next-line import/no-cycle
-import { creatCard } from "./createCard";
+import Card from "./createCard";
 
 export async function visualeFilterCards(params: string[]) {
   const container = document.querySelector(".catalog__products");
@@ -57,6 +57,7 @@ export async function visualeFilterCards(params: string[]) {
     arrProducts.forEach((el) => {
       const name = el.name.en;
       const description = el.description?.en;
+      const { sku } = el.masterVariant;
       const imagesArr = el.masterVariant.images;
       const pricesArr = el.masterVariant.prices;
       let discount: string | undefined = "";
@@ -88,14 +89,9 @@ export async function visualeFilterCards(params: string[]) {
           10 ** dataPrice.fractionDigits
         ).toFixed(2)}`;
       }
-      if (description) {
-        if (discount) {
-          const card = creatCard(name, description, url, price, key, discount);
-          container?.appendChild(card);
-        } else {
-          const card = creatCard(name, description, url, price, key);
-          container?.appendChild(card);
-        }
+      if (description && sku) {
+        const card = discount ? new Card(name, description, url, price, key, sku, discount) : new Card(name, description, url, price, key, sku)
+        card.showCard(container)
       }
     });
   } catch (error) {

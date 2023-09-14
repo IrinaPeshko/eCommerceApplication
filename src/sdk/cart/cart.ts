@@ -5,13 +5,46 @@ import {
   Price,
   Image,
   LocalizedString,
+  createApiBuilderFromCtpClient,
+  ApiRoot,
 } from "@commercetools/platform-sdk";
 import { apiRoot, projectKey } from "../commercetoolsApiRoot";
+import { MyTokenCache } from "../token/TokenCache";
+import {
+  createAnonimusClient,
+  createAnonimusFlow,
+} from "../createPasswordClient";
 import { RemoveLineFromCart } from "../../types/types";
 
 class CartAPI {
   public static async createCart() {
-    const res = apiRoot
+    let res;
+
+    if (localStorage.getItem("token") || localStorage.getItem("anonimToken")) {
+      res = await this.createCartWithToken();
+    } else {
+      const tokenCache = new MyTokenCache();
+      const anonimClientAPI = createAnonimusFlow(tokenCache);
+      const anonimClient = createAnonimusClient(anonimClientAPI);
+      const anonimApiRoot: ApiRoot =
+        createApiBuilderFromCtpClient(anonimClient);
+      res = await this.createAnonimusCart(anonimApiRoot);
+
+      if (res.statusCode !== 400) {
+        const { token } = tokenCache.get();
+        localStorage.setItem("anonimToken", token);
+      }
+    }
+
+    return res;
+  }
+
+  private static async createCartWithToken() {
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("anonimToken");
+
+    if (!token) return null;
+    const res = await apiRoot
       .withProjectKey({ projectKey })
       .me()
       .carts()
@@ -20,11 +53,38 @@ class CartAPI {
           currency: "USD",
         },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .execute();
     return res;
+  }
+
+  private static async createAnonimusCart(anonimusApiRoot: ApiRoot) {
+    const res = await anonimusApiRoot
+      .withProjectKey({ projectKey })
+      .me()
+      .carts()
+      .post({
+        body: {
+          currency: "USD",
+        },
+      })
+      .execute();
+    return res;
+  }
+
+  public static async getOrCreateMyCart() {
+    const myCart = await this.getMyCarts().then(async (myCartData) => {
+      if (myCartData !== null) {
+        return myCartData.body;
+      }
+      const newCart = await this.createCart().then(
+        (newCartData) => newCartData?.body,
+      );
+      return newCart;
+    });
+    return myCart;
   }
 
   public static async deleteCart(id: string, version: number) {
@@ -41,7 +101,6 @@ class CartAPI {
     return res;
   }
 
-  // получаем все созданные корзины
   public static async getAllCarts() {
     const res = await apiRoot
       .withProjectKey({ projectKey })
@@ -51,43 +110,33 @@ class CartAPI {
     return res;
   }
 
-  // получаем корзины созданные со токеном (пока - только для зарегистророванных пользовательй. Для анонимных - не проверено)
   public static async getMyCarts() {
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("anonimToken");
+    if (!token) return null;
     const res = await apiRoot
       .withProjectKey({ projectKey })
       .me()
-      .carts()
+      .activeCart()
       .get({
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .execute();
-    // console.log(res)
     return res;
-  }
-
-  // возвращает корзину или создает и возвращает корзину.
-  public static async getOrCreateMyCart() {
-    const myCart = await this.getMyCarts().then(async (myCartData) => {
-      // если моя корзина создана, то возвращаем корзину
-      if (myCartData.body.count > 0) {
-        return myCartData.body.results[0];
-      }
-      // иначе создаем новую корзину и возвращаем ее
-      const newCart = await this.createCart().then(
-        (newCartData) => newCartData.body,
-      );
-      return newCart;
-    });
-    return myCart;
   }
 
   public static async addProduct(sku: string, quantity: number) {
     if (quantity < 0) return undefined;
     const myCart = await this.getOrCreateMyCart();
+    if (!myCart) {
+      return undefined;
+    }
     const version = myCart?.version;
     const ID = myCart?.id;
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("anonimToken");
     const addProduct = await apiRoot
       .withProjectKey({ projectKey })
       .me()
@@ -106,7 +155,7 @@ class CartAPI {
           ],
         },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .execute()
@@ -131,12 +180,17 @@ class CartAPI {
     let version;
     if (IDData === undefined || versionData === undefined) {
       const myCart = await this.getOrCreateMyCart();
+      if (!myCart) {
+        return undefined;
+      }
       ID = myCart?.id;
       version = myCart?.version;
     } else {
       ID = IDData;
       version = versionData;
     }
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("anonimToken");
     const updateProduct = await apiRoot
       .withProjectKey({ projectKey })
       .me()
@@ -154,7 +208,7 @@ class CartAPI {
           ],
         },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .execute()
@@ -168,9 +222,10 @@ class CartAPI {
   // проверяет корзину, если нет корзины или она пуста возвращает null, иначе возвращает объект с данными продукта и корзины(общая стоимость товаров и общее количество товаров)
   // product - это map, где ключ - sku продукта. Проверить есть ли такой товар в корзине можно через map.get(key) – возвращает значение по ключу или undefined, если ключ key отсутствует.
   public static async checkMyCart() {
+    if (!(localStorage.getItem("token") || localStorage.getItem("anonimToken"))) return null;
     const myCart = await this.getMyCarts().then((res) => {
-      if (res.body.count <= 0) return null;
-      return res.body.results[0];
+      if (!res) return null;
+      return res.body;
     });
     if (myCart === null) return null;
     if (myCart.lineItems.length === 0) return null;

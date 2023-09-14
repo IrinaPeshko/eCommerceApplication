@@ -18,3 +18,18 @@ export interface IpasswordAuthMiddlewareOptions {
     init?: RequestInit | undefined,
   ) => Promise<Response>;
 }
+
+export interface IAnonimeOptions {
+  host: string;
+  projectKey: string;
+  credentials: {
+    clientId: string;
+    clientSecret: string;
+  };
+  scopes: string[];
+  tokenCache: MyTokenCache;
+  fetch: (
+    input: RequestInfo | URL,
+    init?: RequestInit | undefined,
+  ) => Promise<Response>;
+}
