@@ -1,6 +1,6 @@
 import { getSerchingProducts } from "../../../sdk/sdk";
 // eslint-disable-next-line import/no-cycle
-import { creatCard } from "./createCard";
+import Card from "./createCard";
 
 export async function visualeFilterCards(params: string[]) {
   const container = document.querySelector(".catalog__products");
@@ -89,24 +89,9 @@ export async function visualeFilterCards(params: string[]) {
           10 ** dataPrice.fractionDigits
         ).toFixed(2)}`;
       }
-      if (description) {
-        if (discount) {
-          if (sku) {
-            const card = creatCard(
-              name,
-              description,
-              url,
-              price,
-              key,
-              sku,
-              discount,
-            );
-            container?.appendChild(card);
-          }
-        } else if (sku) {
-          const card = creatCard(name, description, url, price, key, sku);
-          container?.appendChild(card);
-        }
+      if (description && sku) {
+        const card = discount ? new Card(name, description, url, price, key, sku, discount) : new Card(name, description, url, price, key, sku)
+        card.showCard(container)
       }
     });
   } catch (error) {

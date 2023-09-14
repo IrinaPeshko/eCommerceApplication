@@ -6,9 +6,9 @@ import {
   createSizeFilterStr,
 } from "./createAttributeParams";
 // eslint-disable-next-line import/no-cycle
-import { creatCard } from "./createCard";
 import { visualeFilterCards } from "./ilterBtnClick";
 import { createSubCategory } from "./createSubCategory";
+import Card from "./createCard";
 
 export function visualeCards() {
   try {
@@ -51,7 +51,6 @@ export function visualeCards() {
     getSerchingProducts(params, sortParam, offset).then((res) => {
       const arrProducts = res.body.results;
       arrProducts.forEach((el) => {
-        // console.log(el);
         const name = el.name.en;
         const description = el.description?.en;
         const imagesArr = el.masterVariant.images;
@@ -81,25 +80,9 @@ export function visualeCards() {
             10 ** dataPrice.fractionDigits
           ).toFixed(2)}`;
         }
-        if (description) {
-          // console.log(discount);
-          if (discount) {
-            if (sku) {
-              const card = creatCard(
-                name,
-                description,
-                url,
-                price,
-                key,
-                sku,
-                discount,
-              );
-              container?.appendChild(card);
-            }
-          } else if (sku) {
-            const card = creatCard(name, description, url, price, key, sku);
-            container?.appendChild(card);
-          }
+        if (description && sku) {
+          const card = discount ? new Card(name, description, url, price, key, sku, discount) : new Card(name, description, url, price, key, sku)
+          card.showCard(container)
         }
       });
     });

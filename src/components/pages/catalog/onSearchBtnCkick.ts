@@ -1,6 +1,6 @@
 import { searchByKeyWords } from "../../../sdk/sdk";
 /* eslint-disable import/no-cycle */
-import { creatCard } from "./createCard";
+import Card from "./createCard";
 
 export function onSearchBtnCkick() {
   const searchInput = document.getElementById("search");
@@ -67,21 +67,8 @@ export function onSearchBtnCkick() {
           ).toFixed(2)}`;
         }
         if (description && sku) {
-          if (discount) {
-            const card = creatCard(
-              name,
-              description,
-              url,
-              price,
-              key,
-              sku,
-              discount,
-            );
-            container?.appendChild(card);
-          } else {
-            const card = creatCard(name, description, url, price, key, sku);
-            container?.appendChild(card);
-          }
+          const card = discount ? new Card(name, description, url, price, key, sku, discount) : new Card(name, description, url, price, key, sku)
+          card.showCard(container)
         }
       });
     });
