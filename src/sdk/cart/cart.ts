@@ -16,7 +16,6 @@ import {
 } from "../createPasswordClient";
 
 class CartAPI {
-
   public static async createCart() {
     let res;
 
@@ -36,10 +35,14 @@ class CartAPI {
       }
     }
 
-    return res; // Возвращает значение из обеих ветвей условия
+    return res;
   }
 
   private static async createCartWithToken() {
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("anonimToken");
+
+    if (!token) return null;
     const res = await apiRoot
       .withProjectKey({ projectKey })
       .me()
@@ -49,7 +52,7 @@ class CartAPI {
           currency: "USD",
         },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .execute();
@@ -70,16 +73,13 @@ class CartAPI {
     return res;
   }
 
-  // возвращает корзину или создает и возвращает корзину.
   public static async getOrCreateMyCart() {
     const myCart = await this.getMyCarts().then(async (myCartData) => {
-      // если моя корзина создана, то возвращаем корзину
-      if (myCartData.body.count > 0) {
-        return myCartData.body.results[0];
+      if (myCartData !== null) {
+        return myCartData.body;
       }
-      // иначе создаем новую корзину и возвращаем ее
       const newCart = await this.createCart().then(
-        (newCartData) => newCartData?.body
+        (newCartData) => newCartData?.body,
       );
       return newCart;
     });
@@ -100,7 +100,6 @@ class CartAPI {
     return res;
   }
 
-  // получаем все созданные корзины
   public static async getAllCarts() {
     const res = await apiRoot
       .withProjectKey({ projectKey })
@@ -110,21 +109,20 @@ class CartAPI {
     return res;
   }
 
-  // получаем корзины созданные со токеном (пока - только для зарегистророванных пользовательй. Для анонимных - не проверено)
   public static async getMyCarts() {
     const token =
       localStorage.getItem("token") || localStorage.getItem("anonimToken");
+    if (!token) return null;
     const res = await apiRoot
       .withProjectKey({ projectKey })
       .me()
-      .carts()
+      .activeCart()
       .get({
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .execute();
-    // console.log(res)
     return res;
   }
 
@@ -136,6 +134,8 @@ class CartAPI {
     }
     const version = myCart?.version;
     const ID = myCart?.id;
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("anonimToken");
     const addProduct = await apiRoot
       .withProjectKey({ projectKey })
       .me()
@@ -154,7 +154,7 @@ class CartAPI {
           ],
         },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .execute()
@@ -173,7 +173,7 @@ class CartAPI {
     sku: string,
     quantity: number,
     IDData?: string,
-    versionData?: number
+    versionData?: number,
   ) {
     let ID;
     let version;
@@ -188,6 +188,8 @@ class CartAPI {
       ID = IDData;
       version = versionData;
     }
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("anonimToken");
     const updateProduct = await apiRoot
       .withProjectKey({ projectKey })
       .me()
@@ -205,7 +207,7 @@ class CartAPI {
           ],
         },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .execute()
@@ -220,8 +222,8 @@ class CartAPI {
   // product - это map, где ключ - sku продукта. Проверить есть ли такой товар в корзине можно через map.get(key) – возвращает значение по ключу или undefined, если ключ key отсутствует.
   public static async checkMyCart() {
     const myCart = await this.getMyCarts().then((res) => {
-      if (res.body.count <= 0) return null;
-      return res.body.results[0];
+      if (!res) return null;
+      return res.body;
     });
     if (myCart === null) return null;
     if (myCart.lineItems.length === 0) return null;
@@ -241,7 +243,7 @@ class CartAPI {
               }
             >
           | undefined,
-        item: LineItem
+        item: LineItem,
       ) => {
         const { sku } = item.variant;
         if (sku !== undefined && acc !== undefined) {
@@ -257,7 +259,7 @@ class CartAPI {
         }
         return acc;
       },
-      new Map()
+      new Map(),
     );
     const cart = {
       totalPrice: myCart.totalPrice,
