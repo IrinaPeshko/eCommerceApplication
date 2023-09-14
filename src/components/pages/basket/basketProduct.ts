@@ -51,9 +51,11 @@ export default class Product {
       </div>
     </div>
     <div class="cart__table-price-col">
-      <span class="cart__table-text">${this.price} ${this.currencyCode} ${this.discountedPrice ?
-        `<span class='discount-price'>${  this.discountedPrice  } ${  this.currencyCode  }</span>`
-        : ""}</span>
+      <span class="cart__table-text">${this.price} ${this.currencyCode} ${
+        this.discountedPrice
+          ? `<span class='discount-price'>${this.discountedPrice} ${this.currencyCode}</span>`
+          : ""
+      }</span>
     </div>
     <div class="cart__table-size-col">
       <span class="cart__table-text">${this.size}</span>
@@ -65,7 +67,9 @@ export default class Product {
             <rect y="5" width="12" height="2" fill="#C4C4C4"/>
           </svg>
         </button>
-        <input class="counter__field" min="1" name="quantity" value="${this.quantity}" type="number" maxlength ="10">
+        <input class="counter__field" min="1" name="quantity" value="${
+          this.quantity
+        }" type="number" maxlength ="10">
         <button class="counter__increment-btn">
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
             <rect y="5" width="12" height="2" fill="#C4C4C4"/>
@@ -75,7 +79,9 @@ export default class Product {
       </div>
     </div>
     <div class="cart__table-total-col">
-      <span class="cart__table-text cart__table-total">${(this.discountedPrice || this.price) * this.quantity} ${this.currencyCode}</span>
+      <span class="cart__table-text cart__table-total">${
+        (this.discountedPrice || this.price) * this.quantity
+      } ${this.currencyCode}</span>
     </div>
     <div class="cart__table-btns-col">
       <button class="edit-btn"></button>
@@ -145,10 +151,12 @@ export default class Product {
   private decrementValue(target: HTMLElement): void {
     const quantityInput: ChildNode | null = target.nextElementSibling;
     if (quantityInput) {
-      const incrementBtn: ChildNode | null = (quantityInput as HTMLElement).nextElementSibling;
+      const incrementBtn: ChildNode | null = (quantityInput as HTMLElement)
+        .nextElementSibling;
       let quantityVal = Number((quantityInput as HTMLInputElement).value);
       if (quantityVal > 1) {
-        if (incrementBtn) (incrementBtn as HTMLElement).removeAttribute("disabled");
+        if (incrementBtn)
+          (incrementBtn as HTMLElement).removeAttribute("disabled");
         quantityVal -= 1;
         (quantityInput as HTMLInputElement).value = String(quantityVal);
         this.updateQuantity(quantityVal, target);
@@ -161,10 +169,12 @@ export default class Product {
   private incrementValue(target: HTMLElement): void {
     const quantityInput: ChildNode | null = target.previousElementSibling;
     if (quantityInput) {
-      const decrementBtn: ChildNode | null = (quantityInput as HTMLElement).previousElementSibling;
+      const decrementBtn: ChildNode | null = (quantityInput as HTMLElement)
+        .previousElementSibling;
       let quantityVal = Number((quantityInput as HTMLInputElement).value);
       if (quantityVal < 10) {
-        if (decrementBtn) (decrementBtn as HTMLElement).removeAttribute("disabled");
+        if (decrementBtn)
+          (decrementBtn as HTMLElement).removeAttribute("disabled");
         quantityVal += 1;
         (quantityInput as HTMLInputElement).value = String(quantityVal);
         this.updateQuantity(quantityVal, target);
@@ -174,27 +184,49 @@ export default class Product {
     }
   }
 
-  private async updateQuantity(quantityVal: number, target: HTMLElement): Promise<void> {
+  private async updateQuantity(
+    quantityVal: number,
+    target: HTMLElement,
+  ): Promise<void> {
     const parentBlock: HTMLElement | null = target.closest(".cart__table-row");
-    const totalPriceBlock: HTMLElement | null = document.querySelector(".cart__total-price");
+    const totalPriceBlock: HTMLElement | null =
+      document.querySelector(".cart__total-price");
     try {
       const addNewItem = await CartAPI.updateProduct(this.sku, quantityVal);
       if (addNewItem) {
         if (addNewItem.statusCode !== 400) {
-          const {lineItems, version, totalPrice: {centAmount: cartCentAmount, currencyCode: cartCurrencyCode, fractionDigits: cartFractionDigits} } = addNewItem.body;
+          const {
+            lineItems,
+            version,
+            totalPrice: {
+              centAmount: cartCentAmount,
+              currencyCode: cartCurrencyCode,
+              fractionDigits: cartFractionDigits,
+            },
+          } = addNewItem.body;
           this.version = version;
-          const currentItem: LineItem = lineItems.filter(elem => elem.productKey === this.productKey)[0];
-          const {quantity, totalPrice: { centAmount, fractionDigits }} = currentItem;
+          const currentItem: LineItem = lineItems.filter(
+            (elem) => elem.productKey === this.productKey,
+          )[0];
+          const {
+            quantity,
+            totalPrice: { centAmount, fractionDigits },
+          } = currentItem;
           this.quantity = quantity;
           if (parentBlock) {
-            const totalBlock: HTMLElement | null = parentBlock.querySelector(".cart__table-total");
+            const totalBlock: HTMLElement | null =
+              parentBlock.querySelector(".cart__table-total");
             if (totalBlock) {
-              const formattedProductTotal = Number((centAmount / 10 ** fractionDigits).toFixed(2));
+              const formattedProductTotal = Number(
+                (centAmount / 10 ** fractionDigits).toFixed(2),
+              );
               totalBlock.innerText = `${formattedProductTotal} ${this.currencyCode}`;
             }
             if (totalPriceBlock) {
-              const formattedTotalPrice = Number((cartCentAmount / 10 ** cartFractionDigits).toFixed(2));
-              totalPriceBlock.innerText = `${formattedTotalPrice  } ${  cartCurrencyCode}`;
+              const formattedTotalPrice = Number(
+                (cartCentAmount / 10 ** cartFractionDigits).toFixed(2),
+              );
+              totalPriceBlock.innerText = `${formattedTotalPrice} ${cartCurrencyCode}`;
             }
           }
         } else {
@@ -207,17 +239,22 @@ export default class Product {
   }
 
   private addColor(): string {
-    switch(this.color) {
-      case "Yellow": return "#F2DA91";
-      break;
-      case "Red": return "#F28598";
-      break;
-      case "Blue": return "#4254A6";
-      break;
-      case "Black": return "#000";
-      break;
-      default: return "#C4C4C4";
-      break;
+    switch (this.color) {
+      case "Yellow":
+        return "#F2DA91";
+        break;
+      case "Red":
+        return "#F28598";
+        break;
+      case "Blue":
+        return "#4254A6";
+        break;
+      case "Black":
+        return "#000";
+        break;
+      default:
+        return "#C4C4C4";
+        break;
     }
   }
 }

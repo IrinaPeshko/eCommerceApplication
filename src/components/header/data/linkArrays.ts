@@ -206,7 +206,22 @@ export const profileLinks: link[] = [
               <img src="${imgBascket}" alt="cart" />
             </div>`,
     href: "basket",
-    callback: (): void => {},
+    callback: (): void => {
+      const mainElem: HTMLElement | null = document.querySelector(".cart");
+      if (mainElem) {
+        mainElem.addEventListener("click", (e: Event) => {
+          e.preventDefault();
+          const { target } = e;
+          if ((target as HTMLElement).tagName === "A") {
+            if ((target as HTMLElement).classList.contains("cart__continue-btn")) {
+              // if (e instanceof MouseEvent) {
+                routeforOtherLink(e);
+              // }
+            }
+          }
+        });
+      }
+    },
   },
 ];
 
@@ -392,7 +407,7 @@ fill="#ffffff" stroke="none">
             </div>`,
     href: "basket",
     callback: (): void => {
-      createCartTable();
+        createCartTable();
     },
   },
 ];

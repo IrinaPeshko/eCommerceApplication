@@ -180,10 +180,10 @@ class CartAPI {
           | Map<
               string,
               {
-                sku: string,
-                id: string,
-                version: number,
-                lineItemKey: string | undefined,
+                sku: string;
+                id: string;
+                version: number;
+                lineItemKey: string | undefined;
                 name: LocalizedString;
                 quantity: number;
                 productKey: string | undefined;
@@ -237,6 +237,24 @@ class CartAPI {
         body: {
           version,
           actions: [actionObj],
+        },
+      })
+      .execute();
+  }
+
+  public static clearCart(
+    id: string,
+    version: number,
+    actionObj: RemoveLineFromCart[],) {
+    return apiRoot
+      .withProjectKey({ projectKey })
+      .me()
+      .carts()
+      .withId({ ID: id })
+      .post({
+        body: {
+          version,
+          actions: actionObj,
         },
       })
       .execute();
