@@ -7,7 +7,7 @@ class Card {
   private name: string;
 
   private description: string;
-  
+
   private img: string;
 
   private price: string;
@@ -25,26 +25,39 @@ class Card {
   private num: HTMLElement | null;
 
   private minusBtn: HTMLElement | null;
-  
+
   private productControl: ProductControl | null;
-  
-  constructor(name: string, description: string, img: string, price: string, key: string | undefined, sku: string, discount?: string,) {
+
+  constructor(
+    name: string,
+    description: string,
+    img: string,
+    price: string,
+    key: string | undefined,
+    sku: string,
+    discount?: string,
+  ) {
     this.name = name;
     this.description = description;
     this.img = img;
     this.price = price;
     this.key = key;
     this.sku = sku;
-    this.discount = discount || '';
+    this.discount = discount || "";
     this.card = this.createCard();
     this.clickCard();
-    this.plusBtn = this.card.querySelector('.product_quantity__plus');
-    this.num = this.card.querySelector('.product_quantity__num');
-    this.minusBtn = this.card.querySelector('.product_quantity__minus');
-    this.productControl = new ProductControl(this.plusBtn, this.num, this.minusBtn, this.sku)
+    this.plusBtn = this.card.querySelector(".product_quantity__plus");
+    this.num = this.card.querySelector(".product_quantity__num");
+    this.minusBtn = this.card.querySelector(".product_quantity__minus");
+    this.productControl = new ProductControl(
+      this.plusBtn,
+      this.num,
+      this.minusBtn,
+      this.sku,
+    );
   }
 
-  public createCard () {
+  public createCard() {
     const card = document.createElement("div");
     card.className = "catalog__card";
     card.setAttribute("products", `${this.key}`);
@@ -58,8 +71,10 @@ class Card {
         <h3 class="product__name">${this.name}</h3>
         <p class="product__description">${this.description}</p>
         <div class="prices__block">
-          <p class="product__price ${this.discount ? 'not-discount': ''}">${this.price}$</p> 
-          ${this.discount ? `<p class="discount">${this.discount}$</p>` : ''}
+          <p class="product__price ${this.discount ? "not-discount" : ""}">${
+            this.price
+          }$</p> 
+          ${this.discount ? `<p class="discount">${this.discount}$</p>` : ""}
         </div>
         <p>Add to bag</p>
         <div class="product_quantity">
@@ -70,24 +85,31 @@ class Card {
     `;
     return card;
   }
-  
+
   private clickCard() {
-    this.card.addEventListener('click', (e) => {
+    this.card.addEventListener("click", (e) => {
       const event = e.target;
       if (event instanceof HTMLElement) {
-        const isClickControlProduct = event.classList.contains('product_quantity') || event.classList.contains('product_quantity__minus') || event.classList.contains('product_quantity__num') || event.classList.contains('product_quantity__plus');
+        const isClickControlProduct =
+          event.classList.contains("product_quantity") ||
+          event.classList.contains("product_quantity__minus") ||
+          event.classList.contains("product_quantity__num") ||
+          event.classList.contains("product_quantity__plus");
         if (isClickControlProduct === false) {
           const { callback } = product[0];
-          routeToNotAnchor(e, `/product__${this.key}`, callback.bind(null, `${this.key}`));
+          routeToNotAnchor(
+            e,
+            `/product__${this.key}`,
+            callback.bind(null, `${this.key}`),
+          );
         }
       }
-    })
+    });
   }
 
   public showCard(box: Element | null) {
     if (!box) return;
-    box.appendChild(this.card)
+    box.appendChild(this.card);
   }
 }
 export default Card;
-

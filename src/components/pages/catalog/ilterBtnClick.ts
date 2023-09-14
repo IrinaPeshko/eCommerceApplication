@@ -90,8 +90,10 @@ export async function visualeFilterCards(params: string[]) {
         ).toFixed(2)}`;
       }
       if (description && sku) {
-        const card = discount ? new Card(name, description, url, price, key, sku, discount) : new Card(name, description, url, price, key, sku)
-        card.showCard(container)
+        const card = discount
+          ? new Card(name, description, url, price, key, sku, discount)
+          : new Card(name, description, url, price, key, sku);
+        card.showCard(container);
       }
     });
   } catch (error) {

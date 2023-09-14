@@ -205,23 +205,22 @@ export const profileLinks: link[] = [
     innerHTML: `<div class="shoping_cart__ico">
               <img src="${imgBascket}" alt="cart" />
             </div>`,
-    href: "basket",
+    href: "/basket",
     callback: (): void => {
       const mainElem: HTMLElement | null = document.querySelector(".cart");
       if (mainElem) {
         mainElem.addEventListener("click", (e: Event) => {
-          e.preventDefault();
           const { target } = e;
           if ((target as HTMLElement).tagName === "A") {
             if (
               (target as HTMLElement).classList.contains("cart__continue-btn")
             ) {
-              // if (e instanceof MouseEvent) {
+              e.preventDefault();
               routeforOtherLink(e);
-              // }
             }
           }
         });
+        createCartTable();
       }
     },
   },
@@ -346,11 +345,7 @@ fill="#ffffff" stroke="none">
 </svg>`,
     href: "/profile",
     callback: async (): Promise<void> => {
-      console.log(
-        document.querySelector(".profile__link.profile__link--active"),
-      );
       const id: string | null = localStorage.getItem("id");
-      console.log(id);
       if (id) {
         const getUserData = await getUserById(id)
           .then((res) => {
@@ -407,9 +402,23 @@ fill="#ffffff" stroke="none">
     innerHTML: `<div class="shoping_cart__ico">
               <img src="${imgBascket}" alt="cart" />
             </div>`,
-    href: "basket",
+    href: "/basket",
     callback: (): void => {
-      createCartTable();
+      const mainElem: HTMLElement | null = document.querySelector(".cart");
+      if (mainElem) {
+        mainElem.addEventListener("click", (e: Event) => {
+          const { target } = e;
+          if ((target as HTMLElement).tagName === "A") {
+            if (
+              (target as HTMLElement).classList.contains("cart__continue-btn")
+            ) {
+              e.preventDefault();
+              routeforOtherLink(e);
+            }
+          }
+        });
+        createCartTable();
+      }
     },
   },
 ];

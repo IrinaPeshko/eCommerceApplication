@@ -118,15 +118,16 @@ export default class Product {
     };
     try {
       const removeCurrentLine = await CartAPI.removeLine(
-        this.cartId,
-        this.version,
+        this.quantity,
         removedObj,
       );
-      if (removeCurrentLine.statusCode !== 400) {
-        Alert.showAlert(false, "Item successfully removed");
-        if (currentLine) currentLine.remove();
-      } else {
-        throw new Error("Something is wrong");
+      if (removeCurrentLine) {
+        if (removeCurrentLine.statusCode !== 400) {
+          Alert.showAlert(false, "Item successfully removed");
+          if (currentLine) currentLine.remove();
+        } else {
+          throw new Error("Something is wrong");
+        }
       }
     } catch (err) {
       Alert.showAlert(true, "Item not removed");

@@ -222,7 +222,8 @@ class CartAPI {
   // проверяет корзину, если нет корзины или она пуста возвращает null, иначе возвращает объект с данными продукта и корзины(общая стоимость товаров и общее количество товаров)
   // product - это map, где ключ - sku продукта. Проверить есть ли такой товар в корзине можно через map.get(key) – возвращает значение по ключу или undefined, если ключ key отсутствует.
   public static async checkMyCart() {
-    if (!(localStorage.getItem("token") || localStorage.getItem("anonimToken"))) return null;
+    if (!(localStorage.getItem("token") || localStorage.getItem("anonimToken")))
+      return null;
     const myCart = await this.getMyCarts().then((res) => {
       if (!res) return null;
       return res.body;
@@ -279,19 +280,30 @@ class CartAPI {
   }
 
   public static async removeLine(
-    id: string,
-    version: number,
+    quantity: number,
     actionObj: RemoveLineFromCart,
   ) {
+    if (quantity < 0) return undefined;
+    const myCart = await this.getOrCreateMyCart();
+    if (!myCart) {
+      return undefined;
+    }
+    const version: number = myCart?.version;
+    const ID: string = myCart?.id;
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("anonimToken");
     return apiRoot
       .withProjectKey({ projectKey })
       .me()
       .carts()
-      .withId({ ID: id })
+      .withId({ ID })
       .post({
         body: {
           version,
           actions: [actionObj],
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .execute();
