@@ -245,7 +245,8 @@ class CartAPI {
   public static clearCart(
     id: string,
     version: number,
-    actionObj: RemoveLineFromCart[],) {
+    actionObj: RemoveLineFromCart[],
+  ) {
     return apiRoot
       .withProjectKey({ projectKey })
       .me()

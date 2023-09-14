@@ -213,9 +213,11 @@ export const profileLinks: link[] = [
           e.preventDefault();
           const { target } = e;
           if ((target as HTMLElement).tagName === "A") {
-            if ((target as HTMLElement).classList.contains("cart__continue-btn")) {
+            if (
+              (target as HTMLElement).classList.contains("cart__continue-btn")
+            ) {
               // if (e instanceof MouseEvent) {
-                routeforOtherLink(e);
+              routeforOtherLink(e);
               // }
             }
           }
@@ -407,7 +409,7 @@ fill="#ffffff" stroke="none">
             </div>`,
     href: "basket",
     callback: (): void => {
-        createCartTable();
+      createCartTable();
     },
   },
 ];

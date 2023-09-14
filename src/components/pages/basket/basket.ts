@@ -12,16 +12,16 @@ async function removeCart(): Promise<void> {
       if (products) {
         console.log(Array.from(products.values()));
         const { id, version } = Array.from(products.values())[0];
-        products.forEach(product => {
+        products.forEach((product) => {
           const { lineItemKey } = product;
           if (lineItemKey) {
             const obj: RemoveLineFromCart = {
               action: Actions.removeline,
-              lineItemKey
+              lineItemKey,
             };
             removeArr.push(obj);
           }
-        })
+        });
         const removeAllItems = await CartAPI.clearCart(id, version, removeArr);
         if (removeAllItems.statusCode !== 400) {
           Alert.showAlert(false, "Сart has been emptied");
@@ -30,7 +30,7 @@ async function removeCart(): Promise<void> {
         }
       }
     }
-  } catch(err) {
+  } catch (err) {
     console.log(err);
   }
 }
@@ -130,7 +130,9 @@ export async function createCartTable(): Promise<void> {
       e.preventDefault();
       const { target } = e;
       if ((target as HTMLElement).tagName === "BUTTON") {
-        if ((target as HTMLElement).classList.contains("cart__clear-cart-btn")) {
+        if (
+          (target as HTMLElement).classList.contains("cart__clear-cart-btn")
+        ) {
           removeCart();
         }
       }
