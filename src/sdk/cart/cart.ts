@@ -9,7 +9,6 @@ import {
   ApiRoot,
 } from "@commercetools/platform-sdk";
 import { apiRoot, projectKey } from "../commercetoolsApiRoot";
-import { createAnonimusCart, createCartWithToken } from "../sdk";
 import { MyTokenCache } from "../token/TokenCache";
 import {
   createAnonimusClient,
@@ -17,6 +16,59 @@ import {
 } from "../createPasswordClient";
 
 class CartAPI {
+  public static async createCart() {
+    let res;
+
+    if (localStorage.getItem("token") || localStorage.getItem("anonimToken")) {
+      res = await this.createCartWithToken();
+    } else {
+      const tokenCache = new MyTokenCache();
+      const anonimClientAPI = createAnonimusFlow(tokenCache);
+      const anonimClient = createAnonimusClient(anonimClientAPI);
+      const anonimApiRoot: ApiRoot =
+        createApiBuilderFromCtpClient(anonimClient);
+      res = await this.createAnonimusCart(anonimApiRoot);
+
+      if (res.statusCode !== 400) {
+        const { token } = tokenCache.get();
+        localStorage.setItem("anonimToken", token);
+      }
+    }
+
+    return res; // Возвращает значение из обеих ветвей условия
+  }
+
+  private static async createCartWithToken() {
+    const res = await apiRoot
+      .withProjectKey({ projectKey })
+      .me()
+      .carts()
+      .post({
+        body: {
+          currency: "USD",
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .execute();
+    return res;
+  }
+
+  private static async createAnonimusCart(anonimusApiRoot: ApiRoot) {
+    const res = await anonimusApiRoot
+      .withProjectKey({ projectKey })
+      .me()
+      .carts()
+      .post({
+        body: {
+          currency: "USD",
+        },
+      })
+      .execute();
+    return res;
+  }
+
   // возвращает корзину или создает и возвращает корзину.
   public static async getOrCreateMyCart() {
     const myCart = await this.getMyCarts().then(async (myCartData) => {
@@ -31,28 +83,6 @@ class CartAPI {
       return newCart;
     });
     return myCart;
-  }
-
-  public static async createCart() {
-    let res;
-
-    if (localStorage.getItem("token") || localStorage.getItem("anonimToken")) {
-      res = await createCartWithToken();
-    } else {
-      const tokenCache = new MyTokenCache();
-      const anonimClientAPI = createAnonimusFlow(tokenCache);
-      const anonimClient = createAnonimusClient(anonimClientAPI);
-      const anonimApiRoot: ApiRoot =
-        createApiBuilderFromCtpClient(anonimClient);
-      res = await createAnonimusCart(anonimApiRoot);
-
-      if (res.statusCode !== 400) {
-        const { token } = tokenCache.get();
-        localStorage.setItem("anonimToken", token);
-      }
-    }
-
-    return res; // Возвращает значение из обеих ветвей условия
   }
 
   public static async deleteCart(id: string, version: number) {
