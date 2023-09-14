@@ -16,6 +16,7 @@ import {
 } from "../createPasswordClient";
 
 class CartAPI {
+
   public static async createCart() {
     let res;
 
@@ -78,7 +79,7 @@ class CartAPI {
       }
       // иначе создаем новую корзину и возвращаем ее
       const newCart = await this.createCart().then(
-        (newCartData) => newCartData?.body,
+        (newCartData) => newCartData?.body
       );
       return newCart;
     });
@@ -111,13 +112,15 @@ class CartAPI {
 
   // получаем корзины созданные со токеном (пока - только для зарегистророванных пользовательй. Для анонимных - не проверено)
   public static async getMyCarts() {
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("anonimToken");
     const res = await apiRoot
       .withProjectKey({ projectKey })
       .me()
       .carts()
       .get({
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .execute();
@@ -170,7 +173,7 @@ class CartAPI {
     sku: string,
     quantity: number,
     IDData?: string,
-    versionData?: number,
+    versionData?: number
   ) {
     let ID;
     let version;
@@ -238,7 +241,7 @@ class CartAPI {
               }
             >
           | undefined,
-        item: LineItem,
+        item: LineItem
       ) => {
         const { sku } = item.variant;
         if (sku !== undefined && acc !== undefined) {
@@ -254,7 +257,7 @@ class CartAPI {
         }
         return acc;
       },
-      new Map(),
+      new Map()
     );
     const cart = {
       totalPrice: myCart.totalPrice,
