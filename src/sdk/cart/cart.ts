@@ -221,7 +221,8 @@ class CartAPI {
   // проверяет корзину, если нет корзины или она пуста возвращает null, иначе возвращает объект с данными продукта и корзины(общая стоимость товаров и общее количество товаров)
   // product - это map, где ключ - sku продукта. Проверить есть ли такой товар в корзине можно через map.get(key) – возвращает значение по ключу или undefined, если ключ key отсутствует.
   public static async checkMyCart() {
-    if (!(localStorage.getItem("token") || localStorage.getItem("anonimToken"))) return null;
+    if (!(localStorage.getItem("token") || localStorage.getItem("anonimToken")))
+      return null;
     const myCart = await this.getMyCarts().then((res) => {
       if (!res) return null;
       return res.body;

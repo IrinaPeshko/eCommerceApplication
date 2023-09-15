@@ -1,5 +1,4 @@
 import Swiper from "swiper";
-import { Attribute, TypedMoney } from "@commercetools/platform-sdk";
 import { getProduct } from "../../../sdk/sdk";
 import Popap from "../../popap/popap";
 import {
@@ -8,6 +7,7 @@ import {
 } from "../../slider/swiper";
 import { productPopap } from "./productPopap";
 import { ProductControl } from "./productControl";
+import { ProductData } from "./productData";
 
 export class Product {
   private static DOM = {
@@ -20,7 +20,7 @@ export class Product {
     get quantityNum() {
       return document.querySelector(".product_quantity__num");
     },
-    get sku() {
+    get currentSku() {
       const skuBox = document.querySelector(".sku_value");
       if (!skuBox) throw new Error("skuBox is not found");
       const value = skuBox.textContent;
@@ -47,9 +47,7 @@ export class Product {
         ".product_page__color .product_item__value",
       ),
       sizes: document.querySelector(".product_page__items.sizes"),
-      // quantityMinus: document.querySelector(".product_quantity__minus"),
       quantityNum: document.querySelector(".product_quantity__num"),
-      // quantityPlus: document.querySelector(".product_quantity__plus"),
       startPrise: document.querySelector(".sizes__item.product_page__prise"),
       salePrise: document.querySelector(".product_page__sale_prise"),
       description: document.querySelector(".product_deail__description"),
@@ -57,47 +55,8 @@ export class Product {
       addBagBtn: document.querySelector(".product_page__btn.bag"),
     };
 
-    const data = {
-      slides: resp.masterVariant.images?.reduce((acc: HTMLElement[], img) => {
-        const el = Product.createSlide(`${img.url}`, "swiper-slide__content");
-        acc.push(el);
-        return acc;
-      }, []),
-      slidesPopap: resp.masterVariant.images?.reduce(
-        (acc: HTMLElement[], img) => {
-          const el = Product.createSlide(`${img.url}`, "swiper-slide__content");
-          acc.push(el);
-          return acc;
-        },
-        [],
-      ),
-      name: resp.name.en,
-      mainAttrubutes: Product.getAttrubutes(resp.masterVariant?.attributes),
-      variantAttrubutes: resp.variants.map((variant) =>
-        Product.getAttrubutes(variant.attributes),
-      ),
-      getStartPrise() {
-        if (
-          resp.masterVariant.prices === undefined ||
-          resp.masterVariant.prices?.length <= 0
-        )
-          return "";
-        const { value } = resp.masterVariant.prices[0];
-        return Product.getPrise(value);
-      },
-      getSalePrise() {
-        if (
-          resp.masterVariant.prices === undefined ||
-          resp.masterVariant.prices?.length <= 0 ||
-          resp.masterVariant.prices[0].discounted === undefined
-        )
-          return "";
-        const { value } = resp.masterVariant.prices[0].discounted;
-        return Product.getPrise(value);
-      },
-      description: resp.description?.en,
-      sku: [resp.masterVariant.sku, ...resp.variants.map((el) => el.sku)],
-    };
+    const data = new ProductData(resp);
+
     const productPageSwiperMain = new Swiper(
       ".product_page__swiper-main",
       productPageSwiperMainSetting,
@@ -123,21 +82,21 @@ export class Product {
       DOM.sizes,
       data.mainAttrubutes,
       data.variantAttrubutes,
-      data.sku,
+      data.skuArr,
     );
     Product.clickSizes(DOM.sizes, DOM.sku);
-    Product.showContent(DOM.startPrise, data.getStartPrise());
-    Product.showContent(DOM.salePrise, data.getSalePrise());
+    Product.showContent(DOM.startPrise, data.startPrise);
+    Product.showContent(DOM.salePrise, data.salePrice);
     Product.checkPrice(DOM.startPrise, DOM.salePrise);
     Product.showContent(DOM.description, data.description);
-    Product.showContent(DOM.sku, data.sku[0]);
+    Product.showContent(DOM.sku, data.skuArr[0]);
     Product.clickAddBagBtn(DOM.addBagBtn, DOM.quantityNum);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const productControl = new ProductControl(
       this.DOM.quantityPlus,
       this.DOM.quantityNum,
       this.DOM.quantityMinus,
-      this.DOM.sku,
+      this.DOM.currentSku,
     );
   }
 
@@ -147,13 +106,6 @@ export class Product {
       return value.replace("product__", "");
     }
     return "";
-  }
-
-  private static createSlide(url: string, className: string) {
-    const box = document.createElement("div");
-    box.classList.add(className);
-    box.innerHTML = `<img class="product_page__img" src="${url}" alt="slide"></img>`;
-    return box;
   }
 
   private static createSlides(
@@ -208,36 +160,6 @@ export class Product {
     domEl.textContent = data;
   }
 
-  private static getAttrubutes(res: Attribute[] | undefined) {
-    const result = {
-      color: "",
-      size: "",
-      brend: "",
-      prise: "",
-    };
-    if (res !== undefined) {
-      res.forEach((el) => {
-        switch (el.name) {
-          case "color":
-            result.color = el.value.label;
-            break;
-          case "size":
-            result.size = el.value.label;
-            break;
-          case "brend":
-            result.brend = el.value.label;
-            break;
-          case "price":
-            result.prise = el.value.label;
-            break;
-          default:
-            break;
-        }
-      });
-    }
-    return result;
-  }
-
   private static createSizes(
     box: Element | null,
     main: { color: string; size: string; brend: string; prise: string },
@@ -261,12 +183,6 @@ export class Product {
       el.textContent = attributes.size;
       box.append(el);
     });
-  }
-
-  private static getPrise(data: TypedMoney | undefined) {
-    if (data === undefined) return "";
-    const value = (data.centAmount / 10 ** data.fractionDigits).toFixed(2);
-    return `${value} ${data.currencyCode}`;
   }
 
   private static checkPrice(priseBox: Element | null, saleBox: Element | null) {
@@ -319,22 +235,4 @@ export class Product {
     }
     return "";
   }
-
-  // private static async showQuantity(
-  //   box: Element | HTMLInputElement | null,
-  //   skuBox: string | null,
-  // ) {
-  //   if (!box || !skuBox || !(box instanceof HTMLInputElement)) return;
-  //   const cartData = await CartAPI.checkMyCart();
-  //   if (cartData === null || cartData.products === undefined || skuBox === "") {
-  //     box.value = "0";
-  //     return;
-  //   }
-  //   const num = await cartData.products.get(`${skuBox}`);
-  //   if (num === undefined) {
-  //     box.value = "0";
-  //   } else {
-  //     box.value = `${num.quantity}`;
-  //   }
-  // }
 }
