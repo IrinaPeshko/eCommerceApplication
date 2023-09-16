@@ -21,13 +21,15 @@ export class ProductData {
 
   public imgs: Image[] | undefined;
 
-  public startPrise: string;
+  public startPrice: string;
 
   public slides: HTMLElement[] | undefined;
 
   public slidesPopap: HTMLElement[] | undefined;
 
   public salePrice: string;
+
+  public key: string | undefined;
 
   public mainAttrubutes: {
     color: string;
@@ -45,7 +47,7 @@ export class ProductData {
       ...data.variants.map((el) => el.sku),
     ];
     this.imgs = data.masterVariant.images;
-    this.startPrise =
+    this.startPrice =
       data.masterVariant.prices === undefined ||
       data.masterVariant.prices?.length <= 0
         ? ""
@@ -62,6 +64,7 @@ export class ProductData {
     this.variantAttrubutes = data.variants.map((variant) =>
       ProductData.getAttrubutes(variant.attributes),
     );
+    this.key = data.key;
 
     this.slides = this.imgs?.reduce((acc: HTMLElement[], img) => {
       const el = ProductData.createSlide(`${img.url}`, "swiper-slide__content");
@@ -85,7 +88,11 @@ export class ProductData {
   private static getPrice(data: TypedMoney | undefined) {
     if (data === undefined) return "";
     const value = (data.centAmount / 10 ** data.fractionDigits).toFixed(2);
-    return value ? `${value} ${data.currencyCode}` : "";
+    let {currencyCode} = data
+    if (data.currencyCode === 'USD') {
+      currencyCode = '$'
+    }
+    return value ? `${value} ${currencyCode}` : "";
   }
 
   private static createSlide(url: string, className: string) {

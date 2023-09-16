@@ -4,30 +4,22 @@ import imgProfile from "../../../assets/icons/8324223_ui_essential_app_avatar_pr
 /* eslint-disable import/no-cycle */
 import Registration from "../../pages/registration/registration";
 import setShippingDefault from "../../pages/registration/select default address checkbox/setDefaultShipping";
-/* eslint-disable import/no-cycle */
 import Login from "../../pages/login/login";
 import Profile from "../../pages/profile/profile";
 import { handleLocation, routeforOtherLink } from "../../utils/router";
 import HeaderView from "../header";
-import {
-  createCategories,
-  onFilterBtnClick,
-  visualeCards,
-} from "../../pages/catalog/catalog";
-import { visualeFilterCards } from "../../pages/catalog/ilterBtnClick";
-import { getCategoryPath } from "../../pages/catalog/getCategoryPath";
-import { getUserById, getCategories } from "../../../sdk/sdk";
+// import {
+//   createCategories,
+// } from "../../pages/catalog/cards";
+// import { visualeFilterCards } from "../../pages/catalog/ilterBtnClick";
+// import { Categ } from "../../pages/catalog/category";
+import { getUserById } from "../../../sdk/sdk";
 import { Address } from "../../../types/types";
-import { Category } from "../../../types/catalog/catalogTypes";
+// import { Category } from "../../../types/catalog/catalogTypes";
 import { Product } from "../../pages/product/product";
 import productKeys from "../../pages/product/productsKey";
-import { onSearchBtnCkick } from "../../pages/catalog/onSearchBtnCkick";
-import {
-  createBrendFilterStr,
-  createColorFilterStr,
-  createPriceFilterStr,
-  createSizeFilterStr,
-} from "../../pages/catalog/createAttributeParams";
+// import Filter from "../../pages/catalog/filter";
+import { Catalog } from "../../pages/catalog/catalog";
 
 const namePage = {
   MAIN: "MAIN",
@@ -409,122 +401,8 @@ export const pages: link[] = [
     name: namePage.CATALOG,
     href: "/catalog",
     callback: (): void => {
-      createCategories();
-      visualeCards();
-      const filterBtn = document.getElementById("filterBtn");
-      filterBtn?.addEventListener("click", onFilterBtnClick);
-      const resetBtn = document.getElementById("resetBtn");
-      resetBtn?.addEventListener("click", visualeCards);
-      const searchKeywordsBtn = document.getElementById("search-button");
-      searchKeywordsBtn?.addEventListener("click", () => {
-        onSearchBtnCkick();
-      });
-      const nextBtn = document.getElementById("next");
-      const prevBtn = document.getElementById("prev");
-      nextBtn?.addEventListener("click", () => {
-        if (nextBtn.classList.contains("catalog__button_active")) {
-          prevBtn?.classList.add("catalog__button_active");
-          prevBtn?.classList.remove("catalog__button_inactive");
-          const page = document.getElementById("number-page");
-          if (page) {
-            page.innerText = `${+page.innerText + 1}`;
-          }
-          onFilterBtnClick();
-        }
-      });
-      prevBtn?.addEventListener("click", () => {
-        if (prevBtn.classList.contains("catalog__button_active")) {
-          nextBtn?.classList.add("catalog__button_active");
-          nextBtn?.classList.remove("catalog__button_inactive");
-          const page = document.getElementById("number-page");
-          if (page) {
-            page.innerText = `${+page.innerText - 1}`;
-          }
-          onFilterBtnClick();
-        }
-      });
-      const categoriesContainer = document.querySelector(
-        ".catalog__catigories",
-      );
-      categoriesContainer?.addEventListener("click", (event) => {
-        const inputs = document.querySelectorAll(".form__checkbox");
-        inputs.forEach((el) => {
-          if (el instanceof HTMLInputElement) {
-            el.checked = false;
-          }
-        });
-        const itemArr = Array.from(
-          document.querySelectorAll(".catalog__breadcrumbs-item"),
-        );
-        itemArr.forEach((el) => {
-          el.classList.remove("selected");
-        });
-        const categories: Record<string, Category> = {};
-        async function getCategoriesArr() {
-          const categoriesRes = await getCategories();
-          const categoriesArr = categoriesRes.body.results;
-          categoriesArr.forEach((el) => {
-            const categoryObj: Category = {
-              id: el.id,
-              name: el.name.en,
-              parentId: `${el.parent?.id}`,
-            };
-            categories[el.id] = categoryObj;
-          });
-          const el = event.target;
-          if (el instanceof HTMLElement) {
-            if (el.tagName === "A") {
-              const { parentElement } = el;
-              if (parentElement) {
-                parentElement.classList.add("selected");
-              }
-            } else {
-              el.classList.add("selected");
-            }
-            const key = el.getAttribute("key");
-            const categoryPathElement = document.getElementById("categoryPath");
-            if (categoryPathElement && key) {
-              const categoryPath = getCategoryPath(key, categories);
-              categoryPathElement.textContent = categoryPath;
-            }
-            visualeFilterCards([`variants.categories.id:"${key}"`]);
-          }
-        }
-        getCategoriesArr();
-      });
-      const sortSelect = document.getElementById("sort-select");
-      if (sortSelect instanceof HTMLSelectElement) {
-        sortSelect?.addEventListener("change", () => {
-          const params: string[] = [];
-          const selected = document.querySelector(".selected");
-          if (selected) {
-            const categoryKey = selected.getAttribute("key");
-            params.push(`variants.categories.id:"${categoryKey}"`);
-          }
-          const colorParams = createColorFilterStr();
-          const brendParams = createBrendFilterStr();
-          const sizeParams = createSizeFilterStr();
-          const priceParams = createPriceFilterStr();
-          const container = document.querySelector(".catalog__products");
-
-          if (colorParams) {
-            params.push(colorParams);
-          }
-          if (brendParams) {
-            params.push(brendParams);
-          }
-          if (sizeParams) {
-            params.push(sizeParams);
-          }
-          if (priceParams) {
-            params.push(priceParams);
-          }
-          if (container) {
-            container.innerHTML = "";
-            visualeFilterCards(params);
-          }
-        });
-      }
+      const catalog = new Catalog();
+      catalog.init();
     },
   },
 ];

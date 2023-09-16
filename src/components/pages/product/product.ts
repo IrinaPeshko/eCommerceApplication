@@ -85,7 +85,7 @@ export class Product {
       data.skuArr,
     );
     Product.clickSizes(DOM.sizes, DOM.sku);
-    Product.showContent(DOM.startPrise, data.startPrise);
+    Product.showContent(DOM.startPrise, data.startPrice);
     Product.showContent(DOM.salePrise, data.salePrice);
     Product.checkPrice(DOM.startPrise, DOM.salePrise);
     Product.showContent(DOM.description, data.description);
