@@ -651,6 +651,23 @@ input:read-only,
   }
 }
 
+.code-elem {
+  padding: 13px 16px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #E3FFE9;
+  border: 1px solid #27ae60;
+  color: #27ae60;
+  & .code-elem__remove-btn {
+    background-color: #C6E8C3;
+    &:hover {
+      background-color: #BBDBB8;
+    }
+  }
+}
+
 @media (max-width: 700px) {
   .form__wrapper {
     flex-direction: column;

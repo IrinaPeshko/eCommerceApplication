@@ -1,9 +1,13 @@
 import Product from "./basketProduct";
 import CartAPI from "../../../sdk/cart/cart";
-import { RemoveLineFromCart, Actions } from "../../../types/types";
+import { RemoveLineFromCart, Actions, AddCode } from "../../../types/types";
 import Alert from "../../alerts/alert";
+import Code from "./code";
+import { correctPrice, totalPrice } from "./correctPrice";
 
 async function removeCart(): Promise<void> {
+  const tableBody: HTMLDivElement | null =
+    document.querySelector(".cart__table-body");
   const removeArr: RemoveLineFromCart[] = [];
   try {
     const allProducts = await CartAPI.checkMyCart();
@@ -11,7 +15,6 @@ async function removeCart(): Promise<void> {
       const { products } = allProducts;
       if (products) {
         console.log(Array.from(products.values()));
-        const { id, version } = Array.from(products.values())[0];
         products.forEach((product) => {
           const { lineItemKey } = product;
           if (lineItemKey) {
@@ -22,16 +25,63 @@ async function removeCart(): Promise<void> {
             removeArr.push(obj);
           }
         });
-        const removeAllItems = await CartAPI.clearCart(id, version, removeArr);
-        if (removeAllItems.statusCode !== 400) {
-          Alert.showAlert(false, "Сart has been emptied");
-        } else {
-          throw new Error("Something is wrong");
+        const removeAllItems = await CartAPI.clearCart(removeArr);
+        if (removeAllItems) {
+          if (removeAllItems.statusCode !== 400) {
+            const { totalPrice: { centAmount, fractionDigits, currencyCode } } = removeAllItems.body;
+            if (tableBody) {
+              tableBody.innerHTML = "";
+            }
+            totalPrice(centAmount, fractionDigits, currencyCode);
+            Alert.showAlert(false, "Сart has been emptied");
+          } else {
+            throw new Error("Something is wrong");
+          }
         }
       }
     }
   } catch (err) {
+    Alert.showAlert(true, "Cart has been not emptied");
     console.log(err);
+  }
+}
+
+async function applyCode(target: HTMLElement): Promise<void> {
+  const codeField: Element | null = target.previousElementSibling;
+  const codesList: HTMLDivElement | null = document.querySelector(".cart__codes-list");
+  const totalElem: HTMLSpanElement | null = document.querySelector(".cart__total-price");
+  if (codeField) {
+    const codeVal: string = (codeField as HTMLInputElement).value;
+    if (codeVal !== "") {
+      const addCodeObj: AddCode[] = [{
+        action: Actions.addcode,
+        code: codeVal
+      }];
+      try {
+        const getCartsDiscount = await CartAPI.addCode(addCodeObj);
+        if (getCartsDiscount) {
+          if (getCartsDiscount.statusCode !== 400) {
+            (codeField as HTMLInputElement).value = "";
+            const { totalPrice: { centAmount, currencyCode, fractionDigits } } = getCartsDiscount.body;
+            const { discountCodes } = getCartsDiscount.body;
+            const { discountCode: { id: idFromCart } } = discountCodes[0];
+            const newCode = new Code(idFromCart, codeVal);
+            if (codesList) {
+              codesList.append(newCode.createCodeElem());
+            }
+            Alert.showAlert(false, "Code is successfully applied to this cart");
+            if (totalElem) {
+              totalPrice(centAmount, fractionDigits, currencyCode);
+            }
+          } else {
+            throw new Error("Something is wrong");
+          }
+        }
+      } catch(err) {
+        Alert.showAlert(true, "This code is unavailable");
+        console.log(err);
+      }
+    }
   }
 }
 
@@ -39,10 +89,10 @@ export async function createCartTable(): Promise<void> {
   const mainElem: HTMLElement | null = document.querySelector(".cart");
   const tableBody: HTMLDivElement | null =
     document.querySelector(".cart__table-body");
-  const totalElem: HTMLSpanElement | null =
-    document.querySelector(".cart__total-price");
+  const codesList: HTMLDivElement | null = document.querySelector(".cart__codes-list");
   try {
     const cartResp = await CartAPI.checkMyCart();
+    const getCartDiscounts = await CartAPI.getOrCreateMyCart();
     if (cartResp) {
       const { products, cart } = cartResp;
       const {
@@ -81,16 +131,9 @@ export async function createCartTable(): Promise<void> {
               );
               const image: string = images.map((elem) => elem.url)[0];
               const discountedPrice: number | undefined = discounted
-                ? Number(
-                    (
-                      discounted.value.centAmount /
-                      10 ** fractionDigits
-                    ).toFixed(2),
-                  )
+                ? correctPrice(discounted.value.centAmount, fractionDigits)
                 : undefined;
-              const correctDefaultPrice = Number(
-                (defaultPrice / 10 ** fractionDigits).toFixed(2),
-              );
+              const correctDefaultPrice: number = correctPrice(defaultPrice, fractionDigits);
               const newProduct = new Product(
                 sku,
                 version,
@@ -112,15 +155,35 @@ export async function createCartTable(): Promise<void> {
         }
       }
       if (cart) {
-        if (totalElem) {
-          const correctTotalPrice = Number(
-            (centAmount / 10 ** cartFractionDigits).toFixed(2),
-          );
-          totalElem.innerText = `${correctTotalPrice} ${cartcurrencyCode}`;
-        }
+        totalPrice(centAmount, cartFractionDigits, cartcurrencyCode);
       }
     } else {
       console.log("Empty cart");
+    }
+    if (codesList) {
+      codesList.innerHTML = "";
+      if (getCartDiscounts) {
+        const { discountCodes } = getCartDiscounts;
+        if (discountCodes && discountCodes.length !== 0) {
+          discountCodes.forEach(async code => {
+            const { discountCode: { id } } = code;
+            try {
+              const getCode = await CartAPI.getDiscountCode(id);
+              if (getCode.statusCode !== 400) {
+                const { code: codeName } = getCode.body;
+                const codeElem = new Code(id, codeName);
+                if (codesList) {
+                  codesList.append(codeElem.createCodeElem());
+                }
+              } else {
+                throw new Error("Something is wrong");
+              }
+            } catch(err) {
+              console.log(err);
+            }
+          })
+        }
+      }
     }
   } catch (err) {
     console.log(err);
@@ -134,6 +197,8 @@ export async function createCartTable(): Promise<void> {
           (target as HTMLElement).classList.contains("cart__clear-cart-btn")
         ) {
           removeCart();
+        } else if ((target as HTMLElement).classList.contains("cart__apply-code-btn")) {
+          applyCode((target as HTMLElement));
         }
       }
     });

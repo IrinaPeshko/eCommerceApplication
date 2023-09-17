@@ -3,6 +3,7 @@ import { LineItem } from "@commercetools/platform-sdk";
 import CartAPI from "../../../sdk/cart/cart";
 import { RemoveLineFromCart, Actions } from "../../../types/types";
 import Alert from "../../alerts/alert";
+import { totalPrice } from "./correctPrice";
 
 export default class Product {
   constructor(
@@ -51,7 +52,7 @@ export default class Product {
       </div>
     </div>
     <div class="cart__table-price-col">
-      <span class="cart__table-text">${this.price} ${this.currencyCode} ${
+      <span class="cart__table-text cart__table-text--prices">${this.price} ${this.currencyCode} ${
         this.discountedPrice
           ? `<span class='discount-price'>${this.discountedPrice} ${this.currencyCode}</span>`
           : ""
@@ -61,7 +62,7 @@ export default class Product {
       <span class="cart__table-text">${this.size}</span>
     </div>
     <div class="cart__table-quantity-col">
-      <div class="counter read-only">
+      <div class="counter read-only cart__counter">
         <button class="counter__decrement-btn">
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
             <rect y="5" width="12" height="2" fill="#C4C4C4"/>
@@ -123,6 +124,8 @@ export default class Product {
       );
       if (removeCurrentLine) {
         if (removeCurrentLine.statusCode !== 400) {
+          const { totalPrice: { centAmount, currencyCode, fractionDigits } } = removeCurrentLine.body;
+          totalPrice(centAmount, fractionDigits, currencyCode);
           Alert.showAlert(false, "Item successfully removed");
           if (currentLine) currentLine.remove();
         } else {

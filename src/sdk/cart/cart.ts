@@ -14,7 +14,7 @@ import {
   createAnonimusClient,
   createAnonimusFlow,
 } from "../createPasswordClient";
-import { RemoveLineFromCart } from "../../types/types";
+import { RemoveLineFromCart, AddCode, RemoveCode } from "../../types/types";
 
 class CartAPI {
   public static async createCart() {
@@ -309,20 +309,99 @@ class CartAPI {
       .execute();
   }
 
-  public static clearCart(
-    id: string,
-    version: number,
+  public static async clearCart(
     actionObj: RemoveLineFromCart[],
   ) {
+    const myCart = await this.getOrCreateMyCart();
+    if (!myCart) {
+      return undefined;
+    }
+    const version: number = myCart?.version;
+    const ID: string = myCart?.id;
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("anonimToken");
     return apiRoot
       .withProjectKey({ projectKey })
       .me()
       .carts()
-      .withId({ ID: id })
+      .withId({ ID })
       .post({
         body: {
           version,
           actions: actionObj,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .execute();
+  }
+
+  public static async getDiscountCode(discountID: string) {
+    return apiRoot
+      .withProjectKey({ projectKey })
+      .discountCodes().withId({ID: discountID})
+      .get()
+      .execute();
+  }
+
+  public static async getCartDiscounts() {
+    return apiRoot
+      .withProjectKey({ projectKey })
+      .cartDiscounts().get().execute();
+  }
+
+  public static async getCartDiscount(id: string) {
+    return apiRoot
+      .withProjectKey({ projectKey })
+      .cartDiscounts().withId({ID: id}).get().execute();
+  }
+
+  public static async addCode(codeObj: AddCode[]) {
+    const myCart = await this.getOrCreateMyCart();
+    if (!myCart) {
+      return undefined;
+    }
+    const version: number = myCart?.version;
+    const ID: string = myCart?.id;
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("anonimToken");
+    return apiRoot
+      .withProjectKey({ projectKey })
+      .carts()
+      .withId({ ID })
+      .post({
+        body: {
+          version,
+          actions: codeObj,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .execute();
+  }
+
+  public static async removeCode(codeObj: RemoveCode[]) {
+    const myCart = await this.getOrCreateMyCart();
+    if (!myCart) {
+      return undefined;
+    }
+    const version: number = myCart?.version;
+    const ID: string = myCart?.id;
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("anonimToken");
+    return apiRoot
+      .withProjectKey({ projectKey })
+      .carts()
+      .withId({ ID })
+      .post({
+        body: {
+          version,
+          actions: codeObj,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .execute();
