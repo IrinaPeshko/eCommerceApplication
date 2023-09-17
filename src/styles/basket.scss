@@ -266,11 +266,11 @@
       column-gap: 45px;
       row-gap: 12px;
       grid-template-areas:
-      "first second"
-      "first third"
-      "first fourth"
-      "first fifth"
-      "first sixth";
+        "first second"
+        "first third"
+        "first fourth"
+        "first fifth"
+        "first sixth";
     }
     & .cart__table-image-wrapper {
       width: 139.6px;
@@ -345,12 +345,13 @@
   }
   @media screen and (max-width: 450px) and (min-width: 400px) {
     & .cart__counter {
-      & .counter__decrement-btn, & .counter__increment-btn {
+      & .counter__decrement-btn,
+      & .counter__increment-btn {
         width: 36.36%;
         padding: 16px 0;
       }
       & .counter__field {
-        width: 24.79%
+        width: 24.79%;
       }
     }
   }

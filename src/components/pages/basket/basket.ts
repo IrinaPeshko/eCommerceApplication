@@ -28,7 +28,9 @@ async function removeCart(): Promise<void> {
         const removeAllItems = await CartAPI.clearCart(removeArr);
         if (removeAllItems) {
           if (removeAllItems.statusCode !== 400) {
-            const { totalPrice: { centAmount, fractionDigits, currencyCode } } = removeAllItems.body;
+            const {
+              totalPrice: { centAmount, fractionDigits, currencyCode },
+            } = removeAllItems.body;
             if (tableBody) {
               tableBody.innerHTML = "";
             }
@@ -48,23 +50,31 @@ async function removeCart(): Promise<void> {
 
 async function applyCode(target: HTMLElement): Promise<void> {
   const codeField: Element | null = target.previousElementSibling;
-  const codesList: HTMLDivElement | null = document.querySelector(".cart__codes-list");
-  const totalElem: HTMLSpanElement | null = document.querySelector(".cart__total-price");
+  const codesList: HTMLDivElement | null =
+    document.querySelector(".cart__codes-list");
+  const totalElem: HTMLSpanElement | null =
+    document.querySelector(".cart__total-price");
   if (codeField) {
     const codeVal: string = (codeField as HTMLInputElement).value;
     if (codeVal !== "") {
-      const addCodeObj: AddCode[] = [{
-        action: Actions.addcode,
-        code: codeVal
-      }];
+      const addCodeObj: AddCode[] = [
+        {
+          action: Actions.addcode,
+          code: codeVal,
+        },
+      ];
       try {
         const getCartsDiscount = await CartAPI.addCode(addCodeObj);
         if (getCartsDiscount) {
           if (getCartsDiscount.statusCode !== 400) {
             (codeField as HTMLInputElement).value = "";
-            const { totalPrice: { centAmount, currencyCode, fractionDigits } } = getCartsDiscount.body;
+            const {
+              totalPrice: { centAmount, currencyCode, fractionDigits },
+            } = getCartsDiscount.body;
             const { discountCodes } = getCartsDiscount.body;
-            const { discountCode: { id: idFromCart } } = discountCodes[0];
+            const {
+              discountCode: { id: idFromCart },
+            } = discountCodes[0];
             const newCode = new Code(idFromCart, codeVal);
             if (codesList) {
               codesList.append(newCode.createCodeElem());
@@ -77,7 +87,7 @@ async function applyCode(target: HTMLElement): Promise<void> {
             throw new Error("Something is wrong");
           }
         }
-      } catch(err) {
+      } catch (err) {
         Alert.showAlert(true, "This code is unavailable");
         console.log(err);
       }
@@ -89,7 +99,8 @@ export async function createCartTable(): Promise<void> {
   const mainElem: HTMLElement | null = document.querySelector(".cart");
   const tableBody: HTMLDivElement | null =
     document.querySelector(".cart__table-body");
-  const codesList: HTMLDivElement | null = document.querySelector(".cart__codes-list");
+  const codesList: HTMLDivElement | null =
+    document.querySelector(".cart__codes-list");
   try {
     const cartResp = await CartAPI.checkMyCart();
     const getCartDiscounts = await CartAPI.getOrCreateMyCart();
@@ -133,7 +144,10 @@ export async function createCartTable(): Promise<void> {
               const discountedPrice: number | undefined = discounted
                 ? correctPrice(discounted.value.centAmount, fractionDigits)
                 : undefined;
-              const correctDefaultPrice: number = correctPrice(defaultPrice, fractionDigits);
+              const correctDefaultPrice: number = correctPrice(
+                defaultPrice,
+                fractionDigits,
+              );
               const newProduct = new Product(
                 sku,
                 version,
@@ -165,8 +179,10 @@ export async function createCartTable(): Promise<void> {
       if (getCartDiscounts) {
         const { discountCodes } = getCartDiscounts;
         if (discountCodes && discountCodes.length !== 0) {
-          discountCodes.forEach(async code => {
-            const { discountCode: { id } } = code;
+          discountCodes.forEach(async (code) => {
+            const {
+              discountCode: { id },
+            } = code;
             try {
               const getCode = await CartAPI.getDiscountCode(id);
               if (getCode.statusCode !== 400) {
@@ -178,10 +194,10 @@ export async function createCartTable(): Promise<void> {
               } else {
                 throw new Error("Something is wrong");
               }
-            } catch(err) {
+            } catch (err) {
               console.log(err);
             }
-          })
+          });
         }
       }
     }
@@ -197,8 +213,10 @@ export async function createCartTable(): Promise<void> {
           (target as HTMLElement).classList.contains("cart__clear-cart-btn")
         ) {
           removeCart();
-        } else if ((target as HTMLElement).classList.contains("cart__apply-code-btn")) {
-          applyCode((target as HTMLElement));
+        } else if (
+          (target as HTMLElement).classList.contains("cart__apply-code-btn")
+        ) {
+          applyCode(target as HTMLElement);
         }
       }
     });

@@ -558,7 +558,6 @@ fill="#ffffff" stroke="none">
   },
 ];
 
-
 export const product: link[] = productKeys.map((data) => ({
   name: namePage.PRODUCT,
   href: `/product__${data}`,

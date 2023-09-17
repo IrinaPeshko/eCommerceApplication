@@ -52,7 +52,9 @@ export default class Product {
       </div>
     </div>
     <div class="cart__table-price-col">
-      <span class="cart__table-text cart__table-text--prices">${this.price} ${this.currencyCode} ${
+      <span class="cart__table-text cart__table-text--prices">${this.price} ${
+        this.currencyCode
+      } ${
         this.discountedPrice
           ? `<span class='discount-price'>${this.discountedPrice} ${this.currencyCode}</span>`
           : ""
@@ -124,7 +126,9 @@ export default class Product {
       );
       if (removeCurrentLine) {
         if (removeCurrentLine.statusCode !== 400) {
-          const { totalPrice: { centAmount, currencyCode, fractionDigits } } = removeCurrentLine.body;
+          const {
+            totalPrice: { centAmount, currencyCode, fractionDigits },
+          } = removeCurrentLine.body;
           totalPrice(centAmount, fractionDigits, currencyCode);
           Alert.showAlert(false, "Item successfully removed");
           if (currentLine) currentLine.remove();

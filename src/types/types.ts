@@ -55,7 +55,7 @@ export enum Actions {
   setdefaultshipping = "setDefaultShippingAddress",
   removeline = "removeLineItem",
   addcode = "addDiscountCode",
-  removecode = "removeDiscountCode"
+  removecode = "removeDiscountCode",
 }
 export enum Countries {
   BY = "Belarus",
@@ -107,9 +107,9 @@ export interface AddCode {
 export interface RemoveCode {
   action: Actions.removecode;
   discountCode: {
-    typeId: "discount-code",
-    id: string
-  }
+    typeId: "discount-code";
+    id: string;
+  };
 }
 // export interface ChangeQuantity {
 //   action: Actions.removeline,

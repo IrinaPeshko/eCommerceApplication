@@ -4,7 +4,10 @@ import Alert from "../../alerts/alert";
 import { totalPrice } from "./correctPrice";
 
 export default class Code {
-  constructor(private id: string, private name: string) {
+  constructor(
+    private id: string,
+    private name: string,
+  ) {
     this.id = id;
     this.name = name;
   }
@@ -21,19 +24,25 @@ export default class Code {
     codeBlock.addEventListener("click", async (e: Event) => {
       const { target } = e;
       if ((target as HTMLElement).tagName === "BUTTON") {
-        if ((target as HTMLElement).classList.contains("code-elem__remove-btn")) {
-          const removeCodeObj: RemoveCode[] = [{
-            action: Actions.removecode,
-            discountCode: {
-              typeId: "discount-code",
-              id: this.id
-            }
-          }];
+        if (
+          (target as HTMLElement).classList.contains("code-elem__remove-btn")
+        ) {
+          const removeCodeObj: RemoveCode[] = [
+            {
+              action: Actions.removecode,
+              discountCode: {
+                typeId: "discount-code",
+                id: this.id,
+              },
+            },
+          ];
           try {
             const removeCurrCode = await CartAPI.removeCode(removeCodeObj);
             if (removeCurrCode) {
               if (removeCurrCode.statusCode !== 400) {
-                const { totalPrice: { centAmount, currencyCode, fractionDigits } } = removeCurrCode.body;
+                const {
+                  totalPrice: { centAmount, currencyCode, fractionDigits },
+                } = removeCurrCode.body;
                 totalPrice(centAmount, fractionDigits, currencyCode);
                 codeBlock.remove();
                 Alert.showAlert(false, `Code ${this.name} was removed`);
@@ -41,13 +50,13 @@ export default class Code {
                 throw new Error("Something is wrong");
               }
             }
-          } catch(err) {
+          } catch (err) {
             Alert.showAlert(true, `Code ${this.name} wasn't removed`);
             console.log(err);
           }
         }
       }
-    })
+    });
     return codeBlock;
   }
 }

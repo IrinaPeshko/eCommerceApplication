@@ -309,9 +309,7 @@ class CartAPI {
       .execute();
   }
 
-  public static async clearCart(
-    actionObj: RemoveLineFromCart[],
-  ) {
+  public static async clearCart(actionObj: RemoveLineFromCart[]) {
     const myCart = await this.getOrCreateMyCart();
     if (!myCart) {
       return undefined;
@@ -340,7 +338,8 @@ class CartAPI {
   public static async getDiscountCode(discountID: string) {
     return apiRoot
       .withProjectKey({ projectKey })
-      .discountCodes().withId({ID: discountID})
+      .discountCodes()
+      .withId({ ID: discountID })
       .get()
       .execute();
   }
@@ -348,13 +347,18 @@ class CartAPI {
   public static async getCartDiscounts() {
     return apiRoot
       .withProjectKey({ projectKey })
-      .cartDiscounts().get().execute();
+      .cartDiscounts()
+      .get()
+      .execute();
   }
 
   public static async getCartDiscount(id: string) {
     return apiRoot
       .withProjectKey({ projectKey })
-      .cartDiscounts().withId({ID: id}).get().execute();
+      .cartDiscounts()
+      .withId({ ID: id })
+      .get()
+      .execute();
   }
 
   public static async addCode(codeObj: AddCode[]) {

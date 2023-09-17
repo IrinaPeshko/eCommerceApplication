@@ -657,13 +657,13 @@ input:read-only,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #E3FFE9;
+  background-color: #e3ffe9;
   border: 1px solid #27ae60;
   color: #27ae60;
   & .code-elem__remove-btn {
-    background-color: #C6E8C3;
+    background-color: #c6e8c3;
     &:hover {
-      background-color: #BBDBB8;
+      background-color: #bbdbb8;
     }
   }
 }
