@@ -88,9 +88,9 @@ export class ProductData {
   private static getPrice(data: TypedMoney | undefined) {
     if (data === undefined) return "";
     const value = (data.centAmount / 10 ** data.fractionDigits).toFixed(2);
-    let {currencyCode} = data
-    if (data.currencyCode === 'USD') {
-      currencyCode = '$'
+    let { currencyCode } = data;
+    if (data.currencyCode === "USD") {
+      currencyCode = "$";
     }
     return value ? `${value} ${currencyCode}` : "";
   }
