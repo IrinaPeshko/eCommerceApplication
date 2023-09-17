@@ -4,30 +4,22 @@ import imgProfile from "../../../assets/icons/8324223_ui_essential_app_avatar_pr
 /* eslint-disable import/no-cycle */
 import Registration from "../../pages/registration/registration";
 import setShippingDefault from "../../pages/registration/select default address checkbox/setDefaultShipping";
-/* eslint-disable import/no-cycle */
 import Login from "../../pages/login/login";
 import Profile from "../../pages/profile/profile";
 import { handleLocation, routeforOtherLink } from "../../utils/router";
 import HeaderView from "../header";
-import {
-  createCategories,
-  onFilterBtnClick,
-  visualeCards,
-} from "../../pages/catalog/catalog";
-import { visualeFilterCards } from "../../pages/catalog/ilterBtnClick";
-import { getCategoryPath } from "../../pages/catalog/getCategoryPath";
-import { getUserById, getCategories } from "../../../sdk/sdk";
+// import {
+//   createCategories,
+// } from "../../pages/catalog/cards";
+// import { visualeFilterCards } from "../../pages/catalog/ilterBtnClick";
+// import { Categ } from "../../pages/catalog/category";
+import { getUserById } from "../../../sdk/sdk";
 import { Address } from "../../../types/types";
-import { Category } from "../../../types/catalog/catalogTypes";
+// import { Category } from "../../../types/catalog/catalogTypes";
 import { Product } from "../../pages/product/product";
 import productKeys from "../../pages/product/productsKey";
-import { onSearchBtnCkick } from "../../pages/catalog/onSearchBtnCkick";
-import {
-  createBrendFilterStr,
-  createColorFilterStr,
-  createPriceFilterStr,
-  createSizeFilterStr,
-} from "../../pages/catalog/createAttributeParams";
+// import Filter from "../../pages/catalog/filter";
+import { Catalog } from "../../pages/catalog/catalog";
 import { createCartTable } from "../../pages/basket/basket";
 
 const namePage = {
@@ -539,6 +531,8 @@ fill="#ffffff" stroke="none">
             </div>`,
     href: "/basket",
     callback: (): void => {
+      const catalog = new Catalog();
+      catalog.init();
       const mainElem: HTMLElement | null = document.querySelector(".cart");
       if (mainElem) {
         mainElem.addEventListener("click", (e: Event) => {

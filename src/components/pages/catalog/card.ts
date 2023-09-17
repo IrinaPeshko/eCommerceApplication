@@ -31,7 +31,7 @@ class Card {
   constructor(
     name: string,
     description: string,
-    img: string,
+    img: string | undefined,
     price: string,
     key: string | undefined,
     sku: string,
@@ -39,7 +39,7 @@ class Card {
   ) {
     this.name = name;
     this.description = description;
-    this.img = img;
+    this.img = img !== undefined ? img : "";
     this.price = price;
     this.key = key;
     this.sku = sku;
@@ -73,8 +73,8 @@ class Card {
         <div class="prices__block">
           <p class="product__price ${this.discount ? "not-discount" : ""}">${
             this.price
-          }$</p> 
-          ${this.discount ? `<p class="discount">${this.discount}$</p>` : ""}
+          }</p> 
+          ${this.discount ? `<p class="discount">${this.discount}</p>` : ""}
         </div>
         <p>Add to bag</p>
         <div class="product_quantity">

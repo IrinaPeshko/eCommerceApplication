@@ -100,3 +100,4 @@ export async function visualeFilterCards(params: string[]) {
     console.error(`You have an error ${error}`);
   }
 }
+
