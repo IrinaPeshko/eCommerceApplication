@@ -42,7 +42,9 @@ export default class Code {
               if (removeCurrCode.statusCode !== 400) {
                 const {
                   totalPrice: { centAmount, currencyCode, fractionDigits },
+                  // lineItems
                 } = removeCurrCode.body;
+                // lineItems
                 totalPrice(centAmount, fractionDigits, currencyCode);
                 codeBlock.remove();
                 Alert.showAlert(false, `Code ${this.name} was removed`);

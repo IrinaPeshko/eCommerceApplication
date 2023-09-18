@@ -7,6 +7,7 @@ import {
   LocalizedString,
   createApiBuilderFromCtpClient,
   ApiRoot,
+  DiscountedLineItemPriceForQuantity,
 } from "@commercetools/platform-sdk";
 import { apiRoot, projectKey } from "../commercetoolsApiRoot";
 import { MyTokenCache } from "../token/TokenCache";
@@ -222,8 +223,7 @@ class CartAPI {
   // проверяет корзину, если нет корзины или она пуста возвращает null, иначе возвращает объект с данными продукта и корзины(общая стоимость товаров и общее количество товаров)
   // product - это map, где ключ - sku продукта. Проверить есть ли такой товар в корзине можно через map.get(key) – возвращает значение по ключу или undefined, если ключ key отсутствует.
   public static async checkMyCart() {
-    if (localStorage.getItem("token") || localStorage.getItem("anonimToken"))
-      return null;
+    if (!(localStorage.getItem("token") || localStorage.getItem("anonimToken"))) return null;
     const myCart = await this.getMyCarts().then((res) => {
       if (!res) return null;
       return res.body;
@@ -246,6 +246,7 @@ class CartAPI {
                 price: Price;
                 totalPrice: CentPrecisionMoney;
                 attributes: Attribute[] | undefined;
+                discountedPricePerQuantity: DiscountedLineItemPriceForQuantity[],
                 images: Image[] | undefined;
               }
             >
@@ -265,6 +266,7 @@ class CartAPI {
             price: item.price,
             totalPrice: item.totalPrice,
             attributes: item.variant.attributes,
+            discountedPricePerQuantity: item.discountedPricePerQuantity,
             images: item.variant.images,
           });
         }

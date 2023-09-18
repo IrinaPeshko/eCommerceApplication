@@ -72,6 +72,7 @@
     &.cart__table-text--prices {
       display: flex;
       flex-direction: column;
+      row-gap: 7px;
     }
   }
   & .cart__table-product-name {
@@ -206,6 +207,9 @@
   }
   & .cart__codes-list {
     &:not(:empty) {
+      display: flex;
+      flex-direction: column;
+      row-gap: 10px;
       margin-top: 16px;
     }
   }

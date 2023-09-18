@@ -49,124 +49,37 @@ export const pages: link[] = [
     name: namePage.CATALOG,
     href: "/catalog",
     callback: (): void => {
-      createCategories();
-      visualeCards();
-      const filterBtn = document.getElementById("filterBtn");
-      filterBtn?.addEventListener("click", onFilterBtnClick);
-      const resetBtn = document.getElementById("resetBtn");
-      resetBtn?.addEventListener("click", visualeCards);
-      const searchKeywordsBtn = document.getElementById("search-button");
-      searchKeywordsBtn?.addEventListener("click", () => {
-        onSearchBtnCkick();
-      });
-      const nextBtn = document.getElementById("next");
-      const prevBtn = document.getElementById("prev");
-      nextBtn?.addEventListener("click", () => {
-        if (nextBtn.classList.contains("catalog__button_active")) {
-          prevBtn?.classList.add("catalog__button_active");
-          prevBtn?.classList.remove("catalog__button_inactive");
-          const page = document.getElementById("number-page");
-          if (page) {
-            page.innerText = `${+page.innerText + 1}`;
-          }
-          onFilterBtnClick();
-        }
-      });
-      prevBtn?.addEventListener("click", () => {
-        if (prevBtn.classList.contains("catalog__button_active")) {
-          nextBtn?.classList.add("catalog__button_active");
-          nextBtn?.classList.remove("catalog__button_inactive");
-          const page = document.getElementById("number-page");
-          if (page) {
-            page.innerText = `${+page.innerText - 1}`;
-          }
-          onFilterBtnClick();
-        }
-      });
-      const categoriesContainer = document.querySelector(
-        ".catalog__catigories",
-      );
-      categoriesContainer?.addEventListener("click", (event) => {
-        const inputs = document.querySelectorAll(".form__checkbox");
-        inputs.forEach((el) => {
-          if (el instanceof HTMLInputElement) {
-            el.checked = false;
-          }
-        });
-        const itemArr = Array.from(
-          document.querySelectorAll(".catalog__breadcrumbs-item"),
-        );
-        itemArr.forEach((el) => {
-          el.classList.remove("selected");
-        });
-        const categories: Record<string, Category> = {};
-        async function getCategoriesArr() {
-          const categoriesRes = await getCategories();
-          const categoriesArr = categoriesRes.body.results;
-          categoriesArr.forEach((el) => {
-            const categoryObj: Category = {
-              id: el.id,
-              name: el.name.en,
-              parentId: `${el.parent?.id}`,
-            };
-            categories[el.id] = categoryObj;
-          });
-          const el = event.target;
-          if (el instanceof HTMLElement) {
-            if (el.tagName === "A") {
-              const { parentElement } = el;
-              if (parentElement) {
-                parentElement.classList.add("selected");
-              }
-            } else {
-              el.classList.add("selected");
-            }
-            const key = el.getAttribute("key");
-            const categoryPathElement = document.getElementById("categoryPath");
-            if (categoryPathElement && key) {
-              const categoryPath = getCategoryPath(key, categories);
-              categoryPathElement.textContent = categoryPath;
-            }
-            visualeFilterCards([`variants.categories.id:"${key}"`]);
-          }
-        }
-        getCategoriesArr();
-      });
-      const sortSelect = document.getElementById("sort-select");
-      if (sortSelect instanceof HTMLSelectElement) {
-        sortSelect?.addEventListener("change", () => {
-          const params: string[] = [];
-          const selected = document.querySelector(".selected");
-          if (selected) {
-            const categoryKey = selected.getAttribute("key");
-            params.push(`variants.categories.id:"${categoryKey}"`);
-          }
-          const colorParams = createColorFilterStr();
-          const brendParams = createBrendFilterStr();
-          const sizeParams = createSizeFilterStr();
-          const priceParams = createPriceFilterStr();
-          const container = document.querySelector(".catalog__products");
-
-          if (colorParams) {
-            params.push(colorParams);
-          }
-          if (brendParams) {
-            params.push(brendParams);
-          }
-          if (sizeParams) {
-            params.push(sizeParams);
-          }
-          if (priceParams) {
-            params.push(priceParams);
-          }
-          if (container) {
-            container.innerHTML = "";
-            visualeFilterCards(params);
-          }
-        });
-      }
+      const catalog = new Catalog();
+      catalog.init();
     },
   },
+  // {
+  //   name: namePage.BASKET,
+  //   classList: ["shoping_cart"],
+  //   innerHTML: `<div class="shoping_cart__ico">
+  //             <img src="${imgBascket}" alt="cart" />
+  //           </div>`,
+  //   href: "/basket",
+  //   callback: (): void => {
+  //     const catalog = new Catalog();
+  //     catalog.init();
+  //     const mainElem: HTMLElement | null = document.querySelector(".cart");
+  //     if (mainElem) {
+  //       mainElem.addEventListener("click", (e: Event) => {
+  //         const { target } = e;
+  //         if ((target as HTMLElement).tagName === "A") {
+  //           if (
+  //             (target as HTMLElement).classList.contains("cart__continue-btn")
+  //           ) {
+  //             e.preventDefault();
+  //             routeforOtherLink(e, pages[2].callback);
+  //           }
+  //         }
+  //       });
+  //       createCartTable();
+  //     }
+  //   },
+  // },
 ];
 
 export const profileLinks: link[] = [
@@ -531,8 +444,6 @@ fill="#ffffff" stroke="none">
             </div>`,
     href: "/basket",
     callback: (): void => {
-      const catalog = new Catalog();
-      catalog.init();
       const mainElem: HTMLElement | null = document.querySelector(".cart");
       if (mainElem) {
         mainElem.addEventListener("click", (e: Event) => {

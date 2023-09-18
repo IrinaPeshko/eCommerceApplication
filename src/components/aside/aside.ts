@@ -17,7 +17,6 @@ export default class Aside extends View {
   }
 
   public static openAside(innerdata: string) {
-    console.log("open");
     const asideElem = document.querySelector(".aside");
     if (asideElem) {
       asideElem.classList.remove("aside--hidden");

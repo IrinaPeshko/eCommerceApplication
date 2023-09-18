@@ -3,7 +3,8 @@ import CartAPI from "../../../sdk/cart/cart";
 import { RemoveLineFromCart, Actions, AddCode } from "../../../types/types";
 import Alert from "../../alerts/alert";
 import Code from "./code";
-import { correctPrice, totalPrice } from "./correctPrice";
+import { totalPrice } from "./correctPrice";
+import { Emitter } from "../../utils/eventEmitter";
 
 async function removeCart(): Promise<void> {
   const tableBody: HTMLDivElement | null =
@@ -14,7 +15,6 @@ async function removeCart(): Promise<void> {
     if (allProducts) {
       const { products } = allProducts;
       if (products) {
-        console.log(Array.from(products.values()));
         products.forEach((product) => {
           const { lineItemKey } = product;
           if (lineItemKey) {
@@ -71,7 +71,7 @@ async function applyCode(target: HTMLElement): Promise<void> {
             const {
               totalPrice: { centAmount, currencyCode, fractionDigits },
             } = getCartsDiscount.body;
-            const { discountCodes } = getCartsDiscount.body;
+            const { discountCodes, lineItems } = getCartsDiscount.body;
             const {
               discountCode: { id: idFromCart },
             } = discountCodes[0];
@@ -79,6 +79,16 @@ async function applyCode(target: HTMLElement): Promise<void> {
             if (codesList) {
               codesList.append(newCode.createCodeElem());
             }
+            lineItems.forEach(elem => {
+              const { productKey, discountedPricePerQuantity } = elem;
+              if (discountedPricePerQuantity.length !== 0) {
+                const { discountedPrice: { includedDiscounts, value: { centAmount: changedTotal } } } = elem.discountedPricePerQuantity[0];
+                const { discount: { typeId }, discountedAmount: { centAmount: discountNum } } = includedDiscounts[0];
+                if (typeId === "cart-discount") {
+                  Emitter.emit("updateRow", productKey, changedTotal, discountNum);
+                }
+              }
+            })
             Alert.showAlert(false, "Code is successfully applied to this cart");
             if (totalElem) {
               totalPrice(centAmount, fractionDigits, currencyCode);
@@ -101,10 +111,12 @@ export async function createCartTable(): Promise<void> {
     document.querySelector(".cart__table-body");
   const codesList: HTMLDivElement | null =
     document.querySelector(".cart__codes-list");
+  let amountNum;
   try {
     const cartResp = await CartAPI.checkMyCart();
     const getCartDiscounts = await CartAPI.getOrCreateMyCart();
     if (cartResp) {
+      // console.log(cartResp);
       const { products, cart } = cartResp;
       const {
         totalPrice: {
@@ -132,22 +144,28 @@ export async function createCartTable(): Promise<void> {
                   fractionDigits,
                 },
               },
+              discountedPricePerQuantity,
               images,
               quantity,
               price: { discounted },
+              totalPrice: {centAmount: totalCentAmount}
             } = product;
+            if (discountedPricePerQuantity.length !== 0) {
+              const { discountedPrice: { includedDiscounts } } = discountedPricePerQuantity[0];
+              const { discountedAmount: { centAmount: currAmount } } = includedDiscounts[0];
+              amountNum = currAmount;
+            } else {
+              amountNum = undefined;
+            }
             if (lineItemKey && productKey && attributes && images) {
               const attributesValues = attributes.map(
                 (elem) => elem.value.label,
               );
               const image: string = images.map((elem) => elem.url)[0];
               const discountedPrice: number | undefined = discounted
-                ? correctPrice(discounted.value.centAmount, fractionDigits)
+                ? discounted.value.centAmount
                 : undefined;
-              const correctDefaultPrice: number = correctPrice(
-                defaultPrice,
-                fractionDigits,
-              );
+              const correctDefaultPrice: number = defaultPrice;
               const newProduct = new Product(
                 sku,
                 version,
@@ -161,6 +179,9 @@ export async function createCartTable(): Promise<void> {
                 image,
                 quantity,
                 currencyCode,
+                fractionDigits,
+                totalCentAmount,
+                amountNum,
                 discountedPrice,
               );
               tableBody.append(newProduct.createProduct());
@@ -177,6 +198,7 @@ export async function createCartTable(): Promise<void> {
     if (codesList) {
       codesList.innerHTML = "";
       if (getCartDiscounts) {
+        console.log(getCartDiscounts);
         const { discountCodes } = getCartDiscounts;
         if (discountCodes && discountCodes.length !== 0) {
           discountCodes.forEach(async (code) => {
@@ -186,6 +208,7 @@ export async function createCartTable(): Promise<void> {
             try {
               const getCode = await CartAPI.getDiscountCode(id);
               if (getCode.statusCode !== 400) {
+                // console.log(getCode.body);
                 const { code: codeName } = getCode.body;
                 const codeElem = new Code(id, codeName);
                 if (codesList) {

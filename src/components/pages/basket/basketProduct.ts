@@ -3,7 +3,8 @@ import { LineItem } from "@commercetools/platform-sdk";
 import CartAPI from "../../../sdk/cart/cart";
 import { RemoveLineFromCart, Actions } from "../../../types/types";
 import Alert from "../../alerts/alert";
-import { totalPrice } from "./correctPrice";
+import { totalPrice, correctPrice } from "./correctPrice";
+import { Emitter } from "../../utils/eventEmitter";
 
 export default class Product {
   constructor(
@@ -19,6 +20,9 @@ export default class Product {
     private image: string,
     private quantity: number,
     private currencyCode: string,
+    private fractionDigits: number,
+    private totalCentAmount: number,
+    private discountSize: number | undefined,
     private discountedPrice: number | undefined,
   ) {
     this.sku = sku;
@@ -33,12 +37,19 @@ export default class Product {
     this.image = image;
     this.quantity = quantity;
     this.currencyCode = currencyCode;
+    this.fractionDigits = fractionDigits;
+    this.totalCentAmount = totalCentAmount;
+    this.discountSize = discountSize;
     this.discountedPrice = discountedPrice || undefined;
+    Emitter.on("updateRow", (currProductKey: string, changedTotal: number, discountNum: number) => {
+      this.changeProductData(currProductKey, changedTotal, discountNum);
+    })
   }
 
   public createProduct(): HTMLDivElement {
     const product: HTMLDivElement = document.createElement("div");
     product.className = "cart__table-row";
+    product.id = this.productKey.toLowerCase();
     product.innerHTML = `
     <div class="cart__table-product-col">
       <div class="cart__table-image-wrapper">
@@ -52,13 +63,12 @@ export default class Product {
       </div>
     </div>
     <div class="cart__table-price-col">
-      <span class="cart__table-text cart__table-text--prices">${this.price} ${
-        this.currencyCode
-      } ${
-        this.discountedPrice
-          ? `<span class='discount-price'>${this.discountedPrice} ${this.currencyCode}</span>`
-          : ""
-      }</span>
+      <span class="cart__table-text cart__table-text--prices"> ${this.discountedPrice ?
+        `<span class="default-price default-price--linethrough">${correctPrice(this.price, this.fractionDigits)} ${this.currencyCode}</span>
+        <span class="discount-price">${correctPrice(this.discountedPrice, this.fractionDigits)} ${this.currencyCode}</span>`
+        : `<span class="default-price">${correctPrice(this.price, this.fractionDigits)} ${this.currencyCode}</span>`}
+        ${this.discountSize ? `<span class="discount-size">-${correctPrice(this.discountSize, this.fractionDigits)} ${this.currencyCode}</span>` : ""}
+      </span>
     </div>
     <div class="cart__table-size-col">
       <span class="cart__table-text">${this.size}</span>
@@ -82,9 +92,7 @@ export default class Product {
       </div>
     </div>
     <div class="cart__table-total-col">
-      <span class="cart__table-text cart__table-total">${
-        (this.discountedPrice || this.price) * this.quantity
-      } ${this.currencyCode}</span>
+      <span class="cart__table-text cart__table-total">${correctPrice(this.totalCentAmount, this.fractionDigits)} ${this.currencyCode}</span>
     </div>
     <div class="cart__table-btns-col">
       <button class="edit-btn"></button>
@@ -197,8 +205,6 @@ export default class Product {
     target: HTMLElement,
   ): Promise<void> {
     const parentBlock: HTMLElement | null = target.closest(".cart__table-row");
-    const totalPriceBlock: HTMLElement | null =
-      document.querySelector(".cart__total-price");
     try {
       const addNewItem = await CartAPI.updateProduct(this.sku, quantityVal);
       if (addNewItem) {
@@ -230,12 +236,7 @@ export default class Product {
               );
               totalBlock.innerText = `${formattedProductTotal} ${this.currencyCode}`;
             }
-            if (totalPriceBlock) {
-              const formattedTotalPrice = Number(
-                (cartCentAmount / 10 ** cartFractionDigits).toFixed(2),
-              );
-              totalPriceBlock.innerText = `${formattedTotalPrice} ${cartCurrencyCode}`;
-            }
+            totalPrice(cartCentAmount, cartFractionDigits, cartCurrencyCode);
           }
         } else {
           throw new Error("Something is wrong");
@@ -243,6 +244,32 @@ export default class Product {
       }
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  private changeProductData(productKey: string, changedTotal: number, discountNum: number): void {
+    if (productKey === this.productKey) {
+      this.totalCentAmount = changedTotal;
+      this.discountSize = discountNum;
+      const currentRow: HTMLElement | null = document.getElementById(`${this.productKey.toLowerCase()}`);
+      if (currentRow) {
+        const productTotalPrice: HTMLElement | null = currentRow.querySelector(".cart__table-total");
+        const productPrice: HTMLElement | null = currentRow.querySelector(".cart__table-text--prices");
+        if (productPrice) {
+          const discountSizeBlock: HTMLElement | null = productPrice.querySelector(".discount-size");
+          if (!discountSizeBlock) {
+            const discountBlock: HTMLSpanElement = document.createElement("span");
+            discountBlock.className = "discount-size";
+            discountBlock.innerText = `-${correctPrice(this.discountSize, this.fractionDigits)} ${this.currencyCode}`;
+            productPrice.append(discountBlock);
+          } else {
+            discountSizeBlock.innerText = `-${correctPrice(this.discountSize, this.fractionDigits)} ${this.currencyCode}`;
+          }
+        }
+        if (productTotalPrice) {
+          productTotalPrice.innerText = `${correctPrice(this.totalCentAmount, this.fractionDigits)} ${this.currencyCode}`;
+        }
+      }
     }
   }
 

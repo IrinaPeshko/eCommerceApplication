@@ -15,6 +15,7 @@ import { routeToNotAnchor } from "../../utils/router";
 /* eslint-disable import/no-cycle */
 import HeaderView from "../../header/header";
 import Popap from "../../popap/popap";
+import CartAPI from "../../../sdk/cart/cart";
 
 export default class Registration {
   public validationForm(target: HTMLInputElement | HTMLSelectElement): void {
@@ -136,6 +137,14 @@ export default class Registration {
                 const { token } = tokenCache.get();
                 localStorage.setItem("id", id);
                 localStorage.setItem("token", token);
+                const createCart = await CartAPI.createCart();
+                if (createCart) {
+                  if (createCart.statusCode !== 400) {
+                    console.log(createCart.body);
+                  } else {
+                    throw new Error("Cart not created");
+                  }
+                }
               } else {
                 throw new Error("User not found!");
               }

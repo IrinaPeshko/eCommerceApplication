@@ -1,6 +1,6 @@
 import { searchByKeyWords } from "../../../sdk/sdk";
 /* eslint-disable import/no-cycle */
-import Card from "./createCard";
+import Card from "./card";
 
 export function onSearchBtnCkick() {
   const searchInput = document.getElementById("search");

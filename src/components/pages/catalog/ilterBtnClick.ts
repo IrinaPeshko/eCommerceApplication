@@ -1,6 +1,6 @@
 import { getSerchingProducts } from "../../../sdk/sdk";
 // eslint-disable-next-line import/no-cycle
-import Card from "./createCard";
+import Card from "./card";
 
 export async function visualeFilterCards(params: string[]) {
   const container = document.querySelector(".catalog__products");
