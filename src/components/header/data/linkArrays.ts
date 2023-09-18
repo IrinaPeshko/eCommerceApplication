@@ -41,8 +41,8 @@ export const pages: link[] = [
     href: "/",
     callback: (): void => {
       const brandsBlock = document.querySelector(".main_brands__list");
-      brandsBlock?.addEventListener("click", (event) =>{
-        onBrandsBlockClick(event)
+      brandsBlock?.addEventListener("click", (event) => {
+        onBrandsBlockClick(event);
       });
     },
   },
