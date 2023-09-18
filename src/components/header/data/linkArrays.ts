@@ -21,6 +21,7 @@ import productKeys from "../../pages/product/productsKey";
 // import Filter from "../../pages/catalog/filter";
 import { Catalog } from "../../pages/catalog/catalog";
 import { createCartTable } from "../../pages/basket/basket";
+import { onBrandsBlockClick } from "../../pages/main/onBransBlockClick";
 
 const namePage = {
   MAIN: "MAIN",
@@ -38,7 +39,12 @@ export const pages: link[] = [
   {
     name: namePage.MAIN,
     href: "/",
-    callback: (): void => {},
+    callback: (): void => {
+      const brandsBlock = document.querySelector(".main_brands__list");
+      brandsBlock?.addEventListener("click", (event) =>{
+        onBrandsBlockClick(event)
+      });
+    },
   },
   {
     name: namePage.ABOUT,
