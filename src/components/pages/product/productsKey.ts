@@ -12,6 +12,9 @@ const productKeys = [
   "ELEG-WL-BLKJ-001",
   "SUNNY-YLW-MDRESS-001",
   "CLS-BLK-LSTEE-001",
+  "RELAX-STR-MDRESS-001",
+  "CLS-BLUE-LSTEE-001",
+  "COZY-RED-HDRESS-001",
 ];
 
 export default productKeys;

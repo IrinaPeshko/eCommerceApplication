@@ -64,6 +64,18 @@ class FilterAndSort {
           checkbox: document.getElementById("chanel__checkbox"),
           param: '"chanel"',
         },
+        {
+          checkbox: document.getElementById("gucci__checkbox"),
+          param: '"gucci"',
+        },
+        {
+          checkbox: document.getElementById("versace__checkbox"),
+          param: '"versace"',
+        },
+        {
+          checkbox: document.getElementById("fendi__checkbox"),
+          param: '"fendi"',
+        },
       ],
       getParam() {
         return FilterAndSort.createAttributeParams(this.str, this.values);
