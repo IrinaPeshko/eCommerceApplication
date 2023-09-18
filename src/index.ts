@@ -36,8 +36,6 @@ declare global {
 
 window.route = route;
 
-// CartAPI.createCart().then((res) => console.log(res));
 CartAPI.getMyCarts()
   .then((res) => console.log(res))
   .catch((err) => console.log(err));
-// CartAPI.addProduct("343T06A4505_X5858-m", 4)

@@ -8,17 +8,10 @@ import Login from "../../pages/login/login";
 import Profile from "../../pages/profile/profile";
 import { handleLocation, routeforOtherLink } from "../../utils/router";
 import HeaderView from "../header";
-// import {
-//   createCategories,
-// } from "../../pages/catalog/cards";
-// import { visualeFilterCards } from "../../pages/catalog/ilterBtnClick";
-// import { Categ } from "../../pages/catalog/category";
 import { getUserById } from "../../../sdk/sdk";
 import { Address } from "../../../types/types";
-// import { Category } from "../../../types/catalog/catalogTypes";
 import { Product } from "../../pages/product/product";
 import productKeys from "../../pages/product/productsKey";
-// import Filter from "../../pages/catalog/filter";
 import { Catalog } from "../../pages/catalog/catalog";
 import { createCartTable } from "../../pages/basket/basket";
 import { onBrandsBlockClick } from "../../pages/main/onBransBlockClick";
@@ -59,33 +52,6 @@ export const pages: link[] = [
       catalog.init();
     },
   },
-  // {
-  //   name: namePage.BASKET,
-  //   classList: ["shoping_cart"],
-  //   innerHTML: `<div class="shoping_cart__ico">
-  //             <img src="${imgBascket}" alt="cart" />
-  //           </div>`,
-  //   href: "/basket",
-  //   callback: (): void => {
-  //     const catalog = new Catalog();
-  //     catalog.init();
-  //     const mainElem: HTMLElement | null = document.querySelector(".cart");
-  //     if (mainElem) {
-  //       mainElem.addEventListener("click", (e: Event) => {
-  //         const { target } = e;
-  //         if ((target as HTMLElement).tagName === "A") {
-  //           if (
-  //             (target as HTMLElement).classList.contains("cart__continue-btn")
-  //           ) {
-  //             e.preventDefault();
-  //             routeforOtherLink(e, pages[2].callback);
-  //           }
-  //         }
-  //       });
-  //       createCartTable();
-  //     }
-  //   },
-  // },
 ];
 
 export const profileLinks: link[] = [

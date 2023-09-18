@@ -59,7 +59,6 @@ export class ProductControl {
 
   public async clickPlus() {
     this.plus.addEventListener("click", async () => {
-      console.log("+");
       const currentNum = +this.getCurrentNum();
       if (currentNum === 1) {
         const res = await CartAPI.addProduct(this.sku, currentNum);
@@ -72,7 +71,6 @@ export class ProductControl {
 
   public async clickMinus() {
     this.minus.addEventListener("click", async () => {
-      console.log("-");
       const currentNum = +this.getCurrentNum();
       const res = await CartAPI.updateProduct(this.sku, currentNum);
       return res;
