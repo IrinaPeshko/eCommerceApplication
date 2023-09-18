@@ -41,9 +41,12 @@ export default class Product {
     this.totalCentAmount = totalCentAmount;
     this.discountSize = discountSize;
     this.discountedPrice = discountedPrice || undefined;
-    Emitter.on("updateRow", (currProductKey: string, changedTotal: number, discountNum: number) => {
-      this.changeProductData(currProductKey, changedTotal, discountNum);
-    })
+    Emitter.on(
+      "updateRow",
+      (currProductKey: string, changedTotal: number, discountNum: number) => {
+        this.changeProductData(currProductKey, changedTotal, discountNum);
+      },
+    );
   }
 
   public createProduct(): HTMLDivElement {
@@ -63,11 +66,29 @@ export default class Product {
       </div>
     </div>
     <div class="cart__table-price-col">
-      <span class="cart__table-text cart__table-text--prices"> ${this.discountedPrice ?
-        `<span class="default-price default-price--linethrough">${correctPrice(this.price, this.fractionDigits)} ${this.currencyCode}</span>
-        <span class="discount-price">${correctPrice(this.discountedPrice, this.fractionDigits)} ${this.currencyCode}</span>`
-        : `<span class="default-price">${correctPrice(this.price, this.fractionDigits)} ${this.currencyCode}</span>`}
-        ${this.discountSize ? `<span class="discount-size">-${correctPrice(this.discountSize, this.fractionDigits)} ${this.currencyCode}</span>` : ""}
+      <span class="cart__table-text cart__table-text--prices"> ${
+        this.discountedPrice
+          ? `<span class="default-price default-price--linethrough">${correctPrice(
+              this.price,
+              this.fractionDigits,
+            )} ${this.currencyCode}</span>
+        <span class="discount-price">${correctPrice(
+          this.discountedPrice,
+          this.fractionDigits,
+        )} ${this.currencyCode}</span>`
+          : `<span class="default-price">${correctPrice(
+              this.price,
+              this.fractionDigits,
+            )} ${this.currencyCode}</span>`
+      }
+        ${
+          this.discountSize
+            ? `<span class="discount-size">-${correctPrice(
+                this.discountSize,
+                this.fractionDigits,
+              )} ${this.currencyCode}</span>`
+            : ""
+        }
       </span>
     </div>
     <div class="cart__table-size-col">
@@ -92,7 +113,10 @@ export default class Product {
       </div>
     </div>
     <div class="cart__table-total-col">
-      <span class="cart__table-text cart__table-total">${correctPrice(this.totalCentAmount, this.fractionDigits)} ${this.currencyCode}</span>
+      <span class="cart__table-text cart__table-total">${correctPrice(
+        this.totalCentAmount,
+        this.fractionDigits,
+      )} ${this.currencyCode}</span>
     </div>
     <div class="cart__table-btns-col">
       <button class="edit-btn"></button>
@@ -247,27 +271,47 @@ export default class Product {
     }
   }
 
-  private changeProductData(productKey: string, changedTotal: number, discountNum: number): void {
+  private changeProductData(
+    productKey: string,
+    changedTotal: number,
+    discountNum: number,
+  ): void {
     if (productKey === this.productKey) {
       this.totalCentAmount = changedTotal;
       this.discountSize = discountNum;
-      const currentRow: HTMLElement | null = document.getElementById(`${this.productKey.toLowerCase()}`);
+      const currentRow: HTMLElement | null = document.getElementById(
+        `${this.productKey.toLowerCase()}`,
+      );
       if (currentRow) {
-        const productTotalPrice: HTMLElement | null = currentRow.querySelector(".cart__table-total");
-        const productPrice: HTMLElement | null = currentRow.querySelector(".cart__table-text--prices");
+        const productTotalPrice: HTMLElement | null =
+          currentRow.querySelector(".cart__table-total");
+        const productPrice: HTMLElement | null = currentRow.querySelector(
+          ".cart__table-text--prices",
+        );
         if (productPrice) {
-          const discountSizeBlock: HTMLElement | null = productPrice.querySelector(".discount-size");
+          const discountSizeBlock: HTMLElement | null =
+            productPrice.querySelector(".discount-size");
           if (!discountSizeBlock) {
-            const discountBlock: HTMLSpanElement = document.createElement("span");
+            const discountBlock: HTMLSpanElement =
+              document.createElement("span");
             discountBlock.className = "discount-size";
-            discountBlock.innerText = `-${correctPrice(this.discountSize, this.fractionDigits)} ${this.currencyCode}`;
+            discountBlock.innerText = `-${correctPrice(
+              this.discountSize,
+              this.fractionDigits,
+            )} ${this.currencyCode}`;
             productPrice.append(discountBlock);
           } else {
-            discountSizeBlock.innerText = `-${correctPrice(this.discountSize, this.fractionDigits)} ${this.currencyCode}`;
+            discountSizeBlock.innerText = `-${correctPrice(
+              this.discountSize,
+              this.fractionDigits,
+            )} ${this.currencyCode}`;
           }
         }
         if (productTotalPrice) {
-          productTotalPrice.innerText = `${correctPrice(this.totalCentAmount, this.fractionDigits)} ${this.currencyCode}`;
+          productTotalPrice.innerText = `${correctPrice(
+            this.totalCentAmount,
+            this.fractionDigits,
+          )} ${this.currencyCode}`;
         }
       }
     }

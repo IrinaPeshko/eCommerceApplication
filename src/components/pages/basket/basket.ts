@@ -79,16 +79,29 @@ async function applyCode(target: HTMLElement): Promise<void> {
             if (codesList) {
               codesList.append(newCode.createCodeElem());
             }
-            lineItems.forEach(elem => {
+            lineItems.forEach((elem) => {
               const { productKey, discountedPricePerQuantity } = elem;
               if (discountedPricePerQuantity.length !== 0) {
-                const { discountedPrice: { includedDiscounts, value: { centAmount: changedTotal } } } = elem.discountedPricePerQuantity[0];
-                const { discount: { typeId }, discountedAmount: { centAmount: discountNum } } = includedDiscounts[0];
+                const {
+                  discountedPrice: {
+                    includedDiscounts,
+                    value: { centAmount: changedTotal },
+                  },
+                } = elem.discountedPricePerQuantity[0];
+                const {
+                  discount: { typeId },
+                  discountedAmount: { centAmount: discountNum },
+                } = includedDiscounts[0];
                 if (typeId === "cart-discount") {
-                  Emitter.emit("updateRow", productKey, changedTotal, discountNum);
+                  Emitter.emit(
+                    "updateRow",
+                    productKey,
+                    changedTotal,
+                    discountNum,
+                  );
                 }
               }
-            })
+            });
             Alert.showAlert(false, "Code is successfully applied to this cart");
             if (totalElem) {
               totalPrice(centAmount, fractionDigits, currencyCode);
@@ -148,11 +161,15 @@ export async function createCartTable(): Promise<void> {
               images,
               quantity,
               price: { discounted },
-              totalPrice: {centAmount: totalCentAmount}
+              totalPrice: { centAmount: totalCentAmount },
             } = product;
             if (discountedPricePerQuantity.length !== 0) {
-              const { discountedPrice: { includedDiscounts } } = discountedPricePerQuantity[0];
-              const { discountedAmount: { centAmount: currAmount } } = includedDiscounts[0];
+              const {
+                discountedPrice: { includedDiscounts },
+              } = discountedPricePerQuantity[0];
+              const {
+                discountedAmount: { centAmount: currAmount },
+              } = includedDiscounts[0];
               amountNum = currAmount;
             } else {
               amountNum = undefined;
