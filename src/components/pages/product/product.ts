@@ -35,7 +35,6 @@ export class Product {
     }
 
     const resp = (await getProduct(key)).body;
-    console.log(resp);
     const DOM = {
       imgs: document.querySelector(".product_page__slider-main"),
       sliderMain: document.querySelector(".product_page__slider-main"),

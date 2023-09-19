@@ -1,4 +1,3 @@
-// import { LineItem } from "@commercetools/platform-sdk";
 import { LineItem } from "@commercetools/platform-sdk";
 import CartAPI from "../../../sdk/cart/cart";
 import { RemoveLineFromCart, Actions } from "../../../types/types";

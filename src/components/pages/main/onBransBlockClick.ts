@@ -15,7 +15,6 @@ export async function onBrandsBlockClick(event: Event) {
     clickedEl instanceof HTMLElement &&
     clickedEl.classList.contains("brands__img")
   ) {
-    console.log(clickedEl.getAttribute("brandId"));
     const callback = async () => {
       const filterBrandsBlock = document.querySelector(".aside__brends");
       const allBrends = filterBrandsBlock?.querySelectorAll(".form__checkbox");
@@ -27,9 +26,7 @@ export async function onBrandsBlockClick(event: Event) {
             el.getAttribute("id") === clickedEl.getAttribute("brandId")
           ) {
             if (el instanceof HTMLInputElement) {
-              console.log(el.checked);
               el.checked = true;
-              console.log(el.checked);
             }
           }
         });

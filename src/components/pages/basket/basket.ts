@@ -167,7 +167,6 @@ export async function createCartTable(): Promise<void> {
     const cartResp = await CartAPI.checkMyCart();
     const getCartDiscounts = await CartAPI.getOrCreateMyCart();
     if (cartResp) {
-      // console.log(cartResp);
       const { products, cart } = cartResp;
       const {
         totalPrice: {
@@ -263,7 +262,6 @@ export async function createCartTable(): Promise<void> {
             try {
               const getCode = await CartAPI.getDiscountCode(id);
               if (getCode.statusCode !== 400) {
-                // console.log(getCode.body);
                 const { code: codeName } = getCode.body;
                 const codeElem = new Code(id, codeName);
                 if (codesList) {
