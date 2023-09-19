@@ -457,9 +457,13 @@ export const product: link[] = productKeys.map((data) => ({
   href: `/product__${data}`,
   callback: (key?: string): void => {
     if (key) {
-      Product.init(`${key}`);
+      // Product.init(`${key}`);
+      const p = new Product(`${key}`);
+      p.show();
     } else {
-      Product.init("");
+      const p = new Product("");
+      p.show();
+      // Product.init("");
     }
   },
 }));
