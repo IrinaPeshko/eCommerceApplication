@@ -111,11 +111,6 @@ export interface RemoveCode {
     id: string;
   };
 }
-// export interface ChangeQuantity {
-//   action: Actions.removeline,
-//   lineItemId: string,
-//   quantity: number
-// }
 export type Tuple = [AddAddress, AddShippingAddress | AddBillingAddress];
 export type ShippingAddress = string;
 export type BillingAddress = string;

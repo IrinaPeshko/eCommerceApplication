@@ -14,17 +14,6 @@ export const productPageSwiperMainSetting = {
   observeParents: true,
   observeSlideChildren: true,
   slidesPerView: 1,
-  // breakpoints: {
-  //   320: {
-  //     slidesPerView: 1,
-  //   },
-  //   600: {
-  //     slidesPerView: 2,
-  //   },
-  //   900: {
-  //     slidesPerView: 3,
-  //   },
-  // },
   grabCursor: true,
   watchOverflow: true,
   pagination: {

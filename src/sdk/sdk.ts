@@ -71,8 +71,6 @@ export function getUser(
         email,
         password,
         updateProductData: true,
-        // anonymousId: options?.anonymousId,
-        // anonymousCartSignInMode: "MergeWithExistingCustomerCart",
       },
     })
     .execute();

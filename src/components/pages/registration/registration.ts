@@ -48,9 +48,6 @@ export default class Registration {
     const form: HTMLFormElement | null = document.querySelector(
       ".registration__form",
     );
-    // const datat: HTMLElement | null =
-    //   document.getElementById("shipping_country");
-    // if (datat) console.log(typeof (datat as HTMLSelectElement).value);
     const userData: Obj = {};
     if (form) {
       const fields = form.querySelectorAll(".form__field[required]");
@@ -139,9 +136,7 @@ export default class Registration {
                 localStorage.setItem("token", token);
                 const createCart = await CartAPI.createCart();
                 if (createCart) {
-                  if (createCart.statusCode !== 400) {
-                    console.log(createCart.body);
-                  } else {
+                  if (createCart.statusCode === 400) {
                     throw new Error("Cart not created");
                   }
                 }

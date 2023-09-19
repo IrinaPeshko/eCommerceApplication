@@ -351,7 +351,6 @@ export default class NewAddress {
   }
 
   private async addAsDefaultAddress(addressType: string): Promise<void> {
-    console.log(addressType);
     if (this.address.key && this.id && this.version) {
       const addDefaultAddressObj: SetDefaultShipping[] | SetDefaultBilling[] =
         addressType === "shipping"
@@ -375,7 +374,6 @@ export default class NewAddress {
         );
         if (setDefaultCurrAddress.statusCode !== 400) {
           Alert.showAlert(false, "Address successfully set as default");
-          console.log(setDefaultCurrAddress.body);
           const {
             version,
             billingAddressIds,
@@ -403,7 +401,6 @@ export default class NewAddress {
             }
           } else if (addressType === "billing") {
             if (this.defaultBillingAddressId) {
-              console.log(this.billingAddressIds, this.defaultBillingAddressId);
               Emitter.emit(
                 "updateAllAddressesBilling",
                 this.version,
