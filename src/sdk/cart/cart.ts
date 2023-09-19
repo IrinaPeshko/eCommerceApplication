@@ -21,7 +21,7 @@ class CartAPI {
   public static async createCart() {
     let res;
 
-    if (localStorage.getItem("token") || localStorage.getItem("anonimToken")) {
+    if (localStorage.getItem("token") || sessionStorage.getItem("anonimToken")) {
       res = await this.createCartWithToken();
     } else {
       const tokenCache = new MyTokenCache();
@@ -33,7 +33,7 @@ class CartAPI {
 
       if (res.statusCode !== 400) {
         const { token } = tokenCache.get();
-        localStorage.setItem("anonimToken", token);
+        sessionStorage.setItem("anonimToken", token);
       }
     }
 
@@ -42,7 +42,7 @@ class CartAPI {
 
   private static async createCartWithToken() {
     const token =
-      localStorage.getItem("token") || localStorage.getItem("anonimToken");
+      localStorage.getItem("token") || sessionStorage.getItem("anonimToken");
 
     if (!token) return null;
     const res = await apiRoot
@@ -113,7 +113,7 @@ class CartAPI {
 
   public static async getMyCarts() {
     const token =
-      localStorage.getItem("token") || localStorage.getItem("anonimToken");
+      localStorage.getItem("token") || sessionStorage.getItem("anonimToken");
     if (!token) return null;
     const res = await apiRoot
       .withProjectKey({ projectKey })
@@ -137,7 +137,7 @@ class CartAPI {
     const version = myCart?.version;
     const ID = myCart?.id;
     const token =
-      localStorage.getItem("token") || localStorage.getItem("anonimToken");
+      localStorage.getItem("token") || sessionStorage.getItem("anonimToken");
     const addProduct = await apiRoot
       .withProjectKey({ projectKey })
       .me()
@@ -191,7 +191,7 @@ class CartAPI {
       version = versionData;
     }
     const token =
-      localStorage.getItem("token") || localStorage.getItem("anonimToken");
+      localStorage.getItem("token") || sessionStorage.getItem("anonimToken");
     const updateProduct = await apiRoot
       .withProjectKey({ projectKey })
       .me()
@@ -223,7 +223,9 @@ class CartAPI {
   // проверяет корзину, если нет корзины или она пуста возвращает null, иначе возвращает объект с данными продукта и корзины(общая стоимость товаров и общее количество товаров)
   // product - это map, где ключ - sku продукта. Проверить есть ли такой товар в корзине можно через map.get(key) – возвращает значение по ключу или undefined, если ключ key отсутствует.
   public static async checkMyCart() {
-    if (!(localStorage.getItem("token") || localStorage.getItem("anonimToken")))
+    if (
+      !(localStorage.getItem("token") || sessionStorage.getItem("anonimToken"))
+    )
       return null;
     const myCart = await this.getMyCarts().then((res) => {
       if (!res) return null;
@@ -294,7 +296,7 @@ class CartAPI {
     const version: number = myCart?.version;
     const ID: string = myCart?.id;
     const token =
-      localStorage.getItem("token") || localStorage.getItem("anonimToken");
+      localStorage.getItem("token") || sessionStorage.getItem("anonimToken");
     return apiRoot
       .withProjectKey({ projectKey })
       .me()
@@ -320,7 +322,7 @@ class CartAPI {
     const version: number = myCart?.version;
     const ID: string = myCart?.id;
     const token =
-      localStorage.getItem("token") || localStorage.getItem("anonimToken");
+      localStorage.getItem("token") || sessionStorage.getItem("anonimToken");
     return apiRoot
       .withProjectKey({ projectKey })
       .me()
@@ -380,7 +382,7 @@ class CartAPI {
     const version: number = myCart?.version;
     const ID: string = myCart?.id;
     const token =
-      localStorage.getItem("token") || localStorage.getItem("anonimToken");
+      localStorage.getItem("token") || sessionStorage.getItem("anonimToken");
     return apiRoot
       .withProjectKey({ projectKey })
       .carts()
@@ -405,7 +407,7 @@ class CartAPI {
     const version: number = myCart?.version;
     const ID: string = myCart?.id;
     const token =
-      localStorage.getItem("token") || localStorage.getItem("anonimToken");
+      localStorage.getItem("token") || sessionStorage.getItem("anonimToken");
     return apiRoot
       .withProjectKey({ projectKey })
       .carts()
