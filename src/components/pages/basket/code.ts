@@ -62,13 +62,6 @@ export default class Code {
                       discount: { typeId },
                       discountedAmount: { centAmount: discountNum },
                     } = includedDiscounts[0];
-                    // const sumOfAllDiscounts: number = includedDiscounts.reduce((acc: number, curr: DiscountedLineItemPortion): number => {
-                    //   const {
-                    //     // discount: { typeId },
-                    //     discountedAmount: { centAmount: discountNum },
-                    //   } = curr;
-                    //   return acc + discountNum;
-                    // }, 0);
                     discountAmount = discountNum;
                     if (typeId === "cart-discount") {
                       Emitter.emit(
@@ -87,13 +80,6 @@ export default class Code {
                       discountAmount,
                     );
                   }
-                  // if (prices) {
-                  //   const { discounted } = prices[0];
-                  //   if (discounted) {
-                  //     const {value: { centAmount: itemAmount }} = discounted
-
-                  //   }
-                  // }
                 });
                 totalPrice(centAmount, fractionDigits, currencyCode);
                 codeBlock.remove();
