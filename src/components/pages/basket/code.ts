@@ -1,6 +1,8 @@
+// import { DiscountedLineItemPortion } from "@commercetools/platform-sdk";
 import CartAPI from "../../../sdk/cart/cart";
 import { Actions, RemoveCode } from "../../../types/types";
 import Alert from "../../alerts/alert";
+import { Emitter } from "../../utils/eventEmitter";
 import { totalPrice } from "./correctPrice";
 
 export default class Code {
@@ -42,7 +44,43 @@ export default class Code {
               if (removeCurrCode.statusCode !== 400) {
                 const {
                   totalPrice: { centAmount, currencyCode, fractionDigits },
+                  lineItems,
                 } = removeCurrCode.body;
+                lineItems.forEach((elem) => {
+                  console.log(elem);
+                  const {
+                    productKey,
+                    totalPrice: { centAmount: itemTotalAmount },
+                    discountedPricePerQuantity,
+                  } = elem;
+                  let discountAmount;
+                  if (discountedPricePerQuantity.length !== 0) {
+                    const {
+                      discountedPrice: { includedDiscounts },
+                    } = elem.discountedPricePerQuantity[0];
+                    const {
+                      discount: { typeId },
+                      discountedAmount: { centAmount: discountNum },
+                    } = includedDiscounts[0];
+                    discountAmount = discountNum;
+                    if (typeId === "cart-discount") {
+                      Emitter.emit(
+                        "updateRow",
+                        productKey,
+                        itemTotalAmount,
+                        discountAmount,
+                      );
+                    }
+                  } else {
+                    discountAmount = null;
+                    Emitter.emit(
+                      "updateRow",
+                      productKey,
+                      itemTotalAmount,
+                      discountAmount,
+                    );
+                  }
+                });
                 totalPrice(centAmount, fractionDigits, currencyCode);
                 codeBlock.remove();
                 Alert.showAlert(false, `Code ${this.name} was removed`);

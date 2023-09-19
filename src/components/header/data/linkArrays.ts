@@ -5,7 +5,11 @@ import Registration from "../../pages/registration/registration";
 import setShippingDefault from "../../pages/registration/select default address checkbox/setDefaultShipping";
 import Login from "../../pages/login/login";
 import Profile from "../../pages/profile/profile";
-import { handleLocation, routeforOtherLink } from "../../utils/router";
+import {
+  handleLocation,
+  routeToNotAnchor,
+  routeforOtherLink,
+} from "../../utils/router";
 import HeaderView from "../header";
 import { getUserById } from "../../../sdk/sdk";
 import { Address } from "../../../types/types";
@@ -14,6 +18,7 @@ import productKeys from "../../pages/product/productsKey";
 import { Catalog } from "../../pages/catalog/catalog";
 import { createCartTable } from "../../pages/basket/basket";
 import { onBrandsBlockClick } from "../../pages/main/onBransBlockClick";
+import Alert from "../../alerts/alert";
 
 const namePage = {
   MAIN: "MAIN",
@@ -33,9 +38,29 @@ export const pages: link[] = [
     href: "/",
     callback: (): void => {
       const brandsBlock = document.querySelector(".main_brands__list");
+      const discountBlock = document.querySelector(".main_discount");
+      const showNowBtn = document.querySelector(".button-main");
       brandsBlock?.addEventListener("click", (event) => {
         onBrandsBlockClick(event);
       });
+      showNowBtn?.addEventListener("click", (event) => {
+        routeToNotAnchor(event, "catalog", pages[2].callback);
+      });
+      if (discountBlock) {
+        discountBlock.addEventListener("click", (e: Event) => {
+          const { target } = e;
+          if ((target as HTMLElement).tagName === "BUTTON") {
+            if (
+              (target as HTMLElement).classList.contains("main_discount-btn")
+            ) {
+              e.preventDefault();
+              const codeText: string = (target as HTMLElement).innerText;
+              navigator.clipboard.writeText(codeText);
+              Alert.showAlert(false, "Promocode copied!");
+            }
+          }
+        });
+      }
     },
   },
   {
