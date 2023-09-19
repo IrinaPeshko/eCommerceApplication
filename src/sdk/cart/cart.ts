@@ -16,6 +16,7 @@ import {
   createAnonimusFlow,
 } from "../createPasswordClient";
 import { RemoveLineFromCart, AddCode, RemoveCode } from "../../types/types";
+import { CartIco } from "../../components/header/cartIco";
 
 class CartAPI {
   public static async createCart() {
@@ -223,14 +224,22 @@ class CartAPI {
   // проверяет корзину, если нет корзины или она пуста возвращает null, иначе возвращает объект с данными продукта и корзины(общая стоимость товаров и общее количество товаров)
   // product - это map, где ключ - sku продукта. Проверить есть ли такой товар в корзине можно через map.get(key) – возвращает значение по ключу или undefined, если ключ key отсутствует.
   public static async checkMyCart() {
-    if (!(localStorage.getItem("token") || localStorage.getItem("anonimToken")))
+    if (!(localStorage.getItem("token") || localStorage.getItem("anonimToken"))) {
+      sessionStorage.setItem('totalCart', `${0}`)
+      CartIco.checkCart()
       return null;
+    }
     const myCart = await this.getMyCarts().then((res) => {
+      sessionStorage.setItem('totalCart', `${0}`)
+      CartIco.checkCart()
       if (!res) return null;
       return res.body;
     });
-    if (myCart === null) return null;
-    if (myCart.lineItems.length === 0) return null;
+    if (myCart === null || myCart.lineItems.length === 0) {
+      sessionStorage.setItem('totalCart', `${0}`)
+      CartIco.checkCart()
+      return null
+    };
     const lineItems = myCart.lineItems.reduce(
       (
         acc:
@@ -279,6 +288,8 @@ class CartAPI {
       totalPrice: myCart.totalPrice,
       totalLineItemQuantity: myCart.totalLineItemQuantity,
     };
+    sessionStorage.setItem('totalCart', `${cart.totalLineItemQuantity}`)
+    CartIco.checkCart()
     return { products: lineItems, cart };
   }
 

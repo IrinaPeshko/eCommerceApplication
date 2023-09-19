@@ -1,5 +1,4 @@
 import link from "../../../types/link/Ilink";
-import imgBascket from "../../../assets/icons/bascket.png";
 import imgProfile from "../../../assets/icons/8324223_ui_essential_app_avatar_profile_icon.svg";
 /* eslint-disable import/no-cycle */
 import Registration from "../../pages/registration/registration";
@@ -215,8 +214,11 @@ export const profileLinks: link[] = [
     name: namePage.BASKET,
     classList: ["shoping_cart"],
     innerHTML: `<div class="shoping_cart__ico">
-              <img src="${imgBascket}" alt="cart" />
-            </div>`,
+    <div class="shoping_cart__img">
+      <svg viewBox="0 0 16 16" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 16 16"><path d="M1 16h14V4h-2v-.5C13 1.57 11.43 0 9.5 0 8.961 0 8.456.133 8 .351A3.464 3.464 0 0 0 6.5 0C4.57 0 3 1.57 3 3.5V4H1v12zM8 1.513c.603.456 1 1.173 1 1.987V4H7v-.5c0-.814.397-1.531 1-1.987zM12 3.5V4h-2v-.5a3.48 3.48 0 0 0-1.006-2.448A2.503 2.503 0 0 1 12 3.5zm-8 0a2.503 2.503 0 0 1 3.006-2.448A3.48 3.48 0 0 0 6 3.5V4H4v-.5z" fill="#ffffff" class="fill-000000"></path></svg>
+      <span class="shoping_cart__ind" id="shoping_cart__ind">12</span>
+    </div>
+  </div>`,
     href: "/basket",
     callback: (): void => {
       const mainElem: HTMLElement | null = document.querySelector(".cart");
@@ -412,7 +414,10 @@ fill="#ffffff" stroke="none">
     name: namePage.BASKET,
     classList: ["shoping_cart"],
     innerHTML: `<div class="shoping_cart__ico">
-              <img src="${imgBascket}" alt="cart" />
+              <div class="shoping_cart__img">
+                <svg viewBox="0 0 16 16" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 16 16"><path d="M1 16h14V4h-2v-.5C13 1.57 11.43 0 9.5 0 8.961 0 8.456.133 8 .351A3.464 3.464 0 0 0 6.5 0C4.57 0 3 1.57 3 3.5V4H1v12zM8 1.513c.603.456 1 1.173 1 1.987V4H7v-.5c0-.814.397-1.531 1-1.987zM12 3.5V4h-2v-.5a3.48 3.48 0 0 0-1.006-2.448A2.503 2.503 0 0 1 12 3.5zm-8 0a2.503 2.503 0 0 1 3.006-2.448A3.48 3.48 0 0 0 6 3.5V4H4v-.5z" fill="#ffffff" class="fill-000000"></path></svg>
+                <span class="shoping_cart__ind" id="shoping_cart__ind">12</span>
+              </div>
             </div>`,
     href: "/basket",
     callback: (): void => {
