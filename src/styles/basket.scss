@@ -162,6 +162,11 @@
       weight: 400;
     }
     color: #c4c4c4;
+    &:active,
+    &:focus {
+      outline: none;
+      border: 2px solid #c4c4c4;
+    }
   }
   & .cart__apply-code-btn {
     position: absolute;
@@ -176,6 +181,11 @@
     }
     text-transform: uppercase;
     color: #3f3f3f;
+    transition: all 0.3s ease-in;
+    &:hover {
+      cursor: pointer;
+      color: #000000;
+    }
   }
   & .cart__total {
     padding-top: 34px;

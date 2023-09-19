@@ -4,7 +4,7 @@ import CartAPI from "../../../sdk/cart/cart";
 import { RemoveLineFromCart, Actions, AddCode } from "../../../types/types";
 import Alert from "../../alerts/alert";
 import Code from "./code";
-import { totalPrice } from "./correctPrice";
+import { totalPrice, correctPrice } from "./correctPrice";
 import { Emitter } from "../../utils/eventEmitter";
 
 async function removeCart(): Promise<void> {
@@ -173,13 +173,21 @@ async function applyCode(target: HTMLElement): Promise<void> {
   }
 }
 
+// function subtotalPrice() {
+
+// }
 export async function createCartTable(): Promise<void> {
   const mainElem: HTMLElement | null = document.querySelector(".cart");
   const tableBody: HTMLDivElement | null =
     document.querySelector(".cart__table-body");
   const codesList: HTMLDivElement | null =
     document.querySelector(".cart__codes-list");
+  const subtotalElem: HTMLDivElement | null =
+  document.querySelector(".cart__subtotal-num");
+  const subtotalCurrency: HTMLDivElement | null =
+  document.querySelector(".cart__subtotal-currency");
   let amountNum;
+  let subtotalPrice = 0;
   try {
     const cartResp = await CartAPI.checkMyCart();
     const getCartDiscounts = await CartAPI.getOrCreateMyCart();
@@ -243,6 +251,7 @@ export async function createCartTable(): Promise<void> {
                 ? discounted.value.centAmount
                 : undefined;
               const correctDefaultPrice: number = defaultPrice;
+              subtotalPrice += correctPrice(correctDefaultPrice * quantity, fractionDigits);
               const newProduct = new Product(
                 sku,
                 version,
@@ -268,6 +277,10 @@ export async function createCartTable(): Promise<void> {
       }
       if (cart) {
         totalPrice(centAmount, cartFractionDigits, cartcurrencyCode);
+        if (subtotalElem && subtotalCurrency) {
+          subtotalElem.innerText = `${subtotalPrice}`;
+          subtotalCurrency.innerText = `${cartcurrencyCode}`;
+        }
       }
     } else {
       console.log("Empty cart");
