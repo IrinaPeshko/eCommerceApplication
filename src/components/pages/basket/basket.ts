@@ -1,3 +1,4 @@
+import { DiscountedLineItemPortion } from "@commercetools/platform-sdk";
 import Product from "./basketProduct";
 import CartAPI from "../../../sdk/cart/cart";
 import { RemoveLineFromCart, Actions, AddCode } from "../../../types/types";
@@ -48,7 +49,7 @@ async function removeCart(): Promise<void> {
   }
 }
 
-async function addPromocode(target: HTMLElement) {
+async function addPromocode(target: HTMLElement, currId: string) {
   const codeField: Element | null = target.previousElementSibling;
   const codesList: HTMLDivElement | null =
     document.querySelector(".cart__codes-list");
@@ -57,6 +58,7 @@ async function addPromocode(target: HTMLElement) {
   if (codeField) {
     const codeVal: string = (codeField as HTMLInputElement).value;
     if (codeVal !== "") {
+      console.log(codeVal);
       const addCodeObj: AddCode[] = [
         {
           action: Actions.addcode,
@@ -67,19 +69,18 @@ async function addPromocode(target: HTMLElement) {
         const addDiscountToCart = await CartAPI.addCode(addCodeObj);
         if (addDiscountToCart) {
           if (addDiscountToCart.statusCode !== 400) {
+            console.log(addDiscountToCart.body);
             (codeField as HTMLInputElement).value = "";
             const {
               totalPrice: { centAmount, currencyCode, fractionDigits },
             } = addDiscountToCart.body;
-            const { discountCodes, lineItems } = addDiscountToCart.body;
-            const {
-              discountCode: { id: idFromCart },
-            } = discountCodes[0];
-            const newCode = new Code(idFromCart, codeVal);
+            const { lineItems } = addDiscountToCart.body;
+            const newCode = new Code(currId, codeVal);
             if (codesList) {
               codesList.append(newCode.createCodeElem());
             }
             lineItems.forEach((elem) => {
+              console.log(elem);
               const { productKey, discountedPricePerQuantity } = elem;
               if (discountedPricePerQuantity.length !== 0) {
                 const {
@@ -88,18 +89,18 @@ async function addPromocode(target: HTMLElement) {
                     value: { centAmount: changedTotal },
                   },
                 } = elem.discountedPricePerQuantity[0];
-                const {
-                  discount: { typeId },
-                  discountedAmount: { centAmount: discountNum },
-                } = includedDiscounts[0];
-                if (typeId === "cart-discount") {
-                  Emitter.emit(
-                    "updateRow",
-                    productKey,
-                    changedTotal,
-                    discountNum,
-                  );
-                }
+                const sumOfDiscounts: number = includedDiscounts.reduce((acc: number, curr: DiscountedLineItemPortion): number => {
+                  const {
+                    discountedAmount: { centAmount: discountNum },
+                  } = curr;
+                  return acc + discountNum;
+                }, 0);
+                    Emitter.emit(
+                      "updateRow",
+                      productKey,
+                      changedTotal,
+                      sumOfDiscounts,
+                    );
               }
             });
             Alert.showAlert(false, "Code is successfully applied to this cart");
@@ -110,7 +111,7 @@ async function addPromocode(target: HTMLElement) {
             throw new Error("Something is wrong");
           }
         }
-      } catch(err) {
+      } catch (err) {
         Alert.showAlert(true, "This code is unavailable");
         console.log(err);
       }
@@ -123,35 +124,48 @@ async function applyCode(target: HTMLElement): Promise<void> {
   if (codeField) {
     const codeVal: string = (codeField as HTMLInputElement).value;
     if (codeVal !== "") {
-      await CartAPI.getMyCarts().then(async res => {
-        if (res) {
-          if (res.statusCode !== 400) {
-            const { discountCodes } = res.body;
-            await CartAPI.getAllCodes().then(async resp => {
-              if (resp) {
-                if (resp.statusCode !== 400) {
-                  const { results } = resp.body;
-                  const currDiscount = results.filter(code => code.code === codeVal)[0];
-                  if (currDiscount) {
-                    const { id } = currDiscount;
-                    if (discountCodes) {
-                      if (discountCodes.length !== 0) {
-                        if (discountCodes.some(elem => elem.discountCode.id === id)) {
-                          Alert.showAlert(true, "Promocode has already been added");
-                        } else {
-                          addPromocode(target);
+      await CartAPI.getMyCarts()
+        .then(async (res) => {
+          if (res) {
+            if (res.statusCode !== 400) {
+              const { discountCodes } = res.body;
+              await CartAPI.getAllCodes()
+                .then(async (resp) => {
+                  if (resp) {
+                    if (resp.statusCode !== 400) {
+                      const { results } = resp.body;
+                      const currDiscount = results.filter(
+                        (code) => code.code === codeVal,
+                      )[0];
+                      if (currDiscount) {
+                        const { id } = currDiscount;
+                        if (discountCodes) {
+                          if (discountCodes.length !== 0) {
+                            if (
+                              discountCodes.some(
+                                (elem) => elem.discountCode.id === id,
+                              )
+                            ) {
+                              Alert.showAlert(
+                                true,
+                                "Promocode has already been added",
+                              );
+                            } else {
+                              addPromocode(target, id);
+                            }
+                          } else {
+                            addPromocode(target, id);
+                          }
                         }
-                      } else {
-                        addPromocode(target);
                       }
                     }
                   }
-                }
-              }
-            }).catch(err => console.log(err));
+                })
+                .catch((err) => console.log(err));
+            }
           }
-        }
-      }).catch(err => console.log(err));
+        })
+        .catch((err) => console.log(err));
     }
   }
 }
@@ -167,7 +181,6 @@ export async function createCartTable(): Promise<void> {
     const cartResp = await CartAPI.checkMyCart();
     const getCartDiscounts = await CartAPI.getOrCreateMyCart();
     if (cartResp) {
-      // console.log(cartResp);
       const { products, cart } = cartResp;
       const {
         totalPrice: {
@@ -205,10 +218,13 @@ export async function createCartTable(): Promise<void> {
               const {
                 discountedPrice: { includedDiscounts },
               } = discountedPricePerQuantity[0];
-              const {
-                discountedAmount: { centAmount: currAmount },
-              } = includedDiscounts[0];
-              amountNum = currAmount;
+              const sumOfAllDiscounts: number = includedDiscounts.reduce((acc: number, curr: DiscountedLineItemPortion): number => {
+                const {
+                  discountedAmount: { centAmount: discountNum },
+                } = curr;
+                return acc + discountNum;
+              }, 0);
+              amountNum = sumOfAllDiscounts;
             } else {
               amountNum = undefined;
             }
@@ -253,7 +269,6 @@ export async function createCartTable(): Promise<void> {
     if (codesList) {
       codesList.innerHTML = "";
       if (getCartDiscounts) {
-        console.log(getCartDiscounts);
         const { discountCodes } = getCartDiscounts;
         if (discountCodes && discountCodes.length !== 0) {
           discountCodes.forEach(async (code) => {
@@ -263,7 +278,6 @@ export async function createCartTable(): Promise<void> {
             try {
               const getCode = await CartAPI.getDiscountCode(id);
               if (getCode.statusCode !== 400) {
-                // console.log(getCode.body);
                 const { code: codeName } = getCode.body;
                 const codeElem = new Code(id, codeName);
                 if (codesList) {

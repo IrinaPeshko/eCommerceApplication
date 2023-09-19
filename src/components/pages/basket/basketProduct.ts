@@ -1,4 +1,3 @@
-// import { LineItem } from "@commercetools/platform-sdk";
 import { LineItem } from "@commercetools/platform-sdk";
 import CartAPI from "../../../sdk/cart/cart";
 import { RemoveLineFromCart, Actions } from "../../../types/types";
@@ -274,10 +273,12 @@ export default class Product {
   private changeProductData(
     productKey: string,
     changedTotal: number,
+    // cnangedPrice: number,
     discountNum: number,
   ): void {
     if (productKey === this.productKey) {
       this.totalCentAmount = changedTotal;
+      // this.price = cnangedPrice;
       this.discountSize = discountNum;
       const currentRow: HTMLElement | null = document.getElementById(
         `${this.productKey.toLowerCase()}`,
@@ -289,22 +290,39 @@ export default class Product {
           ".cart__table-text--prices",
         );
         if (productPrice) {
-          const discountSizeBlock: HTMLElement | null =
+          // const productDefaultPrice: HTMLElement | null = currentRow.querySelector(
+          //   ".default-price",
+          // );
+          // if (productDefaultPrice) {
+          //   productDefaultPrice.innerText = `${correctPrice(
+          //     this.price,
+          //     this.fractionDigits,
+          //   )} ${this.currencyCode}`;
+          // }
+          if (discountNum !== null) {
+            const discountSizeBlock: HTMLElement | null =
             productPrice.querySelector(".discount-size");
-          if (!discountSizeBlock) {
-            const discountBlock: HTMLSpanElement =
-              document.createElement("span");
-            discountBlock.className = "discount-size";
-            discountBlock.innerText = `-${correctPrice(
-              this.discountSize,
-              this.fractionDigits,
-            )} ${this.currencyCode}`;
-            productPrice.append(discountBlock);
+            if (!discountSizeBlock) {
+              const discountBlock: HTMLSpanElement =
+                document.createElement("span");
+              discountBlock.className = "discount-size";
+              discountBlock.innerText = `-${correctPrice(
+                this.discountSize,
+                this.fractionDigits,
+              )} ${this.currencyCode}`;
+              productPrice.append(discountBlock);
+            } else {
+              discountSizeBlock.innerText = `-${correctPrice(
+                this.discountSize,
+                this.fractionDigits,
+              )} ${this.currencyCode}`;
+            }
           } else {
-            discountSizeBlock.innerText = `-${correctPrice(
-              this.discountSize,
-              this.fractionDigits,
-            )} ${this.currencyCode}`;
+            const discountSizeBlock: HTMLElement | null =
+            productPrice.querySelector(".discount-size");
+            if (discountSizeBlock) {
+              discountSizeBlock.remove();
+            }
           }
         }
         if (productTotalPrice) {

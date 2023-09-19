@@ -1,6 +1,8 @@
+// import { DiscountedLineItemPortion } from "@commercetools/platform-sdk";
 import CartAPI from "../../../sdk/cart/cart";
 import { Actions, RemoveCode } from "../../../types/types";
 import Alert from "../../alerts/alert";
+import { Emitter } from "../../utils/eventEmitter";
 import { totalPrice } from "./correctPrice";
 
 export default class Code {
@@ -42,9 +44,45 @@ export default class Code {
               if (removeCurrCode.statusCode !== 400) {
                 const {
                   totalPrice: { centAmount, currencyCode, fractionDigits },
-                  // lineItems
+                  lineItems
                 } = removeCurrCode.body;
-                // lineItems
+                lineItems.forEach(elem => {
+                  console.log(elem);
+                  const { productKey, totalPrice: { centAmount: itemTotalAmount }, discountedPricePerQuantity } = elem;
+                  let discountAmount;
+                  if (discountedPricePerQuantity.length !== 0) {
+                    const {
+                      discountedPrice: {
+                        includedDiscounts
+                      },
+                    } = elem.discountedPricePerQuantity[0];
+                    const {
+                      discount: { typeId },
+                      discountedAmount: { centAmount: discountNum },
+                    } = includedDiscounts[0];
+                    // const sumOfAllDiscounts: number = includedDiscounts.reduce((acc: number, curr: DiscountedLineItemPortion): number => {
+                    //   const {
+                    //     // discount: { typeId },
+                    //     discountedAmount: { centAmount: discountNum },
+                    //   } = curr;
+                    //   return acc + discountNum;
+                    // }, 0);
+                    discountAmount = discountNum;
+                    if (typeId === "cart-discount") {
+                      Emitter.emit("updateRow", productKey, itemTotalAmount, discountAmount);
+                    }
+                  } else {
+                    discountAmount = null;
+                    Emitter.emit("updateRow", productKey, itemTotalAmount, discountAmount);
+                  }
+                  // if (prices) {
+                  //   const { discounted } = prices[0];
+                  //   if (discounted) {
+                  //     const {value: { centAmount: itemAmount }} = discounted
+
+                  //   }
+                  // }
+                })
                 totalPrice(centAmount, fractionDigits, currencyCode);
                 codeBlock.remove();
                 Alert.showAlert(false, `Code ${this.name} was removed`);
