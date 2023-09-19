@@ -110,7 +110,8 @@ header {
   &:hover {
     color: $color5;
   }
-  &.sigh, &.sigh-out {
+  &.sigh,
+  &.sigh-out {
     column-gap: 5px;
     & .account__item-text {
       font: {
