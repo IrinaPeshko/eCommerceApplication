@@ -50,14 +50,16 @@ export const pages: link[] = [
         discountBlock.addEventListener("click", (e: Event) => {
           const { target } = e;
           if ((target as HTMLElement).tagName === "BUTTON") {
-            if ((target as HTMLElement).classList.contains("main_discount-btn")) {
+            if (
+              (target as HTMLElement).classList.contains("main_discount-btn")
+            ) {
               e.preventDefault();
               const codeText: string = (target as HTMLElement).innerText;
               navigator.clipboard.writeText(codeText);
               Alert.showAlert(false, "Promocode copied!");
             }
           }
-        })
+        });
       }
     },
   },

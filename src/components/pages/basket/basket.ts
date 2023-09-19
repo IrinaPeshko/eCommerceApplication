@@ -48,7 +48,7 @@ async function removeCart(): Promise<void> {
   }
 }
 
-async function applyCode(target: HTMLElement): Promise<void> {
+async function addPromocode(target: HTMLElement) {
   const codeField: Element | null = target.previousElementSibling;
   const codesList: HTMLDivElement | null =
     document.querySelector(".cart__codes-list");
@@ -64,14 +64,14 @@ async function applyCode(target: HTMLElement): Promise<void> {
         },
       ];
       try {
-        const getCartsDiscount = await CartAPI.addCode(addCodeObj);
-        if (getCartsDiscount) {
-          if (getCartsDiscount.statusCode !== 400) {
+        const addDiscountToCart = await CartAPI.addCode(addCodeObj);
+        if (addDiscountToCart) {
+          if (addDiscountToCart.statusCode !== 400) {
             (codeField as HTMLInputElement).value = "";
             const {
               totalPrice: { centAmount, currencyCode, fractionDigits },
-            } = getCartsDiscount.body;
-            const { discountCodes, lineItems } = getCartsDiscount.body;
+            } = addDiscountToCart.body;
+            const { discountCodes, lineItems } = addDiscountToCart.body;
             const {
               discountCode: { id: idFromCart },
             } = discountCodes[0];
@@ -110,10 +110,48 @@ async function applyCode(target: HTMLElement): Promise<void> {
             throw new Error("Something is wrong");
           }
         }
-      } catch (err) {
+      } catch(err) {
         Alert.showAlert(true, "This code is unavailable");
         console.log(err);
       }
+    }
+  }
+}
+
+async function applyCode(target: HTMLElement): Promise<void> {
+  const codeField: Element | null = target.previousElementSibling;
+  if (codeField) {
+    const codeVal: string = (codeField as HTMLInputElement).value;
+    if (codeVal !== "") {
+      await CartAPI.getMyCarts().then(async res => {
+        if (res) {
+          if (res.statusCode !== 400) {
+            const { discountCodes } = res.body;
+            await CartAPI.getAllCodes().then(async resp => {
+              if (resp) {
+                if (resp.statusCode !== 400) {
+                  const { results } = resp.body;
+                  const currDiscount = results.filter(code => code.code === codeVal)[0];
+                  if (currDiscount) {
+                    const { id } = currDiscount;
+                    if (discountCodes) {
+                      if (discountCodes.length !== 0) {
+                        if (discountCodes.some(elem => elem.discountCode.id === id)) {
+                          Alert.showAlert(true, "Promocode has already been added");
+                        } else {
+                          addPromocode(target);
+                        }
+                      } else {
+                        addPromocode(target);
+                      }
+                    }
+                  }
+                }
+              }
+            }).catch(err => console.log(err));
+          }
+        }
+      }).catch(err => console.log(err));
     }
   }
 }

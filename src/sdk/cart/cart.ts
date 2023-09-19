@@ -364,6 +364,14 @@ class CartAPI {
       .execute();
   }
 
+  public static async getAllCodes() {
+    return apiRoot
+      .withProjectKey({ projectKey })
+      .discountCodes()
+      .get()
+      .execute();
+  }
+
   public static async addCode(codeObj: AddCode[]) {
     const myCart = await this.getOrCreateMyCart();
     if (!myCart) {

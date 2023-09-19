@@ -137,10 +137,20 @@
     width: 49.23%;
     display: flex;
     &.main_discount-item--newuser {
-      background: linear-gradient(270deg, rgba(241, 239, 240, 0.00) 0%, #F1F0F0 10.79%, #F3F0EF 98.67%);
+      background: linear-gradient(
+        270deg,
+        rgba(241, 239, 240, 0) 0%,
+        #f1f0f0 10.79%,
+        #f3f0ef 98.67%
+      );
     }
     &.main_discount-item--dresses {
-      background: linear-gradient(90deg, #F7E0D5 0%, #F3DCD2 83.85%, rgba(243, 220, 210, 0.14) 100%);
+      background: linear-gradient(
+        90deg,
+        #f7e0d5 0%,
+        #f3dcd2 83.85%,
+        rgba(243, 220, 210, 0.14) 100%
+      );
     }
   }
   & .main_discount-img {
@@ -237,7 +247,13 @@
     & .main_discount-item {
       flex-direction: column;
       &.main_discount-item--dresses {
-        background: linear-gradient(90deg, #F7E0D5 0%,#f6ded4 50%, #e4cdc5 83.85%, #e4cdc5 100%);
+        background: linear-gradient(
+          90deg,
+          #f7e0d5 0%,
+          #f6ded4 50%,
+          #e4cdc5 83.85%,
+          #e4cdc5 100%
+        );
       }
     }
     & .main_discount-description {
