@@ -267,6 +267,41 @@
   }
 }
 
+.card__cart_control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .product_page__btn.bag {
+    border-radius: 10px;
+    width: 8rem;
+    height: 2rem;
+    font-size: 0.7rem;
+    box-sizing: border-box;
+    border: #000 1px solid;
+    background-color: #ffffff;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+    &::after {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 0;
+    }
+    &.remove {
+      background-color: #000000;
+      &::after {
+        color: #ffffff;
+      }
+    }
+    &::after {
+      color: #030303;
+    }
+  }
+}
+
 .catalog__card:hover {
   background-color: #f0f0f0;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);

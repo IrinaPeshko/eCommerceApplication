@@ -10,93 +10,44 @@ import { ProductControl } from "./productControl";
 import { ProductData } from "./productData";
 
 export class Product {
-  private static DOM = {
-    get quantityMinus() {
-      return document.querySelector(".product_quantity__minus");
-    },
-    get quantityPlus() {
-      return document.querySelector(".product_quantity__plus");
-    },
-    get quantityNum() {
-      return document.querySelector(".product_quantity__num");
-    },
-    get currentSku() {
-      const skuBox = document.querySelector(".sku_value");
-      if (!skuBox) throw new Error("skuBox is not found");
-      const value = skuBox.textContent;
-      return value;
-    },
-  };
+  private DOM: { [key: string]: HTMLElement | null };
 
-  public static async init(keyData = "") {
-    let key = keyData;
-    if (key === "") {
-      key = Product.checkURL();
-    }
+  private key: string;
 
-    const resp = (await getProduct(key)).body;
-    const DOM = {
+  private productControl: ProductControl | null;
+
+  constructor(keyData = "") {
+    this.DOM = {
+      conteiner: document.querySelector(".product_page"),
+      name: document.querySelector(".product_page__name"),
+      productBreadcrumbs: document.querySelector(".breadcrumbs li:last-child"),
+      description: document.querySelector(".product_deail__description"),
+      quantityMinus: document.querySelector(".product_quantity__minus"),
+      quantityPlus: document.querySelector(".product_quantity__plus"),
+      quantityNum: document.querySelector(".product_quantity__num"),
       imgs: document.querySelector(".product_page__slider-main"),
       sliderMain: document.querySelector(".product_page__slider-main"),
-      productBreadcrumbs: document.querySelector(".breadcrumbs li:last-child"),
-      name: document.querySelector(".product_page__name"),
       brend: document.querySelector(".product_page__brand .value"),
       colorBox: document.querySelector(".product_page__color"),
       color: document.querySelector(
         ".product_page__color .product_item__value",
       ),
       sizes: document.querySelector(".product_page__items.sizes"),
-      quantityNum: document.querySelector(".product_quantity__num"),
       startPrise: document.querySelector(".sizes__item.product_page__prise"),
       salePrise: document.querySelector(".product_page__sale_prise"),
-      description: document.querySelector(".product_deail__description"),
       sku: document.querySelector(".sku_value"),
       addBagBtn: document.querySelector(".product_page__btn.bag"),
     };
-
-    const data = new ProductData(resp);
-
-    const productPageSwiperMain = new Swiper(
-      ".product_page__swiper-main",
-      productPageSwiperMainSetting,
-    );
-    Product.createSlides(data.slides, productPageSwiperMain);
-
-    Product.clickSlide(DOM.sliderMain, data.slidesPopap, productPageSwiperMain);
-
-    Product.showContent(DOM.name, data.name);
-    Product.showContent(DOM.productBreadcrumbs, data.name);
-
-    Product.showContent(DOM.brend, data.mainAttrubutes.brend);
-
-    Product.showContent(DOM.color, data.mainAttrubutes.color);
-    if (
-      data.mainAttrubutes.color === "" &&
-      DOM.colorBox &&
-      DOM.colorBox instanceof HTMLElement
-    ) {
-      DOM.colorBox.style.display = "none";
+    this.key = keyData === "" ? Product.checkURL() : keyData;
+    if (this.DOM.conteiner) {
+      this.DOM.conteiner.style.opacity = "0";
     }
-    Product.createSizes(
-      DOM.sizes,
-      data.mainAttrubutes,
-      data.variantAttrubutes,
-      data.skuArr,
-    );
-    Product.clickSizes(DOM.sizes, DOM.sku);
-    Product.showContent(DOM.startPrise, data.startPrice);
-    Product.showContent(DOM.salePrise, data.salePrice);
-    Product.checkPrice(DOM.startPrise, DOM.salePrise);
-    Product.showContent(DOM.description, data.description);
-    Product.showContent(DOM.sku, data.skuArr[0]);
-    Product.clickAddBagBtn(DOM.addBagBtn, DOM.quantityNum);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const productControl = new ProductControl(
-      this.DOM.quantityPlus,
-      this.DOM.quantityNum,
-      this.DOM.quantityMinus,
-      this.DOM.currentSku,
-    );
+
+    this.productControl = null;
+  }
+
+  private getCurrentSkuValue() {
+    return this.DOM.sku?.innerText || "";
   }
 
   private static checkURL() {
@@ -105,6 +56,61 @@ export class Product {
       return value.replace("product__", "");
     }
     return "";
+  }
+
+  private async getData() {
+    const resp = (await getProduct(this.key)).body;
+    const data = new ProductData(resp);
+    return data;
+  }
+
+  public async show() {
+    const data = await this.getData();
+    const productPageSwiperMain = new Swiper(
+      ".product_page__swiper-main",
+      productPageSwiperMainSetting,
+    );
+    Product.showContent(this.DOM.name, data.name);
+    Product.showContent(this.DOM.productBreadcrumbs, data.name);
+    Product.showContent(this.DOM.description, data.description);
+    Product.showContent(this.DOM.brend, data.mainAttrubutes.brend);
+    Product.showContent(this.DOM.color, data.mainAttrubutes.color);
+    Product.showContent(this.DOM.sku, data.skuArr[0]);
+    Product.showContent(this.DOM.startPrise, data.startPrice);
+    Product.showContent(this.DOM.salePrise, data.salePrice);
+    Product.checkPrice(this.DOM.startPrise, this.DOM.salePrise);
+
+    Product.createSlides(data.slides, productPageSwiperMain);
+    Product.clickSlide(
+      this.DOM.sliderMain,
+      data.slidesPopap,
+      productPageSwiperMain,
+    );
+
+    Product.createSizes(
+      this.DOM.sizes,
+      data.mainAttrubutes,
+      data.variantAttrubutes,
+      data.skuArr,
+    );
+    // Product.clickAddBagBtn(this.DOM.addBagBtn, this.DOM.quantityNum);
+
+    if (this.DOM.conteiner) {
+      this.DOM.conteiner.style.opacity = "1";
+    }
+
+    if (this.DOM.quantityPlus) {
+      this.productControl = new ProductControl(
+        this.DOM.quantityPlus,
+        this.DOM.quantityNum,
+        this.DOM.quantityMinus,
+        this.getCurrentSkuValue(),
+        this.DOM.addBagBtn,
+      );
+      await this.productControl.inite();
+    }
+
+    await this.clickSizes();
   }
 
   private static createSlides(
@@ -154,6 +160,7 @@ export class Product {
     if (!(domEl instanceof HTMLElement) || !domEl) return;
     if (data === undefined) {
       domEl.textContent = "";
+      domEl.style.display = "none";
       return;
     }
     domEl.textContent = data;
@@ -193,40 +200,43 @@ export class Product {
     }
   }
 
-  private static clickSizes(box: Element | null, skuBox: Element | null) {
-    if (!(box instanceof HTMLElement)) return;
-    box.addEventListener("click", (e) => {
+  private async clickSizes() {
+    if (!(this.DOM.sizes instanceof HTMLElement)) return;
+    this.DOM.sizes.addEventListener("click", async (e) => {
       if (
-        !box ||
+        !this.DOM.sizes ||
         !(e.target instanceof HTMLElement) ||
         !e.target.classList.contains("sizes__item") ||
-        !(box instanceof HTMLElement)
+        !(this.DOM.sizes instanceof HTMLElement)
       )
         return;
-      Array.from(box.getElementsByClassName("sizes__item")).forEach((el) => {
-        if (el.classList.contains("active")) el.classList.remove("active");
-      });
+      Array.from(this.DOM.sizes.getElementsByClassName("sizes__item")).forEach(
+        (el) => {
+          if (el.classList.contains("active")) el.classList.remove("active");
+        },
+      );
       if (!e.target.classList.contains("active"))
         e.target.classList.add("active");
       const skuValue = e.target.getAttribute("sku");
-      if (skuBox && skuValue) {
-        skuBox.textContent = skuValue;
+      if (this.DOM.sku && skuValue) {
+        this.DOM.sku.textContent = skuValue;
+        await this.productControl?.changeSku(skuValue);
       }
     });
   }
 
-  private static clickAddBagBtn(
-    btn: Element | null,
-    quantityNum: Element | null,
-  ) {
-    if (!btn || !(quantityNum instanceof HTMLInputElement)) return;
-    btn.addEventListener("click", () => {
-      if (quantityNum && btn.classList.contains("remove")) {
-        quantityNum.value = `0`;
-      }
-      btn.classList.toggle("remove");
-    });
-  }
+  // private static clickAddBagBtn(
+  //   btn: Element | null,
+  //   quantityNum: Element | null,
+  // ) {
+  //   if (!btn || !(quantityNum instanceof HTMLInputElement)) return;
+  //   btn.addEventListener("click", () => {
+  //     if (quantityNum && btn.classList.contains("remove")) {
+  //       quantityNum.value = `0`;
+  //     }
+  //     btn.classList.toggle("remove");
+  //   });
+  // }
 
   private static getElemText(box: Element | null) {
     if (box) {

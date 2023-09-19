@@ -22,43 +22,37 @@ export class Catalog {
   }
 
   public init() {
-    this.categories.container?.addEventListener("click", (event) => {
+    this.categories.container?.addEventListener("click", async (event) => {
       this.cards.filter.resetFilter();
       this.categories.reset();
-
       const categories: Record<string, Category> = {};
-
-      const getCategoriesArr = async () => {
-        const categoriesArr = (await getCategories()).body.results;
-        categoriesArr.forEach((el) => {
-          const categoryObj: Category = {
-            id: el.id,
-            name: el.name.en,
-            parentId: `${el.parent?.id}`,
-          };
-          categories[el.id] = categoryObj;
-        });
-        const el = event.target;
-        if (el instanceof HTMLElement) {
-          if (el.tagName === "A") {
-            const { parentElement } = el;
-            if (parentElement) {
-              parentElement.classList.add("selected");
-            }
-          } else {
-            el.classList.add("selected");
+      const categoriesArr = (await getCategories()).body.results;
+      categoriesArr.forEach((el) => {
+        const categoryObj: Category = {
+          id: el.id,
+          name: el.name.en,
+          parentId: `${el.parent?.id}`,
+        };
+        categories[el.id] = categoryObj;
+      });
+      const el = event.target;
+      if (el instanceof HTMLElement) {
+        if (el.tagName === "A") {
+          const { parentElement } = el;
+          if (parentElement) {
+            parentElement.classList.add("selected");
           }
-          const key = el.getAttribute("key");
-          const categoryPathElement = document.getElementById("categoryPath");
-          if (categoryPathElement && key) {
-            const categoryPath = Categ.getCategoryPath(key, categories);
-            categoryPathElement.textContent = categoryPath;
-          }
-          this.cards.visualeFilterCards([`variants.categories.id:"${key}"`]);
+        } else {
+          el.classList.add("selected");
         }
-      };
-
-      getCategoriesArr();
+        const key = el.getAttribute("key");
+        const categoryPathElement = document.getElementById("categoryPath");
+        if (categoryPathElement && key) {
+          const categoryPath = Categ.getCategoryPath(key, categories);
+          categoryPathElement.textContent = categoryPath;
+        }
+        this.cards.visualeFilterCards([`variants.categories.id:"${key}"`]);
+      }
     });
   }
 }
