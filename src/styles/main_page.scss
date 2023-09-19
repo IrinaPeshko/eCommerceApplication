@@ -30,6 +30,12 @@
   & .button-main {
     padding-left: 21px;
     margin: 0 auto;
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(240, 240, 240, 10%);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+    }
   }
 }
 
