@@ -21,7 +21,10 @@ class CartAPI {
   public static async createCart() {
     let res;
 
-    if (localStorage.getItem("token") || sessionStorage.getItem("anonimToken")) {
+    if (
+      localStorage.getItem("token") ||
+      sessionStorage.getItem("anonimToken")
+    ) {
       res = await this.createCartWithToken();
     } else {
       const tokenCache = new MyTokenCache();
