@@ -145,8 +145,10 @@ export default class Product {
   }
 
   private async removeProductFromCart(target: HTMLElement): Promise<void> {
-    const cartBlock: HTMLElement | null = document.querySelector(".cart__wrapper");
-    const emptyCartBlock: HTMLElement | null = document.querySelector(".cart__empty-cart");
+    const cartBlock: HTMLElement | null =
+      document.querySelector(".cart__wrapper");
+    const emptyCartBlock: HTMLElement | null =
+      document.querySelector(".cart__empty-cart");
     const currentLine: HTMLElement | null = target.closest(".cart__table-row");
     const subtotalElem: HTMLDivElement | null = document.querySelector(
       ".cart__subtotal-num",

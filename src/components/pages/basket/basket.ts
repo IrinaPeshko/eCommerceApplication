@@ -8,8 +8,10 @@ import { totalPrice, correctPrice } from "./correctPrice";
 import { Emitter } from "../../utils/eventEmitter";
 
 async function removeCart(): Promise<void> {
-  const cartBlock: HTMLElement | null = document.querySelector(".cart__wrapper");
-  const emptyCartBlock: HTMLElement | null = document.querySelector(".cart__empty-cart");
+  const cartBlock: HTMLElement | null =
+    document.querySelector(".cart__wrapper");
+  const emptyCartBlock: HTMLElement | null =
+    document.querySelector(".cart__empty-cart");
   const tableBody: HTMLDivElement | null =
     document.querySelector(".cart__table-body");
   const removeArr: RemoveLineFromCart[] = [];
@@ -181,8 +183,10 @@ async function applyCode(target: HTMLElement): Promise<void> {
 
 export async function createCartTable(): Promise<void> {
   const mainElem: HTMLElement | null = document.querySelector(".cart");
-  const cartBlock: HTMLElement | null = document.querySelector(".cart__wrapper");
-  const emptyCartBlock: HTMLElement | null = document.querySelector(".cart__empty-cart");
+  const cartBlock: HTMLElement | null =
+    document.querySelector(".cart__wrapper");
+  const emptyCartBlock: HTMLElement | null =
+    document.querySelector(".cart__empty-cart");
   const tableBody: HTMLDivElement | null =
     document.querySelector(".cart__table-body");
   const codesList: HTMLDivElement | null =
