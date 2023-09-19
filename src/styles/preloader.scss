@@ -24,23 +24,23 @@
     margin-left: 31px;
     animation: dots 2.8s infinite;
     & span {
-        display: block;
-        float: left;
-        width: 16px;
-        height: 16px;
-        margin-left: 16px;
-        background: #000;
-        border-radius: 50%;
+      display: block;
+      float: left;
+      width: 16px;
+      height: 16px;
+      margin-left: 16px;
+      background: #000;
+      border-radius: 50%;
     }
   }
   @keyframes dot {
     50% {
-      transform: translateX(96px)
+      transform: translateX(96px);
     }
   }
   @keyframes dots {
     50% {
-      transform: translateX(-31px)
+      transform: translateX(-31px);
     }
   }
 }
@@ -51,9 +51,9 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.95);
   z-index: 1;
   &.preloader-overlay--off {
-      display: none;
+    display: none;
   }
 }

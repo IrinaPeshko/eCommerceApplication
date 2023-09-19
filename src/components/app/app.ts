@@ -16,7 +16,12 @@ export default class App {
     const mainElement = mainView.getHTMLElement();
 
     if (preloaderElem && footerElement && headerElement && mainElement) {
-      document.body.append(preloaderElem, headerElement, mainElement, footerElement);
+      document.body.append(
+        preloaderElem,
+        headerElement,
+        mainElement,
+        footerElement,
+      );
     } else {
       throw new Error("Element is null.");
     }

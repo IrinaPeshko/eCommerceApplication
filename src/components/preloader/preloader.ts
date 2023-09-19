@@ -17,12 +17,13 @@ export default class Preloader extends View {
   }
 
   public static showLoader() {
-    const overlay: HTMLElement | null = document.querySelector(".preloader-overlay");
+    const overlay: HTMLElement | null =
+      document.querySelector(".preloader-overlay");
     if (overlay) {
       overlay.classList.remove("preloader-overlay--off");
       setTimeout(() => {
         overlay.classList.add("preloader-overlay--off");
-      }, 1000);
+      }, 2500);
     }
   }
 }
