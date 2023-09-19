@@ -22,6 +22,7 @@ import productKeys from "../../pages/product/productsKey";
 import { Catalog } from "../../pages/catalog/catalog";
 import { createCartTable } from "../../pages/basket/basket";
 import { onBrandsBlockClick } from "../../pages/main/onBransBlockClick";
+import Alert from "../../alerts/alert";
 
 const namePage = {
   MAIN: "MAIN",
@@ -41,9 +42,23 @@ export const pages: link[] = [
     href: "/",
     callback: (): void => {
       const brandsBlock = document.querySelector(".main_brands__list");
+      const discountBlock = document.querySelector(".main_discount");
       brandsBlock?.addEventListener("click", (event) => {
         onBrandsBlockClick(event);
       });
+      if (discountBlock) {
+        discountBlock.addEventListener("click", (e: Event) => {
+          const { target } = e;
+          if ((target as HTMLElement).tagName === "BUTTON") {
+            if ((target as HTMLElement).classList.contains("main_discount-btn")) {
+              e.preventDefault();
+              const codeText: string = (target as HTMLElement).innerText;
+              navigator.clipboard.writeText(codeText);
+              Alert.showAlert(false, "Promocode copied!");
+            }
+          }
+        })
+      }
     },
   },
   {
