@@ -242,7 +242,8 @@ export const profileLinks: link[] = [
           const { target } = e;
           if ((target as HTMLElement).tagName === "A") {
             if (
-              (target as HTMLElement).classList.contains("cart__continue-btn")
+              (target as HTMLElement).classList.contains("cart__continue-btn") ||
+              (target as HTMLElement).classList.contains("cart__start-btn")
             ) {
               e.preventDefault();
               routeforOtherLink(e, pages[2].callback);
@@ -439,7 +440,8 @@ fill="#ffffff" stroke="none">
           const { target } = e;
           if ((target as HTMLElement).tagName === "A") {
             if (
-              (target as HTMLElement).classList.contains("cart__continue-btn")
+              (target as HTMLElement).classList.contains("cart__continue-btn") ||
+              (target as HTMLElement).classList.contains("cart__start-btn")
             ) {
               e.preventDefault();
               routeforOtherLink(e, pages[2].callback);

@@ -9,6 +9,9 @@
     display: flex;
     justify-content: space-between;
     column-gap: 71px;
+    &.cart__wrapper--hidden {
+      display: none;
+    }
   }
   & .cart__breadcrumbs {
     margin-bottom: 13px;
@@ -221,6 +224,31 @@
       flex-direction: column;
       row-gap: 10px;
       margin-top: 16px;
+    }
+  }
+  & .cart__empty-cart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &.cart__empty-cart--hidden {
+       display: none;
+    }
+  }
+  & .cart__empty-cart-title {
+    margin-bottom: 7px;
+    font: {
+      family: "Oswald", Arial, sans-serif;
+      size: 32px;
+      weight: 500;
+    }
+  }
+  & .cart__empty-cart-text {
+    margin: 0;
+    margin-bottom: 60px;
+    font: {
+      family: "Roboto-Regular", Arial, sans-serif;
+      size: 22px;
+      weight: 400;
     }
   }
 

@@ -8,6 +8,8 @@ import { totalPrice, correctPrice } from "./correctPrice";
 import { Emitter } from "../../utils/eventEmitter";
 
 async function removeCart(): Promise<void> {
+  const cartBlock: HTMLElement | null = document.querySelector(".cart__wrapper");
+  const emptyCartBlock: HTMLElement | null = document.querySelector(".cart__empty-cart");
   const tableBody: HTMLDivElement | null =
     document.querySelector(".cart__table-body");
   const removeArr: RemoveLineFromCart[] = [];
@@ -37,6 +39,10 @@ async function removeCart(): Promise<void> {
             }
             totalPrice(centAmount, fractionDigits, currencyCode);
             Alert.showAlert(false, "Сart has been emptied");
+            if (cartBlock && emptyCartBlock) {
+              cartBlock.classList.add("cart__wrapper--hidden");
+              emptyCartBlock.classList.remove("cart__empty-cart--hidden");
+            }
           } else {
             throw new Error("Something is wrong");
           }
@@ -173,19 +179,20 @@ async function applyCode(target: HTMLElement): Promise<void> {
   }
 }
 
-// function subtotalPrice() {
-
-// }
 export async function createCartTable(): Promise<void> {
   const mainElem: HTMLElement | null = document.querySelector(".cart");
+  const cartBlock: HTMLElement | null = document.querySelector(".cart__wrapper");
+  const emptyCartBlock: HTMLElement | null = document.querySelector(".cart__empty-cart");
   const tableBody: HTMLDivElement | null =
     document.querySelector(".cart__table-body");
   const codesList: HTMLDivElement | null =
     document.querySelector(".cart__codes-list");
-  const subtotalElem: HTMLDivElement | null =
-  document.querySelector(".cart__subtotal-num");
-  const subtotalCurrency: HTMLDivElement | null =
-  document.querySelector(".cart__subtotal-currency");
+  const subtotalElem: HTMLDivElement | null = document.querySelector(
+    ".cart__subtotal-num",
+  );
+  const subtotalCurrency: HTMLDivElement | null = document.querySelector(
+    ".cart__subtotal-currency",
+  );
   let amountNum;
   let subtotalPrice = 0;
   try {
@@ -200,6 +207,10 @@ export async function createCartTable(): Promise<void> {
           fractionDigits: cartFractionDigits,
         },
       } = cart;
+      if (cartBlock && emptyCartBlock) {
+        cartBlock.classList.remove("cart__wrapper--hidden");
+        emptyCartBlock.classList.add("cart__empty-cart--hidden");
+      }
       if (products) {
         if (tableBody) {
           tableBody.innerHTML = "";
@@ -251,7 +262,10 @@ export async function createCartTable(): Promise<void> {
                 ? discounted.value.centAmount
                 : undefined;
               const correctDefaultPrice: number = defaultPrice;
-              subtotalPrice += correctPrice(correctDefaultPrice * quantity, fractionDigits);
+              subtotalPrice += correctPrice(
+                correctDefaultPrice * quantity,
+                fractionDigits,
+              );
               const newProduct = new Product(
                 sku,
                 version,
@@ -275,6 +289,33 @@ export async function createCartTable(): Promise<void> {
           });
         }
       }
+      if (codesList) {
+        codesList.innerHTML = "";
+        if (getCartDiscounts) {
+          const { discountCodes } = getCartDiscounts;
+          if (discountCodes && discountCodes.length !== 0) {
+            discountCodes.forEach(async (code) => {
+              const {
+                discountCode: { id },
+              } = code;
+              try {
+                const getCode = await CartAPI.getDiscountCode(id);
+                if (getCode.statusCode !== 400) {
+                  const { code: codeName } = getCode.body;
+                  const codeElem = new Code(id, codeName);
+                  if (codesList) {
+                    codesList.append(codeElem.createCodeElem());
+                  }
+                } else {
+                  throw new Error("Something is wrong");
+                }
+              } catch (err) {
+                console.log(err);
+              }
+            });
+          }
+        }
+      }
       if (cart) {
         totalPrice(centAmount, cartFractionDigits, cartcurrencyCode);
         if (subtotalElem && subtotalCurrency) {
@@ -282,54 +323,31 @@ export async function createCartTable(): Promise<void> {
           subtotalCurrency.innerText = `${cartcurrencyCode}`;
         }
       }
-    } else {
-      console.log("Empty cart");
-    }
-    if (codesList) {
-      codesList.innerHTML = "";
-      if (getCartDiscounts) {
-        const { discountCodes } = getCartDiscounts;
-        if (discountCodes && discountCodes.length !== 0) {
-          discountCodes.forEach(async (code) => {
-            const {
-              discountCode: { id },
-            } = code;
-            try {
-              const getCode = await CartAPI.getDiscountCode(id);
-              if (getCode.statusCode !== 400) {
-                const { code: codeName } = getCode.body;
-                const codeElem = new Code(id, codeName);
-                if (codesList) {
-                  codesList.append(codeElem.createCodeElem());
-                }
-              } else {
-                throw new Error("Something is wrong");
-              }
-            } catch (err) {
-              console.log(err);
+      if (mainElem) {
+        mainElem.addEventListener("click", (e: Event) => {
+          e.preventDefault();
+          const { target } = e;
+          if ((target as HTMLElement).tagName === "BUTTON") {
+            if (
+              (target as HTMLElement).classList.contains("cart__clear-cart-btn")
+            ) {
+              removeCart();
+            } else if (
+              (target as HTMLElement).classList.contains("cart__apply-code-btn")
+            ) {
+              applyCode(target as HTMLElement);
             }
-          });
-        }
+          }
+        });
+      }
+    } else {
+      console.log("Cart empty");
+      if (cartBlock && emptyCartBlock) {
+        cartBlock.classList.add("cart__wrapper--hidden");
+        emptyCartBlock.classList.remove("cart__empty-cart--hidden");
       }
     }
   } catch (err) {
     console.log(err);
-  }
-  if (mainElem) {
-    mainElem.addEventListener("click", (e: Event) => {
-      e.preventDefault();
-      const { target } = e;
-      if ((target as HTMLElement).tagName === "BUTTON") {
-        if (
-          (target as HTMLElement).classList.contains("cart__clear-cart-btn")
-        ) {
-          removeCart();
-        } else if (
-          (target as HTMLElement).classList.contains("cart__apply-code-btn")
-        ) {
-          applyCode(target as HTMLElement);
-        }
-      }
-    });
   }
 }

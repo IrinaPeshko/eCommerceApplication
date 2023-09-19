@@ -19,8 +19,13 @@ export function totalPrice(
 
 export function subtotalPrice(lineItems: LineItem[]): number {
   const summaryDefaultPrice: number = lineItems.reduce((acc, curr) => {
-    const {quantity, price: {value: {centAmount: defaultSummaryCentAmount}}} = curr;
-    return acc + (defaultSummaryCentAmount * quantity);
+    const {
+      quantity,
+      price: {
+        value: { centAmount: defaultSummaryCentAmount },
+      },
+    } = curr;
+    return acc + defaultSummaryCentAmount * quantity;
   }, 0);
   return summaryDefaultPrice;
 }

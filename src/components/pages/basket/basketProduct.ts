@@ -145,8 +145,12 @@ export default class Product {
   }
 
   private async removeProductFromCart(target: HTMLElement): Promise<void> {
+    const cartBlock: HTMLElement | null = document.querySelector(".cart__wrapper");
+    const emptyCartBlock: HTMLElement | null = document.querySelector(".cart__empty-cart");
     const currentLine: HTMLElement | null = target.closest(".cart__table-row");
-    const subtotalElem: HTMLDivElement | null = document.querySelector(".cart__subtotal-num");
+    const subtotalElem: HTMLDivElement | null = document.querySelector(
+      ".cart__subtotal-num",
+    );
     const removedObj: RemoveLineFromCart = {
       action: Actions.removeline,
       lineItemKey: this.lineItemKey,
@@ -162,12 +166,25 @@ export default class Product {
             lineItems,
             totalPrice: { centAmount, currencyCode, fractionDigits },
           } = removeCurrentLine.body;
-          totalPrice(centAmount, fractionDigits, currencyCode);
-          if (subtotalElem) {
-            subtotalElem.innerText = `${correctPrice(subtotalPrice(lineItems), fractionDigits)}`;
-          }
           Alert.showAlert(false, "Item successfully removed");
           if (currentLine) currentLine.remove();
+          if (lineItems) {
+            if (lineItems.length !== 0) {
+              totalPrice(centAmount, fractionDigits, currencyCode);
+              if (subtotalElem) {
+                subtotalElem.innerText = `${correctPrice(
+                  subtotalPrice(lineItems),
+                  fractionDigits,
+                )}`;
+              }
+            } else {
+              console.log("Cart empty");
+              if (cartBlock && emptyCartBlock) {
+                cartBlock.classList.add("cart__wrapper--hidden");
+                emptyCartBlock.classList.remove("cart__empty-cart--hidden");
+              }
+            }
+          }
         } else {
           throw new Error("Something is wrong");
         }
@@ -233,7 +250,9 @@ export default class Product {
     target: HTMLElement,
   ): Promise<void> {
     const parentBlock: HTMLElement | null = target.closest(".cart__table-row");
-    const subtotalElem: HTMLDivElement | null = document.querySelector(".cart__subtotal-num");
+    const subtotalElem: HTMLDivElement | null = document.querySelector(
+      ".cart__subtotal-num",
+    );
     try {
       const addNewItem = await CartAPI.updateProduct(this.sku, quantityVal);
       if (addNewItem) {
@@ -267,7 +286,10 @@ export default class Product {
             }
             totalPrice(cartCentAmount, cartFractionDigits, cartCurrencyCode);
             if (subtotalElem) {
-              subtotalElem.innerText = `${correctPrice(subtotalPrice(lineItems), cartFractionDigits)}`;
+              subtotalElem.innerText = `${correctPrice(
+                subtotalPrice(lineItems),
+                cartFractionDigits,
+              )}`;
             }
           }
         } else {
