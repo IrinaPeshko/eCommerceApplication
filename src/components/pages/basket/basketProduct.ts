@@ -301,7 +301,7 @@ export default class Product {
           // }
           if (discountNum !== null) {
             const discountSizeBlock: HTMLElement | null =
-            productPrice.querySelector(".discount-size");
+              productPrice.querySelector(".discount-size");
             if (!discountSizeBlock) {
               const discountBlock: HTMLSpanElement =
                 document.createElement("span");
@@ -319,7 +319,7 @@ export default class Product {
             }
           } else {
             const discountSizeBlock: HTMLElement | null =
-            productPrice.querySelector(".discount-size");
+              productPrice.querySelector(".discount-size");
             if (discountSizeBlock) {
               discountSizeBlock.remove();
             }

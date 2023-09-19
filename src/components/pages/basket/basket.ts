@@ -89,18 +89,21 @@ async function addPromocode(target: HTMLElement, currId: string) {
                     value: { centAmount: changedTotal },
                   },
                 } = elem.discountedPricePerQuantity[0];
-                const sumOfDiscounts: number = includedDiscounts.reduce((acc: number, curr: DiscountedLineItemPortion): number => {
-                  const {
-                    discountedAmount: { centAmount: discountNum },
-                  } = curr;
-                  return acc + discountNum;
-                }, 0);
-                    Emitter.emit(
-                      "updateRow",
-                      productKey,
-                      changedTotal,
-                      sumOfDiscounts,
-                    );
+                const sumOfDiscounts: number = includedDiscounts.reduce(
+                  (acc: number, curr: DiscountedLineItemPortion): number => {
+                    const {
+                      discountedAmount: { centAmount: discountNum },
+                    } = curr;
+                    return acc + discountNum;
+                  },
+                  0,
+                );
+                Emitter.emit(
+                  "updateRow",
+                  productKey,
+                  changedTotal,
+                  sumOfDiscounts,
+                );
               }
             });
             Alert.showAlert(false, "Code is successfully applied to this cart");
@@ -218,12 +221,15 @@ export async function createCartTable(): Promise<void> {
               const {
                 discountedPrice: { includedDiscounts },
               } = discountedPricePerQuantity[0];
-              const sumOfAllDiscounts: number = includedDiscounts.reduce((acc: number, curr: DiscountedLineItemPortion): number => {
-                const {
-                  discountedAmount: { centAmount: discountNum },
-                } = curr;
-                return acc + discountNum;
-              }, 0);
+              const sumOfAllDiscounts: number = includedDiscounts.reduce(
+                (acc: number, curr: DiscountedLineItemPortion): number => {
+                  const {
+                    discountedAmount: { centAmount: discountNum },
+                  } = curr;
+                  return acc + discountNum;
+                },
+                0,
+              );
               amountNum = sumOfAllDiscounts;
             } else {
               amountNum = undefined;
