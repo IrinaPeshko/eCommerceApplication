@@ -47,7 +47,6 @@ export default class Code {
                   lineItems,
                 } = removeCurrCode.body;
                 lineItems.forEach((elem) => {
-                  console.log(elem);
                   const {
                     productKey,
                     totalPrice: { centAmount: itemTotalAmount },

@@ -66,7 +66,6 @@ async function addPromocode(target: HTMLElement, currId: string) {
   if (codeField) {
     const codeVal: string = (codeField as HTMLInputElement).value;
     if (codeVal !== "") {
-      console.log(codeVal);
       const addCodeObj: AddCode[] = [
         {
           action: Actions.addcode,
@@ -77,7 +76,6 @@ async function addPromocode(target: HTMLElement, currId: string) {
         const addDiscountToCart = await CartAPI.addCode(addCodeObj);
         if (addDiscountToCart) {
           if (addDiscountToCart.statusCode !== 400) {
-            console.log(addDiscountToCart.body);
             (codeField as HTMLInputElement).value = "";
             const {
               totalPrice: { centAmount, currencyCode, fractionDigits },
@@ -88,7 +86,6 @@ async function addPromocode(target: HTMLElement, currId: string) {
               codesList.append(newCode.createCodeElem());
             }
             lineItems.forEach((elem) => {
-              console.log(elem);
               const { productKey, discountedPricePerQuantity } = elem;
               if (discountedPricePerQuantity.length !== 0) {
                 const {
@@ -168,6 +165,9 @@ async function applyCode(target: HTMLElement): Promise<void> {
                             addPromocode(target, id);
                           }
                         }
+                      } else {
+                        Alert.showAlert(true, "This code is unavailable");
+                        (codeField as HTMLInputElement).value = "";
                       }
                     }
                   }
