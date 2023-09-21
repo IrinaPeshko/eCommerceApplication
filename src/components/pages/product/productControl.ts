@@ -41,9 +41,9 @@ export class ProductControl {
     this.clickAddBtn();
   }
 
-  public async updateNum(value?: number) {
+  public async updateNum() {
     this.startLoading();
-    const currentNum = value || (await this.getNumfromCart());
+    const currentNum = await this.getNumfromCart();
     if (this.num && this.num instanceof HTMLInputElement) {
       this.num.value = `${currentNum}`;
     }
@@ -73,13 +73,13 @@ export class ProductControl {
       if (currentNum === 0) {
         const res = await CartAPI.addProduct(this.sku, currentNum + 1);
         if (res?.statusCode === 200) {
-          await this.updateNum(currentNum + 1);
+          await this.updateNum();
         }
         this.finishLoading();
       }
       const res = await CartAPI.updateProduct(this.sku, currentNum + 1);
       if (res?.statusCode === 200) {
-        await this.updateNum(currentNum + 1);
+        await this.updateNum();
       }
       this.finishLoading();
     });
@@ -95,7 +95,7 @@ export class ProductControl {
       }
       const res = await CartAPI.updateProduct(this.sku, currentNum - 1);
       if (res?.statusCode === 200) {
-        await this.updateNum(currentNum - 1);
+        await this.updateNum();
       }
       await this.updateNum();
       this.finishLoading();
@@ -110,13 +110,13 @@ export class ProductControl {
       if (currentNum > 0) {
         const res = await CartAPI.updateProduct(this.sku, 0);
         if (res?.statusCode === 200) {
-          await this.updateNum(0);
+          await this.updateNum();
         }
       }
       if (currentNum === 0) {
         const res = await CartAPI.addProduct(this.sku, 1);
         if (res?.statusCode === 200) {
-          await this.updateNum(1);
+          await this.updateNum();
         }
       }
       this.finishLoading();

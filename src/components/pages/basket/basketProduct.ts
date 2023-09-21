@@ -4,6 +4,7 @@ import { RemoveLineFromCart, Actions } from "../../../types/types";
 import Alert from "../../alerts/alert";
 import { totalPrice, correctPrice, subtotalPrice } from "./correctPrice";
 import { Emitter } from "../../utils/eventEmitter";
+import { CartIco } from "../../header/indicator";
 
 export default class Product {
   constructor(
@@ -42,7 +43,11 @@ export default class Product {
     this.discountedPrice = discountedPrice || undefined;
     Emitter.on(
       "updateRow",
-      (currProductKey: string, changedTotal: number, discountNum: number) => {
+      (
+        currProductKey: string,
+        changedTotal: number,
+        discountNum: number,
+      ): void => {
         this.changeProductData(currProductKey, changedTotal, discountNum);
       },
     );
@@ -168,6 +173,7 @@ export default class Product {
             lineItems,
             totalPrice: { centAmount, currencyCode, fractionDigits },
           } = removeCurrentLine.body;
+          this.quantity = 0;
           Alert.showAlert(false, "Item successfully removed");
           if (currentLine) currentLine.remove();
           if (lineItems) {
@@ -186,6 +192,11 @@ export default class Product {
                 emptyCartBlock.classList.remove("cart__empty-cart--hidden");
               }
             }
+            sessionStorage.setItem(
+              "totalCart",
+              String(this.totalQuantity(lineItems)),
+            );
+            CartIco.checkCart();
           }
         } else {
           throw new Error("Something is wrong");
@@ -293,6 +304,11 @@ export default class Product {
                 cartFractionDigits,
               )}`;
             }
+            sessionStorage.setItem(
+              "totalCart",
+              String(this.totalQuantity(lineItems)),
+            );
+            CartIco.checkCart();
           }
         } else {
           throw new Error("Something is wrong");
@@ -355,6 +371,13 @@ export default class Product {
         }
       }
     }
+  }
+
+  private totalQuantity(arr: LineItem[]) {
+    return arr.reduce((acc: number, curr: LineItem): number => {
+      const { quantity } = curr;
+      return acc + quantity;
+    }, 0);
   }
 
   private addColor(): string {

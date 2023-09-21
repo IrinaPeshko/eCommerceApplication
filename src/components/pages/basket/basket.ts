@@ -6,6 +6,8 @@ import Alert from "../../alerts/alert";
 import Code from "./code";
 import { totalPrice, correctPrice } from "./correctPrice";
 import { Emitter } from "../../utils/eventEmitter";
+import { CartIco } from "../../header/indicator";
+import Popap from "../../popap/popap";
 
 async function removeCart(): Promise<void> {
   const cartBlock: HTMLElement | null =
@@ -45,6 +47,8 @@ async function removeCart(): Promise<void> {
               cartBlock.classList.add("cart__wrapper--hidden");
               emptyCartBlock.classList.remove("cart__empty-cart--hidden");
             }
+            sessionStorage.setItem("totalCart", String(0));
+            CartIco.checkCart();
           } else {
             throw new Error("Something is wrong");
           }
@@ -197,6 +201,7 @@ export async function createCartTable(): Promise<void> {
   const subtotalCurrency: HTMLDivElement | null = document.querySelector(
     ".cart__subtotal-currency",
   );
+  const activePopap: HTMLElement | null = document.querySelector(".popap");
   let amountNum;
   let subtotalPrice = 0;
   try {
@@ -335,11 +340,34 @@ export async function createCartTable(): Promise<void> {
             if (
               (target as HTMLElement).classList.contains("cart__clear-cart-btn")
             ) {
-              removeCart();
+              Popap.open(`<div class="popap__wrapper"><p class="popap__text">Do you want to clear your cart?
+              </p><button class="btn popap__clear-btn" type="button">Clear</button>
+              <button class="btn btn--light popap__cancel-btn" type="button">Cancel</button></div>`);
             } else if (
               (target as HTMLElement).classList.contains("cart__apply-code-btn")
             ) {
               applyCode(target as HTMLElement);
+            }
+          }
+        });
+      }
+      if (activePopap) {
+        activePopap.addEventListener("click", (e: Event) => {
+          if (activePopap.classList.contains("active")) {
+            e.preventDefault();
+            const { target } = e;
+            if (
+              (target as HTMLElement).classList.contains("popap__clear-btn")
+            ) {
+              removeCart();
+              document.body.classList.remove("lock");
+              activePopap.classList.remove("active");
+            } else if (
+              (target as HTMLElement).classList.contains("popap__cancel-btn")
+            ) {
+              Popap.close();
+              document.body.classList.remove("lock");
+              activePopap.classList.remove("active");
             }
           }
         });

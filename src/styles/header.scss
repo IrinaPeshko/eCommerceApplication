@@ -153,6 +153,25 @@ header {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  position: relative;
+}
+
+#shoping_cart__ind {
+  &.active {
+    opacity: 1;
+  }
+
+  color: #ffffff;
+  padding: 3px;
+  border: 1px solid #b60f0f;
+  background-color: #b60f0f;
+  border-radius: 10px;
+  font-size: 50%;
+  position: absolute;
+  right: -1em;
+  top: -25%;
+  display: inline-block;
+  opacity: 0;
 }
 
 .shoping_cart__aditional {
