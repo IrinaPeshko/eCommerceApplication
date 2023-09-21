@@ -71,15 +71,7 @@ npm run lint
 ```
 - Runs ESLint and fixes problems: 
 ```bash
-npm run lint
-```
-- Runs ESLint and fixes problems: 
-```bash
 npm run lint:fix
-```
-- Runs Prettier for uniform code formatting: 
-```bash
-npm run prettier
 ```
 - Runs Prettier for uniform code formatting: 
 ```bash
