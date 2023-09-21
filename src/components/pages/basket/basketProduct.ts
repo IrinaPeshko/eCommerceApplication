@@ -42,7 +42,11 @@ export default class Product {
     this.discountedPrice = discountedPrice || undefined;
     Emitter.on(
       "updateRow",
-      (currProductKey: string, changedTotal: number, discountNum: number): void => {
+      (
+        currProductKey: string,
+        changedTotal: number,
+        discountNum: number,
+      ): void => {
         this.changeProductData(currProductKey, changedTotal, discountNum);
       },
     );

@@ -16,6 +16,7 @@ import {
   createAnonimusFlow,
 } from "../createPasswordClient";
 import { RemoveLineFromCart, AddCode, RemoveCode } from "../../types/types";
+import { CartIco } from "../../components/header/indicator";
 
 class CartAPI {
   public static async createCart() {
@@ -228,14 +229,25 @@ class CartAPI {
   public static async checkMyCart() {
     if (
       !(localStorage.getItem("token") || sessionStorage.getItem("anonimToken"))
-    )
+    ) {
+      sessionStorage.setItem("totalCart", `${0}`);
+      CartIco.checkCart();
       return null;
+    }
+
     const myCart = await this.getMyCarts().then((res) => {
-      if (!res) return null;
+      if (!res) {
+        sessionStorage.setItem("totalCart", `${0}`);
+        CartIco.checkCart();
+        return null;
+      }
       return res.body;
     });
-    if (myCart === null) return null;
-    if (myCart.lineItems.length === 0) return null;
+    if (myCart === null || myCart.lineItems.length === 0) {
+      sessionStorage.setItem("totalCart", `${0}`);
+      CartIco.checkCart();
+      return null;
+    }
     const lineItems = myCart.lineItems.reduce(
       (
         acc:
@@ -284,6 +296,8 @@ class CartAPI {
       totalPrice: myCart.totalPrice,
       totalLineItemQuantity: myCart.totalLineItemQuantity,
     };
+    sessionStorage.setItem("totalCart", `${cart.totalLineItemQuantity}`);
+    CartIco.checkCart();
     return { products: lineItems, cart };
   }
 
