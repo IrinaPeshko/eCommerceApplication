@@ -92,6 +92,7 @@ header {
 .pages,
 .account {
   display: flex;
+  align-items: center;
   gap: 29px;
 }
 
@@ -102,20 +103,24 @@ header {
 }
 
 .account__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-transform: uppercase;
   &:hover {
     color: $color5;
   }
-}
-
-.account__create {
-  position: relative;
-  margin-right: 20px;
-  &.unactive::after {
-    content: "+";
-    position: absolute;
-    bottom: 0;
-    color: #ffffff;
+  &.sigh,
+  &.sigh-out {
+    column-gap: 5px;
+    & .account__item-text {
+      font: {
+        family: "Oswald", Arial, sans-serif;
+        size: 14px;
+        weight: 600;
+      }
+      color: #ffffff;
+    }
   }
 }
 
@@ -145,11 +150,9 @@ header {
 
 .shoping_cart {
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
-}
-
-.shoping_cart {
-  margin-left: 10px;
 }
 
 .shoping_cart__aditional {

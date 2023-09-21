@@ -2,7 +2,7 @@ import { LineItem } from "@commercetools/platform-sdk";
 import CartAPI from "../../../sdk/cart/cart";
 import { RemoveLineFromCart, Actions } from "../../../types/types";
 import Alert from "../../alerts/alert";
-import { totalPrice, correctPrice } from "./correctPrice";
+import { totalPrice, correctPrice, subtotalPrice } from "./correctPrice";
 import { Emitter } from "../../utils/eventEmitter";
 
 export default class Product {
@@ -145,7 +145,14 @@ export default class Product {
   }
 
   private async removeProductFromCart(target: HTMLElement): Promise<void> {
+    const cartBlock: HTMLElement | null =
+      document.querySelector(".cart__wrapper");
+    const emptyCartBlock: HTMLElement | null =
+      document.querySelector(".cart__empty-cart");
     const currentLine: HTMLElement | null = target.closest(".cart__table-row");
+    const subtotalElem: HTMLDivElement | null = document.querySelector(
+      ".cart__subtotal-num",
+    );
     const removedObj: RemoveLineFromCart = {
       action: Actions.removeline,
       lineItemKey: this.lineItemKey,
@@ -158,11 +165,28 @@ export default class Product {
       if (removeCurrentLine) {
         if (removeCurrentLine.statusCode !== 400) {
           const {
+            lineItems,
             totalPrice: { centAmount, currencyCode, fractionDigits },
           } = removeCurrentLine.body;
-          totalPrice(centAmount, fractionDigits, currencyCode);
           Alert.showAlert(false, "Item successfully removed");
           if (currentLine) currentLine.remove();
+          if (lineItems) {
+            if (lineItems.length !== 0) {
+              totalPrice(centAmount, fractionDigits, currencyCode);
+              if (subtotalElem) {
+                subtotalElem.innerText = `${correctPrice(
+                  subtotalPrice(lineItems),
+                  fractionDigits,
+                )}`;
+              }
+            } else {
+              console.log("Cart empty");
+              if (cartBlock && emptyCartBlock) {
+                cartBlock.classList.add("cart__wrapper--hidden");
+                emptyCartBlock.classList.remove("cart__empty-cart--hidden");
+              }
+            }
+          }
         } else {
           throw new Error("Something is wrong");
         }
@@ -228,6 +252,9 @@ export default class Product {
     target: HTMLElement,
   ): Promise<void> {
     const parentBlock: HTMLElement | null = target.closest(".cart__table-row");
+    const subtotalElem: HTMLDivElement | null = document.querySelector(
+      ".cart__subtotal-num",
+    );
     try {
       const addNewItem = await CartAPI.updateProduct(this.sku, quantityVal);
       if (addNewItem) {
@@ -247,7 +274,7 @@ export default class Product {
           )[0];
           const {
             quantity,
-            totalPrice: { centAmount, fractionDigits },
+            totalPrice: { centAmount: totalCentAmount, fractionDigits },
           } = currentItem;
           this.quantity = quantity;
           if (parentBlock) {
@@ -255,11 +282,17 @@ export default class Product {
               parentBlock.querySelector(".cart__table-total");
             if (totalBlock) {
               const formattedProductTotal = Number(
-                (centAmount / 10 ** fractionDigits).toFixed(2),
+                (totalCentAmount / 10 ** fractionDigits).toFixed(2),
               );
               totalBlock.innerText = `${formattedProductTotal} ${this.currencyCode}`;
             }
             totalPrice(cartCentAmount, cartFractionDigits, cartCurrencyCode);
+            if (subtotalElem) {
+              subtotalElem.innerText = `${correctPrice(
+                subtotalPrice(lineItems),
+                cartFractionDigits,
+              )}`;
+            }
           }
         } else {
           throw new Error("Something is wrong");
@@ -288,22 +321,30 @@ export default class Product {
           ".cart__table-text--prices",
         );
         if (productPrice) {
-          const discountSizeBlock: HTMLElement | null =
-            productPrice.querySelector(".discount-size");
-          if (!discountSizeBlock) {
-            const discountBlock: HTMLSpanElement =
-              document.createElement("span");
-            discountBlock.className = "discount-size";
-            discountBlock.innerText = `-${correctPrice(
-              this.discountSize,
-              this.fractionDigits,
-            )} ${this.currencyCode}`;
-            productPrice.append(discountBlock);
+          if (discountNum !== null) {
+            const discountSizeBlock: HTMLElement | null =
+              productPrice.querySelector(".discount-size");
+            if (!discountSizeBlock) {
+              const discountBlock: HTMLSpanElement =
+                document.createElement("span");
+              discountBlock.className = "discount-size";
+              discountBlock.innerText = `-${correctPrice(
+                this.discountSize,
+                this.fractionDigits,
+              )} ${this.currencyCode}`;
+              productPrice.append(discountBlock);
+            } else {
+              discountSizeBlock.innerText = `-${correctPrice(
+                this.discountSize,
+                this.fractionDigits,
+              )} ${this.currencyCode}`;
+            }
           } else {
-            discountSizeBlock.innerText = `-${correctPrice(
-              this.discountSize,
-              this.fractionDigits,
-            )} ${this.currencyCode}`;
+            const discountSizeBlock: HTMLElement | null =
+              productPrice.querySelector(".discount-size");
+            if (discountSizeBlock) {
+              discountSizeBlock.remove();
+            }
           }
         }
         if (productTotalPrice) {

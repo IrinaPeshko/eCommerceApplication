@@ -11,6 +11,7 @@ import Aside from "../aside/aside";
 import Alert from "../alerts/alert";
 import showPassword from "./showPassword";
 import productKeys from "../pages/product/productsKey";
+import Preloader from "../preloader/preloader";
 
 export const routers: Irouters = {
   "/": "pages/main.html",
@@ -51,6 +52,7 @@ export async function handleLocation(callback?: () => void): Promise<void> {
     const html = await getHTML();
     const main = document.querySelector(".main");
     if (main) {
+      Preloader.showLoader();
       main.innerHTML = html;
       const popap = new Popap();
       const popapElement = popap.getHTMLElement();
@@ -64,7 +66,6 @@ export async function handleLocation(callback?: () => void): Promise<void> {
       showPassword();
       window.scrollTo(0, 0);
     }
-
     if (callback) {
       callback();
     }

@@ -20,13 +20,9 @@ class Card {
 
   public card: HTMLDivElement;
 
-  private plusBtn: HTMLElement | null;
+  private productControl: ProductControl | undefined;
 
-  private num: HTMLElement | null;
-
-  private minusBtn: HTMLElement | null;
-
-  private productControl: ProductControl | null;
+  private addToCart: HTMLElement | null;
 
   constructor(
     name: string,
@@ -46,15 +42,18 @@ class Card {
     this.discount = discount || "";
     this.card = this.createCard();
     this.clickCard();
-    this.plusBtn = this.card.querySelector(".product_quantity__plus");
-    this.num = this.card.querySelector(".product_quantity__num");
-    this.minusBtn = this.card.querySelector(".product_quantity__minus");
+    // this.plusBtn = this.card.querySelector(".product_quantity__plus");
+    // this.num = this.card.querySelector(".product_quantity__num");
+    // this.minusBtn = this.card.querySelector(".product_quantity__minus");
+    this.addToCart = this.card.querySelector(".product_page__btn.bag");
     this.productControl = new ProductControl(
-      this.plusBtn,
-      this.num,
-      this.minusBtn,
+      null,
+      null,
+      null,
       this.sku,
+      this.addToCart,
     );
+    this.productControl.inite();
   }
 
   public createCard() {
@@ -76,12 +75,9 @@ class Card {
           }</p> 
           ${this.discount ? `<p class="discount">${this.discount}</p>` : ""}
         </div>
-        <p>Add to bag</p>
-        <div class="product_quantity">
-          <button class="product_quantity__minus" type="button" onclick="this.nextElementSibling.stepDown();">-</button>
-          <input type="number" class="product_quantity__num" value="0" min="0" readonly>
-          <button class="product_quantity__plus" type="button" onclick="this.previousElementSibling.stepUp();">+</button>
-      </div>
+        <div class="card__cart_control ">
+          <button class="btn product_page__btn bag"></button>
+        </div>
     `;
     return card;
   }
@@ -91,10 +87,8 @@ class Card {
       const event = e.target;
       if (event instanceof HTMLElement) {
         const isClickControlProduct =
-          event.classList.contains("product_quantity") ||
-          event.classList.contains("product_quantity__minus") ||
-          event.classList.contains("product_quantity__num") ||
-          event.classList.contains("product_quantity__plus");
+          event.classList.contains("product_page__btn") ||
+          event.classList.contains("card__cart_add");
         if (isClickControlProduct === false) {
           const { callback } = product[0];
           routeToNotAnchor(

@@ -1,12 +1,17 @@
+import { DiscountedLineItemPortion } from "@commercetools/platform-sdk";
 import Product from "./basketProduct";
 import CartAPI from "../../../sdk/cart/cart";
 import { RemoveLineFromCart, Actions, AddCode } from "../../../types/types";
 import Alert from "../../alerts/alert";
 import Code from "./code";
-import { totalPrice } from "./correctPrice";
+import { totalPrice, correctPrice } from "./correctPrice";
 import { Emitter } from "../../utils/eventEmitter";
 
 async function removeCart(): Promise<void> {
+  const cartBlock: HTMLElement | null =
+    document.querySelector(".cart__wrapper");
+  const emptyCartBlock: HTMLElement | null =
+    document.querySelector(".cart__empty-cart");
   const tableBody: HTMLDivElement | null =
     document.querySelector(".cart__table-body");
   const removeArr: RemoveLineFromCart[] = [];
@@ -36,6 +41,10 @@ async function removeCart(): Promise<void> {
             }
             totalPrice(centAmount, fractionDigits, currencyCode);
             Alert.showAlert(false, "Сart has been emptied");
+            if (cartBlock && emptyCartBlock) {
+              cartBlock.classList.add("cart__wrapper--hidden");
+              emptyCartBlock.classList.remove("cart__empty-cart--hidden");
+            }
           } else {
             throw new Error("Something is wrong");
           }
@@ -48,7 +57,7 @@ async function removeCart(): Promise<void> {
   }
 }
 
-async function applyCode(target: HTMLElement): Promise<void> {
+async function addPromocode(target: HTMLElement, currId: string) {
   const codeField: Element | null = target.previousElementSibling;
   const codesList: HTMLDivElement | null =
     document.querySelector(".cart__codes-list");
@@ -64,18 +73,15 @@ async function applyCode(target: HTMLElement): Promise<void> {
         },
       ];
       try {
-        const getCartsDiscount = await CartAPI.addCode(addCodeObj);
-        if (getCartsDiscount) {
-          if (getCartsDiscount.statusCode !== 400) {
+        const addDiscountToCart = await CartAPI.addCode(addCodeObj);
+        if (addDiscountToCart) {
+          if (addDiscountToCart.statusCode !== 400) {
             (codeField as HTMLInputElement).value = "";
             const {
               totalPrice: { centAmount, currencyCode, fractionDigits },
-            } = getCartsDiscount.body;
-            const { discountCodes, lineItems } = getCartsDiscount.body;
-            const {
-              discountCode: { id: idFromCart },
-            } = discountCodes[0];
-            const newCode = new Code(idFromCart, codeVal);
+            } = addDiscountToCart.body;
+            const { lineItems } = addDiscountToCart.body;
+            const newCode = new Code(currId, codeVal);
             if (codesList) {
               codesList.append(newCode.createCodeElem());
             }
@@ -88,18 +94,21 @@ async function applyCode(target: HTMLElement): Promise<void> {
                     value: { centAmount: changedTotal },
                   },
                 } = elem.discountedPricePerQuantity[0];
-                const {
-                  discount: { typeId },
-                  discountedAmount: { centAmount: discountNum },
-                } = includedDiscounts[0];
-                if (typeId === "cart-discount") {
-                  Emitter.emit(
-                    "updateRow",
-                    productKey,
-                    changedTotal,
-                    discountNum,
-                  );
-                }
+                const sumOfDiscounts: number = includedDiscounts.reduce(
+                  (acc: number, curr: DiscountedLineItemPortion): number => {
+                    const {
+                      discountedAmount: { centAmount: discountNum },
+                    } = curr;
+                    return acc + discountNum;
+                  },
+                  0,
+                );
+                Emitter.emit(
+                  "updateRow",
+                  productKey,
+                  changedTotal,
+                  sumOfDiscounts,
+                );
               }
             });
             Alert.showAlert(false, "Code is successfully applied to this cart");
@@ -118,13 +127,78 @@ async function applyCode(target: HTMLElement): Promise<void> {
   }
 }
 
+async function applyCode(target: HTMLElement): Promise<void> {
+  const codeField: Element | null = target.previousElementSibling;
+  if (codeField) {
+    const codeVal: string = (codeField as HTMLInputElement).value;
+    if (codeVal !== "") {
+      await CartAPI.getMyCarts()
+        .then(async (res) => {
+          if (res) {
+            if (res.statusCode !== 400) {
+              const { discountCodes } = res.body;
+              await CartAPI.getAllCodes()
+                .then(async (resp) => {
+                  if (resp) {
+                    if (resp.statusCode !== 400) {
+                      const { results } = resp.body;
+                      const currDiscount = results.filter(
+                        (code) => code.code === codeVal,
+                      )[0];
+                      if (currDiscount) {
+                        const { id } = currDiscount;
+                        if (discountCodes) {
+                          if (discountCodes.length !== 0) {
+                            if (
+                              discountCodes.some(
+                                (elem) => elem.discountCode.id === id,
+                              )
+                            ) {
+                              Alert.showAlert(
+                                true,
+                                "Promocode has already been added",
+                              );
+                            } else {
+                              addPromocode(target, id);
+                            }
+                          } else {
+                            addPromocode(target, id);
+                          }
+                        }
+                      } else {
+                        Alert.showAlert(true, "This code is unavailable");
+                        (codeField as HTMLInputElement).value = "";
+                      }
+                    }
+                  }
+                })
+                .catch((err) => console.log(err));
+            }
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+}
+
 export async function createCartTable(): Promise<void> {
   const mainElem: HTMLElement | null = document.querySelector(".cart");
+  const cartBlock: HTMLElement | null =
+    document.querySelector(".cart__wrapper");
+  const emptyCartBlock: HTMLElement | null =
+    document.querySelector(".cart__empty-cart");
   const tableBody: HTMLDivElement | null =
     document.querySelector(".cart__table-body");
   const codesList: HTMLDivElement | null =
     document.querySelector(".cart__codes-list");
+  const subtotalElem: HTMLDivElement | null = document.querySelector(
+    ".cart__subtotal-num",
+  );
+  const subtotalCurrency: HTMLDivElement | null = document.querySelector(
+    ".cart__subtotal-currency",
+  );
   let amountNum;
+  let subtotalPrice = 0;
   try {
     const cartResp = await CartAPI.checkMyCart();
     const getCartDiscounts = await CartAPI.getOrCreateMyCart();
@@ -137,6 +211,10 @@ export async function createCartTable(): Promise<void> {
           fractionDigits: cartFractionDigits,
         },
       } = cart;
+      if (cartBlock && emptyCartBlock) {
+        cartBlock.classList.remove("cart__wrapper--hidden");
+        emptyCartBlock.classList.add("cart__empty-cart--hidden");
+      }
       if (products) {
         if (tableBody) {
           tableBody.innerHTML = "";
@@ -166,10 +244,16 @@ export async function createCartTable(): Promise<void> {
               const {
                 discountedPrice: { includedDiscounts },
               } = discountedPricePerQuantity[0];
-              const {
-                discountedAmount: { centAmount: currAmount },
-              } = includedDiscounts[0];
-              amountNum = currAmount;
+              const sumOfAllDiscounts: number = includedDiscounts.reduce(
+                (acc: number, curr: DiscountedLineItemPortion): number => {
+                  const {
+                    discountedAmount: { centAmount: discountNum },
+                  } = curr;
+                  return acc + discountNum;
+                },
+                0,
+              );
+              amountNum = sumOfAllDiscounts;
             } else {
               amountNum = undefined;
             }
@@ -182,6 +266,10 @@ export async function createCartTable(): Promise<void> {
                 ? discounted.value.centAmount
                 : undefined;
               const correctDefaultPrice: number = defaultPrice;
+              subtotalPrice += correctPrice(
+                correctDefaultPrice * quantity,
+                fractionDigits,
+              );
               const newProduct = new Product(
                 sku,
                 version,
@@ -205,58 +293,65 @@ export async function createCartTable(): Promise<void> {
           });
         }
       }
+      if (codesList) {
+        codesList.innerHTML = "";
+        if (getCartDiscounts) {
+          const { discountCodes } = getCartDiscounts;
+          if (discountCodes && discountCodes.length !== 0) {
+            discountCodes.forEach(async (code) => {
+              const {
+                discountCode: { id },
+              } = code;
+              try {
+                const getCode = await CartAPI.getDiscountCode(id);
+                if (getCode.statusCode !== 400) {
+                  const { code: codeName } = getCode.body;
+                  const codeElem = new Code(id, codeName);
+                  if (codesList) {
+                    codesList.append(codeElem.createCodeElem());
+                  }
+                } else {
+                  throw new Error("Something is wrong");
+                }
+              } catch (err) {
+                console.log(err);
+              }
+            });
+          }
+        }
+      }
       if (cart) {
         totalPrice(centAmount, cartFractionDigits, cartcurrencyCode);
+        if (subtotalElem && subtotalCurrency) {
+          subtotalElem.innerText = `${subtotalPrice}`;
+          subtotalCurrency.innerText = `${cartcurrencyCode}`;
+        }
+      }
+      if (mainElem) {
+        mainElem.addEventListener("click", (e: Event) => {
+          e.preventDefault();
+          const { target } = e;
+          if ((target as HTMLElement).tagName === "BUTTON") {
+            if (
+              (target as HTMLElement).classList.contains("cart__clear-cart-btn")
+            ) {
+              removeCart();
+            } else if (
+              (target as HTMLElement).classList.contains("cart__apply-code-btn")
+            ) {
+              applyCode(target as HTMLElement);
+            }
+          }
+        });
       }
     } else {
-      console.log("Empty cart");
-    }
-    if (codesList) {
-      codesList.innerHTML = "";
-      if (getCartDiscounts) {
-        console.log(getCartDiscounts);
-        const { discountCodes } = getCartDiscounts;
-        if (discountCodes && discountCodes.length !== 0) {
-          discountCodes.forEach(async (code) => {
-            const {
-              discountCode: { id },
-            } = code;
-            try {
-              const getCode = await CartAPI.getDiscountCode(id);
-              if (getCode.statusCode !== 400) {
-                const { code: codeName } = getCode.body;
-                const codeElem = new Code(id, codeName);
-                if (codesList) {
-                  codesList.append(codeElem.createCodeElem());
-                }
-              } else {
-                throw new Error("Something is wrong");
-              }
-            } catch (err) {
-              console.log(err);
-            }
-          });
-        }
+      console.log("Cart empty");
+      if (cartBlock && emptyCartBlock) {
+        cartBlock.classList.add("cart__wrapper--hidden");
+        emptyCartBlock.classList.remove("cart__empty-cart--hidden");
       }
     }
   } catch (err) {
     console.log(err);
-  }
-  if (mainElem) {
-    mainElem.addEventListener("click", (e: Event) => {
-      e.preventDefault();
-      const { target } = e;
-      if ((target as HTMLElement).tagName === "BUTTON") {
-        if (
-          (target as HTMLElement).classList.contains("cart__clear-cart-btn")
-        ) {
-          removeCart();
-        } else if (
-          (target as HTMLElement).classList.contains("cart__apply-code-btn")
-        ) {
-          applyCode(target as HTMLElement);
-        }
-      }
-    });
   }
 }
