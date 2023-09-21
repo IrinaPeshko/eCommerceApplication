@@ -49,6 +49,9 @@
       img {
         width: 300px;
         border-radius: 50%; /* Make images circular */
+        @media (max-width: 870px) {
+          width: 190px;
+        }
       }
 
       .member-details {
