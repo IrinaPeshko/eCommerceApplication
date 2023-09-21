@@ -192,7 +192,10 @@ export default class Product {
                 emptyCartBlock.classList.remove("cart__empty-cart--hidden");
               }
             }
-            sessionStorage.setItem("totalCart", String(this.totalQuantity(lineItems)));
+            sessionStorage.setItem(
+              "totalCart",
+              String(this.totalQuantity(lineItems)),
+            );
             CartIco.checkCart();
           }
         } else {
@@ -301,7 +304,10 @@ export default class Product {
                 cartFractionDigits,
               )}`;
             }
-            sessionStorage.setItem("totalCart", String(this.totalQuantity(lineItems)));
+            sessionStorage.setItem(
+              "totalCart",
+              String(this.totalQuantity(lineItems)),
+            );
             CartIco.checkCart();
           }
         } else {

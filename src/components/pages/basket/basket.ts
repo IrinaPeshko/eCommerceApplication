@@ -356,11 +356,15 @@ export async function createCartTable(): Promise<void> {
           if (activePopap.classList.contains("active")) {
             e.preventDefault();
             const { target } = e;
-            if ((target as HTMLElement).classList.contains("popap__clear-btn")) {
+            if (
+              (target as HTMLElement).classList.contains("popap__clear-btn")
+            ) {
               removeCart();
               document.body.classList.remove("lock");
               activePopap.classList.remove("active");
-            } else if ((target as HTMLElement).classList.contains("popap__cancel-btn")) {
+            } else if (
+              (target as HTMLElement).classList.contains("popap__cancel-btn")
+            ) {
               Popap.close();
               document.body.classList.remove("lock");
               activePopap.classList.remove("active");
