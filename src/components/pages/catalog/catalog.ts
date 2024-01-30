@@ -5,7 +5,7 @@ import { Categ } from "./category";
 
 interface Category {
   id: string;
-  name: string;
+  name: string;  
   parentId: string | null;
 }
 export class Catalog {
@@ -27,6 +27,8 @@ export class Catalog {
       this.categories.reset();
       const categories: Record<string, Category> = {};
       const categoriesArr = (await getCategories()).body.results;
+      console.log(categoriesArr);
+      console.log(categoriesArr);
       categoriesArr.forEach((el) => {
         const categoryObj: Category = {
           id: el.id,

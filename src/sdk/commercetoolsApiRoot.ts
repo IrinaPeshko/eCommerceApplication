@@ -8,20 +8,23 @@ import {
   ApiRoot,
 } from "@commercetools/platform-sdk";
 
-export const projectKey = "ecommerceapplication";
+export const projectKey = "e-commerce-app";
 export const authMiddlewareOptions = {
-  host: "https://auth.europe-west1.gcp.commercetools.com",
-  projectKey: "ecommerceapplication",
+  host: "https://auth.us-east-2.aws.commercetools.com",
+  projectKey: "e-commerce-app",
   credentials: {
-    clientId: "xWGHs96wClja2WK4pTe4sHuL",
-    clientSecret: "ygIfusxYt5nEp1dB-K4Y-rcCMEReoCFG",
+    clientId: "bH_y4pxzkq8a8Ct-i3GnIa8t",
+    clientSecret: "ACxqivGsGGfpqYEhBJDnrm3mE85ukSFn",
   },
   scopes: [`manage_project:${projectKey}`],
+  // scopes: [
+  //   "manage_project:e-commerce-app manage_api_clients:e-commerce-app view_api_clients:e-commerce-app view_audit_log:e-commerce-app",
+  // ],
   fetch,
 };
 
 export const httpMiddlewareOptions = {
-  host: "https://api.europe-west1.gcp.commercetools.com",
+  host: "https://api.us-east-2.aws.commercetools.com",
   fetch,
 };
 
