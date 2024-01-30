@@ -268,7 +268,6 @@ export async function getProduct(key: string) {
 }
 
 export async function getCategories() {
-  console.log(apiRoot.withProjectKey({ projectKey }));
   return apiRoot.withProjectKey({ projectKey }).categories().get().execute();
 }
 

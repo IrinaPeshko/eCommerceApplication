@@ -3,44 +3,47 @@ import {
   createAuthForPasswordFlow,
   createHttpClient,
 } from "@commercetools/sdk-client-v2";
-import { projectKey, httpMiddlewareOptions } from "./commercetoolsApiRoot";
+import { httpMiddlewareOptions } from "./commercetoolsApiRoot";
 import { MyTokenCache } from "./token/TokenCache";
 
 import {
   IAnonimeOptions,
   IpasswordAuthMiddlewareOptions,
 } from "../types/APIClient/APIClient";
+import {
+  CTP_AUTH_URL,
+  CTP_CLIENT_ID,
+  CTP_CLIENT_SECRET,
+  CTP_PROJECT_KEY,
+} from "../../env";
 
 export function createPasswordClient(
   email: string,
   password: string,
-  tokenCache: MyTokenCache
+  tokenCache: MyTokenCache,
 ) {
   return {
-    host: "https://auth.us-east-2.aws.commercetools.com",
-    projectKey: "e-commerce-app",
+    host: CTP_AUTH_URL,
+    projectKey: CTP_PROJECT_KEY,
     credentials: {
-      clientId: "vYFp38vqtvN7tDsiIhRV9GOB",
-      clientSecret: "KfKjtdbrjrOJPO4FsdmkJSRTNcnU4evW",
+      clientId: CTP_CLIENT_ID,
+      clientSecret: CTP_CLIENT_SECRET,
       user: {
         username: email,
         password,
       },
     },
-    scopes: [`manage_project:${projectKey}`],
-    // scopes: [
-    //   "manage_project:e-commerce-app manage_api_clients:e-commerce-app view_api_clients:e-commerce-app view_audit_log:e-commerce-app",
-    // ],
+    scopes: [`manage_project:${CTP_PROJECT_KEY}`],
     tokenCache,
     fetch,
   };
 }
 
 export function createClient(
-  passwordAuthMiddlewareOptions: IpasswordAuthMiddlewareOptions
+  passwordAuthMiddlewareOptions: IpasswordAuthMiddlewareOptions,
 ) {
   const client = new ClientBuilder()
-    .withProjectKey(projectKey)
+    .withProjectKey(CTP_PROJECT_KEY)
     .withMiddleware(createAuthForPasswordFlow(passwordAuthMiddlewareOptions))
     .withMiddleware(createHttpClient(httpMiddlewareOptions))
     .withUserAgentMiddleware()
@@ -50,16 +53,13 @@ export function createClient(
 
 export function createAnonimusFlow(tokenCache: MyTokenCache) {
   return {
-    host: "https://auth.us-east-2.aws.commercetools.com",
-    projectKey: "e-commerce-app",
+    host: CTP_AUTH_URL,
+    projectKey: CTP_PROJECT_KEY,
     credentials: {
-      clientId: "vYFp38vqtvN7tDsiIhRV9GOB",
-      clientSecret: "KfKjtdbrjrOJPO4FsdmkJSRTNcnU4evW",
+      clientId: CTP_CLIENT_ID,
+      clientSecret: CTP_CLIENT_SECRET,
     },
-    scopes: [`manage_project:${projectKey}`],
-    // scopes: [
-    //   "manage_project:e-commerce-app manage_api_clients:e-commerce-app view_api_clients:e-commerce-app view_audit_log:e-commerce-app",
-    // ],
+    scopes: [`manage_project:${CTP_PROJECT_KEY}`],
     tokenCache,
     fetch,
   };

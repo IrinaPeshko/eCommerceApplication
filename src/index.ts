@@ -37,5 +37,5 @@ declare global {
 window.route = route;
 
 CartAPI.getMyCarts()
-  .then((res) => console.log(res))
+  .then((res) => res)
   .catch((err) => console.log(err));

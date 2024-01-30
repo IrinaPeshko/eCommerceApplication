@@ -117,7 +117,6 @@ export default class Account {
               Alert.showAlert(true, "Email not updated");
               console.log(err);
             });
-          console.log(updateToNewEmail);
         } else {
           validationForm(emailField as HTMLInputElement);
         }
@@ -172,7 +171,6 @@ export default class Account {
           Alert.showAlert(true, "Password not valid or not match with current");
           console.log(err);
         });
-      console.log(updateToNewPassword);
     } else {
       const currentForm: HTMLFormElement | null = document.querySelector(
         ".profile__password-form",

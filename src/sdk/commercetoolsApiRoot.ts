@@ -7,29 +7,33 @@ import {
   createApiBuilderFromCtpClient,
   ApiRoot,
 } from "@commercetools/platform-sdk";
+import {
+  CTP_API_URL,
+  CTP_AUTH_URL,
+  CTP_CLIENT_ID,
+  CTP_CLIENT_SECRET,
+  CTP_PROJECT_KEY,
+} from "../../env";
 
-export const projectKey = "e-commerce-app";
+export const projectKey = CTP_PROJECT_KEY;
 export const authMiddlewareOptions = {
-  host: "https://auth.us-east-2.aws.commercetools.com",
-  projectKey: "e-commerce-app",
+  host: CTP_AUTH_URL,
+  projectKey:CTP_PROJECT_KEY,
   credentials: {
-    clientId: "bH_y4pxzkq8a8Ct-i3GnIa8t",
-    clientSecret: "ACxqivGsGGfpqYEhBJDnrm3mE85ukSFn",
+    clientId: CTP_CLIENT_ID,
+    clientSecret: CTP_CLIENT_SECRET,
   },
-  scopes: [`manage_project:${projectKey}`],
-  // scopes: [
-  //   "manage_project:e-commerce-app manage_api_clients:e-commerce-app view_api_clients:e-commerce-app view_audit_log:e-commerce-app",
-  // ],
+  scopes: [`manage_project:${CTP_PROJECT_KEY}`],
   fetch,
 };
 
 export const httpMiddlewareOptions = {
-  host: "https://api.us-east-2.aws.commercetools.com",
+  host: CTP_API_URL,
   fetch,
 };
 
 const client = new ClientBuilder()
-  .withProjectKey(projectKey)
+  .withProjectKey(CTP_PROJECT_KEY)
   .withMiddleware(createAuthForClientCredentialsFlow(authMiddlewareOptions))
   .withMiddleware(createHttpClient(httpMiddlewareOptions))
   .withUserAgentMiddleware()
