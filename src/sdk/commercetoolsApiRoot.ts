@@ -18,7 +18,7 @@ import {
 export const projectKey = CTP_PROJECT_KEY;
 export const authMiddlewareOptions = {
   host: CTP_AUTH_URL,
-  projectKey:CTP_PROJECT_KEY,
+  projectKey: CTP_PROJECT_KEY,
   credentials: {
     clientId: CTP_CLIENT_ID,
     clientSecret: CTP_CLIENT_SECRET,

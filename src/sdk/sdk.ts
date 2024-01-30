@@ -268,7 +268,15 @@ export async function getProduct(key: string) {
 }
 
 export async function getCategories() {
-  return apiRoot.withProjectKey({ projectKey }).categories().get().execute();
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .categories()
+    .get({
+      queryArgs: {
+        limit: 100,
+      },
+    })
+    .execute();
 }
 
 export function searchByKeyWords(word: string, sortParam: string) {
